@@ -69,11 +69,14 @@
 - 수정하는 경우 : working directory에서는 modified, staging area에서는 staged, repository에서는 committed 상태
 
 ### Git 명령어
+- git init
+- git status : 현재 git의 상태를 확인하기 위한 명령어
 - git add: working directory에 있는 파일이 staging area로 이동하게 하는 명령어
 - git add . : 현재 폴더의 모든 파일을 git add 하는 명령어
+- git config --global user.email "kimhhyeonjin@gmail.com" : 사용자 이메일 설정
+- git config --global user.name "kimhhyeonjin" : 사용자 이름 설정
 - git commit : 확실하게 관리할 파일이 맞다는 것을 확인하는 명령어
-- git commit –m “커밋 메시지를 입력.”
-- git status : 현재 git의 상태를 확인하기 위한 명령어
+- git commit –m "커밋 메시지를 입력."
 - git log : git의 commit 히스토리를 살펴볼 수 있는 명령어(위에 있을수록 최신)
 - git log --oneline : git log를 한 줄씩 볼 수 있는 명령어
 - git diff : 두 commit 간 차이를 볼 수 있는 명령어 ex) git diff cb85f3 3f1dda
@@ -84,11 +87,13 @@
 
 ## Github
 ### Repository 생성
-- git remote add 레포별명(관용적으로 origin 사용) 레포주소
-- git remote add origin https://github.com/kimhhyeonjin/test
+- git remote add 레포별명(관용적으로 origin 사용) 레포주소 : local과 remote 연결
+- git remote add origin https://github.com/kimhhyeonjin/TIL
 - git remote –v : 현재 등록된 remote에 대한 정보 확인하는 명령어
+- git remote rm origin : 레포주소 잘못 입력한 경우
 - git push 레포별명 브랜치명
 - git push origin master
+- git branch -M master : main branch 이름을 master로 변경
 - git clone 레포주소 : 복제
 - >clone과 pull의 차이점
   - clone
@@ -103,11 +108,12 @@
 - 기준버전은 GITHUB
 - pull -> add -> commit -> push
 
-### Git 올리기
+### Git 올리고 받기
 - git bash 이용하기
-- git init
+- git init : master 등록 안되어있으면 실행
 - git add .
 - git status
 - git commit -m 'TIL first commit'
-- git remote add origin https://github.com/kimhhyeonjin/TIL
-- git push origin master
+- git remote add origin https://github.com/kimhhyeonjin/TIL : local과 remote 연결
+- git push origin master : 올리기
+- git pull origin : 최신버전으로 내려받기
