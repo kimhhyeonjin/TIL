@@ -102,3 +102,12 @@
 - 파일을 동시에 수정하면 GITHUB에서는 충돌이 일어남
 - 기준버전은 GITHUB
 - pull -> add -> commit -> push
+
+### Git 올리기
+- git bash 이용하기
+- git init
+- git add .
+- git status
+- git commit -m 'TIL first commit'
+- git remote add origin https://github.com/kimhhyeonjin/TIL
+- git push origin master
