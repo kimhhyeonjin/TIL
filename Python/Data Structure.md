@@ -106,6 +106,17 @@
    > print(msg)  # hI! Everyone, I'm happy
    > print(msg.swapcase())  # Hi! eVERYONE, i'M HAPPY
    > ```
+ - 숫자 판별 method
+   > `.isdecimal()` : 문자열이 0~9까지의 수로 이루어져 있는가?
+   > `.isdigit()` : 문자열이 숫자로 이루어져 있는가?
+   > `.isnumeric()`: 문자열을 수로 볼 수 있는가?
+
+   > | isdecimal() | isdigit() | isnumeric() |          Example               |
+   > |:-----------:|:-----------:|:-----------:|:----------------------------------:|
+   > |    True     |    True   |    True     | "038", "੦੩੮", "０３８"             |
+   > |  False      |    True   |    True     | "⁰³⁸", "🄀⒊⒏", "⓪③⑧"          |
+   > |  False      |  False    |    True     | "↉⅛⅘", "ⅠⅢⅧ", "⑩⑬㊿", "壹貳參"   |
+   > |  False      |  False    |  False      | "abc", "38.0", "-38"             |
 ### 리스트(List)
  - 리스트 method
    > **`L.append(x)`** : 리스트 마지막에 항목 x를 추가
