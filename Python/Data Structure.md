@@ -61,6 +61,9 @@
    > # 오른쪽을 제거
    > print('안녕하세요????'.rstrip('?'))   # 안녕하세요
    > # 특정 문자를 제거
+   > print('www.jurassic.net'.strip('wten.'))  # jurassic
+   > print('www.jurassic.net'.strip('wten'))  # .jurassic.
+   > # 순서 상관없이 제거하고 싶은 문자 입력하면 제거된
    > ```
    > **`s.split(sep=None, maxsplit=-1)`** : 공백이나 특정 문자를 기준으로 분리하여 리스트로 반환
    > ```python
