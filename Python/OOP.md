@@ -354,14 +354,162 @@
 
 ## 객체 지향의 핵심 개념
 ### 추상화
+ - 현실 세계를 프로그램 설계에 반영
+ - 함수, 변수, 클래스
+ - 예시
+   ```python
+   # 학생을 표현하기 위한 클래스 생성
+   class Student:
+       def __init__(self, name, age, gpa):
+           self.name = name
+           self.age = age
+           self.gpa = gpa
 
+       def talk(self):
+           print(f'반갑습니다. {self.name}입니다.')
+
+       def study(self):
+           self.gpa += 0.1
+
+   # 교수를 표현하기 위한 클래스 생성
+   class Professor:
+       def __init__(self, name, age, department):
+           self.name = name
+           self.age = age
+           self.department = department
+   
+       def talk(self):
+           print(f'반갑습니다. {self.name}입니다.')
+   
+       def teach(self):
+           self.age += 1
+   
+   class Person:
+       def __init__(self, name, age):
+           self.name = name
+           self.age = age
+   
+       def talk(self):
+           print(f'반갑습니다. {self.name}입니다.')
+   ```
 ### 상속
  - 상속
- - 상속 관련 함수와 메서드
- - 상속 정리
- - 다중 상속
- - mro 메서드 (Method Resolution Order)
+   - 두 클래스 사이에 부모-자식 관계를 정립하는 것
+   - 클래스는 상속이 가능함 (모든 파이썬 클래스는 object를 상속받음)
+   - 하위 클래스는 상위 클래스에 정의된 속성, 행동, 관계 및 제약 조건을 모두 상속 받음
+   - 부모클래스의 속성, 메서드가 자식 클래스에 상속되므로 코드 재사용성이 높아짐
+   ```python
+   class ChildClass(ParentClass):
 
+   # 상속을 통한 메서드 재사용
+   class Person:
+       def __init__(self, name, age):
+           self.name = name
+           self.age = age
+   
+       def talk(self):  # 메서드 재사용
+           print(f'반갑습니다. {self.name}입니다.')
+   
+   class Professor(Person):
+       def __init__(self, name, age, department):
+           self.name = name
+           self.age = age
+           self.department = department
+   
+   class Student(Person):
+       def __init__(self, name, age, gpa):
+           self.name = name
+           self.age = age
+           self.gpa = gpa
+   
+   p1 = Professor('박교수', 49, '컴퓨터공학과')
+   s1 = Student('김학생', 20, 3.5)
+
+   # 부모 Person 클래스의 talk 메서드를 활용
+   p1.talk()  # 반갑습니다. 박교수입니다.
+   s1.talk()  # 반갑습니다. 김학생입니다.   
+   ```
+ - 상속 관련 함수와 메서드
+   - isinstance(object, classinfo)
+   - issubclass(class, classinfo)
+   - super() : 자식클래스에서 부모클래스를 사용하고 싶은 경우
+     ```python
+     class Person:
+         def __init__(self, name, age, number, email):
+             self.name = name
+             self.age = age
+             self.number = number
+             self.email = email
+     
+     
+     class Student(Person):
+         def __init__(self, name, age, number, email, student_id):
+             # Person 클래스
+             super().__init__(name, age, number, email)
+             self.student_id = student_id
+     ```
+ - 상속 정리
+   - 파이썬의 모든 클래스는 object로부터 상속됨
+   - 부모 클래스의 모든 요소(속성, 메서드)가 상속됨
+   - super()를 통해 부모클래스의 요소를 호출할 수 있음
+   - 메서드 오버라이딩을 통해 자식클래스에서 재정의 가능함
+   - 상속관계에서 이름공간은 인스턴스, 자식클래스, 부모클래스 순으로 탐색
+ - 다중 상속
+   - 두 개 이상의 클래스를 상속받는 경우
+   - 상속받은 모든 클래스의 요소를 활용 가능함
+   - 중복된 속성이나 메서드가 있는 경우 상속 순서에 의해 결정됨
+   ```python
+   class Person:
+       def __init__(self, name):
+           self.name = name
+   
+       def greeting(self):
+           return f'안녕, {self.name}'
+   
+   class Mom(Person):
+       gene = 'XX'
+       def swim(self):
+           return '엄마가 수영'
+   
+   class Dad(Person):
+       gene = 'XY'
+       def walk(self):
+           return '아빠가 걷기'
+   
+   class FirstChild(Dad, Mom):
+       def swim(self):
+           return '첫째가 수영'
+   
+       def cry(self):
+           return '첫째가 응애'
+   
+   baby1 = FirstChild('아가')
+   print(baby1.cry())   # 첫째가 응애
+   print(baby1.swim())  # 첫째가 수영
+   print(baby1.walk())  # 아빠가 걷기
+   print(baby1.gene)    # XY         # Dad를 먼저 썼기 때문
+   
+   class SecondChild(Mom, Dad):
+       def walk(self):
+           return '둘째가 걷기'
+   
+       def cry(self):
+           return '둘째가 응애'
+   
+   baby2 = SecondChild('아가')
+   print(baby2.cry())   # 둘째가 응애
+   print(baby2.walk())  # 둘째가 걷기
+   print(baby2.swim())  # 엄마가 수영
+   print(baby2.gene)    # XX         # Mom을 먼저 썼기 때문
+   ```
+ - mro 메서드 (Method Resolution Order)
+   - 해당 인스턴스의 클래스가 어떤 부모 클래스를 가지는지 확인하는 메서드
+     ```python
+     print(FirstChild.mro())
+     # [<class '__main__.FirstChild'>, <class '__main__.Dad'>, <class '__main__.Mom'>, <class '__main__.Person'>, <class 'object'>]
+     print(SecondChild.mro())
+     # [<class '__main__.SecondChild'>, <class '__main__.Mom'>, <class '__main__.Dad'>, <class '__main__.Person'>, <class 'object'>]
+     ```
 ### 다형성
  - 다형성
  - 메서드 오버라이딩
