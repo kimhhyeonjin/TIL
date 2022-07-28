@@ -620,24 +620,119 @@
        > @property 데코레이터 사용
      - setter 메서드 : 변수의 값을 설정하는 성격의 메서드
        > @변수.setter 사용
-      
-
+       ```python
+       class Person:
+       
+           def __init__(self, age):
+               self.age = age
+       
+           @property  # getter
+           def age(self):
+               return self._age
+       
+           @age.setter  # setter
+           def age(self, new_age):
+               if new_age <= 19:
+                   raise ValueError('No Alcohol')
+                   return
+       
+               self._age = new_age
+       
+       p1 = Person(20)
+       print(p1.age)  # 20
+       # _ 표시 없이 age만 입력해도 동작 (getter 메서드)
+       p1.age = 33
+       print(p1.age)  # 33
+       
+       p1.age = 19
+       print(p1.age)  # ValueError: No Alcohol
+       ```
 
 ## 에러와 예외
 ### 디버깅
- - 버그란?
- - 디버깅의 정의
- - 디버깅
+ - 버그 : 소프트웨어에서 발생하는 문제
+ - 디버깅 : 잘못된 프로그램을 수정하는 것
 
 ### 에러와 예외
- - 문법 에러(Syntax Error)
+ - 문법 에러(Syntax Error) : 파일이름, 줄번호, ^ 문자를 통해 파이썬이 코드를 읽어 나갈 때 문제가 발생한 위치를 표현
+   - Invalid syntax : 문법 오류
+   - assign to literal : 잘못된 할당
+   - EOL(End of Line) / EOF(End of File)
  - 예외(Exception)
- - 파이썬 내장 예외
+   - 실행 중에 감지되는 에러
+   - 여러 타입으로 나타나고 타입이 메세지의 일부로 출력
+   - 모든 내장 예외는 Exception Class를 상속받아 이루어짐
+   - ZeroDivisionError : 0으로 나누고자 할 때 발생
+   - NameError : namespace 상에 이름이 없는 경우
+   - TypeError : 타입 불일치 / argument 누락 / argument 갯수 초과 / argument type 불일치
+   - ValueError : 타입은 올바르나 값이 적절하지 않거나 없는 경우
+   - IndexError : 인덱스가 존재하지 않거나 범위를 벗어나는 경우
+   - KeyError : 해당 키가 존재하지 않는 경우
+   - ModuleNotFoundError : 해당 Module이 존재하지 않는 경우
+   - ImportError : Module은 있으나 존재하지 않는 클래스/함수를 가져오는 경우
+   - KeyboardInterrupt : 임의로 프로그램을 종료하였을 때
+   - IndentationError : Indentation이 적절하지 않은 경우
+ - 파이썬 내장 예외 (built-in-exceptions)
 
 ### 예외 처리
  - 예외 처리
+   - try
+     - 코드를 실행
+   - except
+     - try문에서 예외가 발생하면 실행
+   - else
+     - try문에서 예외가 발생하지 않으면 실행
+   - finally
+     - 예외 발생 여부와 관계없이 항상 실행
  - 예외 처리 예시
- - 에러 메시지 처리(as)
+   ```python
+   try:
+       try 명령문
+   except 예외그룹-1 as 변수-1:
+       예외처리 명령문 1
+   except 예외그룹-2 as 변수-2:
+       예외처리 명령문 2
+   finally:  # 선택사항
+       finally 명령문
+   ```
  - 복수의 예외 처리 실습
- - 예외 처리 종합
+   - 100을 사용자가 입력한 정수로 나누고 출력하는 코드 작성
+   ```python
+   try:
+       num = input('100으로 나눌 값을 입력하시오 : ')
+       100 / int(num)
+   except (ValueError, ZeroDivisionError):  # 발생 가능한 에러를 모두 명시
+       print('제대로 입력하시오.')
+
+   try:
+       num = input('100으로 나눌 값을 입력하시오 : ')
+       100 / int(num)
+   except ValueError:  # 에러 별로 별도의 에러 처리
+       print('숫자를 넣어주세요.')
+   except ZeroDivisionError:
+       print('0으로 나눌 수 없습니다.')
+   except:
+       print('에러가 발생하였습니다.')
+   # 순차적으로 수행되므로 가장 작은 범주부터 예외 처리 해야 함
+   ```
  - 예외 처리 종합 예시
+   > 파일을 열고 읽는 코드 작성
+   >
+   > 파일을 열 때 파일이 없으면 '해당 파일이 없습니다' 출력 (except)
+   >
+   > 파일이 있으면 파일 내용을 출력 (else)
+   >
+   > 해당 파일 읽기 작업 종료 메세지 출력 (finally)
+   ```python
+   try:
+       f = open('abc.txt')  # 파일 열기 시도
+   except FileNotFoundError:  # 파일이 없는 경우
+       print('해당 파일이 없습니다.')
+   else:  # 파일이 있는 경우
+       print('파일을 읽기 시작합니다.')
+       print(f.read())
+       print('파일을 모두 읽었습니다.')
+       f.close()
+   finally:  # 종료 메세지 출력
+       print('파일 읽기를 종료합니다.')
+   ```
