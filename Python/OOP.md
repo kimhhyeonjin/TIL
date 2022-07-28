@@ -171,7 +171,7 @@
      print(c2.pi)      # 5 (새로운 인스턴스)
      ```
 ### OOP 메서드
- - 메서드 : 특정 데이터 타입 / 클래스의 객체에 공통적으로 적용 가능한 행위(함수)
+ - 메서드 : 특정 데이터 타입 / 클래스의 객체에 공통적으로 적용 가능한 행위(**함수**)
    ```python
    class Person:
 
@@ -255,6 +255,7 @@
    - 순서대로 적용되기 때문에 작성 순서가 중요
  - 스태틱 메서드
    - 인스턴스 변수, 클래스 변수를 전혀 다루지 않는 메서드
+   - 클래스가 사용할 메서드에 해당
    - 속성을 다루지 않고 단지 기능(행동)만을 하는 메서드를 정의할 때 사용
    - @staticmethod 데코레이터를 사용하여 정의
    - 일반 함수처럼 동작하지만 클래스의 이름공간에 귀속됨
@@ -397,7 +398,7 @@
    - 두 클래스 사이에 부모-자식 관계를 정립하는 것
    - 클래스는 상속이 가능함 (모든 파이썬 클래스는 object를 상속받음)
    - 하위 클래스는 상위 클래스에 정의된 속성, 행동, 관계 및 제약 조건을 모두 상속 받음
-   - 부모클래스의 속성, 메서드가 자식 클래스에 상속되므로 코드 재사용성이 높아짐
+   - 부모 클래스의 속성, 메서드가 자식 클래스에 상속되므로 코드 재사용성이 높아짐
    ```python
    class ChildClass(ParentClass):
 
@@ -430,9 +431,9 @@
    s1.talk()  # 반갑습니다. 김학생입니다.   
    ```
  - 상속 관련 함수와 메서드
-   - isinstance(object, classinfo)
-   - issubclass(class, classinfo)
-   - super() : 자식클래스에서 부모클래스를 사용하고 싶은 경우
+   - isinstance(object, classinfo) : object가 classinfo의 인스턴스이거나 subclass인 경우 True를 반환
+   - issubclass(class, classinfo) : class가 classinfo의 subclass인 경우 True를 반환
+   - super() : 자식 클래스에서 부모 클래스를 사용하고 싶은 경우
      ```python
      class Person:
          def __init__(self, name, age, number, email):
@@ -451,9 +452,9 @@
  - 상속 정리
    - 파이썬의 모든 클래스는 object로부터 상속됨
    - 부모 클래스의 모든 요소(속성, 메서드)가 상속됨
-   - super()를 통해 부모클래스의 요소를 호출할 수 있음
-   - 메서드 오버라이딩을 통해 자식클래스에서 재정의 가능함
-   - 상속관계에서 이름공간은 인스턴스, 자식클래스, 부모클래스 순으로 탐색
+   - super()를 통해 부모 클래스의 요소를 호출할 수 있음
+   - 메서드 오버라이딩을 통해 자식 클래스에서 재정의 가능함
+   - 상속관계에서 이름공간은 인스턴스, 자식 클래스, 부모 클래스 순으로 탐색
  - 다중 상속
    - 두 개 이상의 클래스를 상속받는 경우
    - 상속받은 모든 클래스의 요소를 활용 가능함
@@ -511,16 +512,115 @@
      # [<class '__main__.SecondChild'>, <class '__main__.Mom'>, <class '__main__.Dad'>, <class '__main__.Person'>, <class 'object'>]
      ```
 ### 다형성
- - 다형성
+ - 다형성(Polymorphism)
+   - 동일한 메서드가 클래스에 따라 다르게 행동할 수 있음을 의미
+   - 서로 다른 클래스에 속해있는 객체들이 동일한 메세지에 대해 다른 방식으로 응답할 수 있음
  - 메서드 오버라이딩
+   - 상속받은 메서드를 재정의
+     - 클래스 상속 시 부모 클래스에서 정의한 메서드를 자식 클래스에서 변경
+     - 부모 클래스의 메서드 이름과 기본 기능은 그대로 사용하지만 특정 기능을 바꾸고 싶을 때 사용
+     - 상속받은 클래스에서 같은 이름의 메서드로 덮어씀
+     - 부모 클래스의 메서드를 실행시키고 싶은 경우 super를 활용
+     ```python
+     class Person:
+         def __init__(self, name):
+             self.name = name
+     
+         def talk(self):
+             print(f'반갑습니다. {self.name}입니다.')
+     
+     # 자식 클래스 - Professor
+     class Professor(Person):
+         def talk(self):
+             print(f'{self.name}일세.')
+     
+     # 자식 클래스 - Student
+     class Student(Person):
+         def talk(self):
+             super().talk()
+             print(f'저는 학생입니다.')
+     
+     p1 = Professor('김교수')
+     p1.talk()  # 김교수일세.
+     
+     s1 = Student('이학생')
+     s1.talk()
+     # 반갑습니다. 이학생입니다.
+     # 저는 학생입니다.
+     ```
 
 ### 캡슐화
  - 캡슐화
+   - 객체의 일부 구현 내용에 대해 외부로부터의 직접적인 액세스를 차단 (ex. 주민등록번호)
+   - 파이썬에서 암묵적으로 존재하지만 언어적으로는 존재하지 않음
  - 접근제어자 종류
+   - Public Access Modifier
+   - Protected Access Modifier
+   - Private Access Modifier
  - Public Member
+   - 언더바 없이 시작하는 메서드나 속성
+   - 어디서나 호출이 가능, 하위 클래스 override 허용
+   - 일반적으로 작성되는 메서드와 속성의 대다수를 차지
+   ```python
+   class Person:
+
+       def __init__(self, name, age):
+           self.name = name
+           self.age = age
+   
+   p1 = Person('김학생', 30)
+   print(p1.name)  # 김학생
+   print(p1.age)   # 30
+   ```
  - Protected Member
+   - 언더바 1개로 시작하는 메서드나 속성
+   - 암묵적 규칙에 의해 부모 클래스 내부와 자식 클래스에서만 호출 가능
+   - 하위 클래스 override 허용
+   ```python
+   class Person:
+       def __init__(self, name, age):
+           self.name = name
+           self._age = age
+   
+       def get_age(self):
+           return self._age
+   
+   # 인스턴스를 만들고 get_age 메서드를 활용하여 호출할 수 있음
+   p1 = Person('김학생', 30)
+   print(p1.get_age())  # 30
+   
+   # _age에 직접 접근하여도 확인 가능
+   # 파이썬에서는 암묵적으로 활용(거의 사용 안하는 듯)
+   print(p1._age)  # 30
+   ```
  - Private Member
+   - 언더바 2개로 시작하는 메서드나 속성
+   - 본 클래스 내부에서만 사용이 가능
+   - 하위클래스 상속 및 호출 불가능 (오류)
+   - 외부 호출 불가능 (오류)
+   ```python
+   class Person:
+       def __init__(self, name, age):
+           self.name = name
+           self.__age = age
+   
+       def get_age(self):
+           return self.__age
+   
+   # 인스턴스를 만들고 get_age 메서드를 활용하여 호출할 수 있음
+   p1 = Person('김학생', 30)
+   print(p1.get_age())  # 30
+   
+   # __age에 직접 접근이 불가능
+   print(p1.__age)  # AttributeError: 'Person' object has no attribute '__age'
+   ```
  - getter 메서드와 setter 메서드
+   - 변수에 접근할 수 있는 메서드를 별도록 생성
+     - getter 메서드 : 변수의 값을 읽는 메서드
+       > @property 데코레이터 사용
+     - setter 메서드 : 변수의 값을 설정하는 성격의 메서드
+       > @변수.setter 사용
+      
 
 
 ## 에러와 예외
