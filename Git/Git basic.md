@@ -45,6 +45,7 @@
 - 개인 프로젝트의 소개 문서 작성
 - 매일 학습한 내용 정리
 - 마크다운을 이용한 블로그 운영
+- .gitignore : git init을 하고 바로 만드는 것 추천 [참고사이트](gitignore.io)
 
 ## README.md
 ### README.md
