@@ -16,4 +16,5 @@
 ### Web 정리
 
 1. [HTML & CSS](./Web/HTML_CSS.md)
-2. [Bootstrap 컴포넌트와 Grid system을 활용한 반응형 레이아웃 구성하기](./Web/0805.md)
+2. [Bootstrap](./Web/Bootstrap.md)
+3. [Bootstrap 컴포넌트와 Grid system을 활용한 반응형 레이아웃 구성하기](./Web/0805.md)
