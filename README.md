@@ -1,5 +1,8 @@
 ## 분류
 
+### Algorithm 정리
+1. [배열](./Algorithm/array.md)
+
 ### Basic 기본적인 내용 정리
 
 1. [웹크롤링](./Basic/0729.md)
