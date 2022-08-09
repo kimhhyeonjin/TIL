@@ -23,10 +23,38 @@
 ### 버블 정렬 (Bubble Sort)
  - 버블 정렬
    - 인접한 두 개의 원소를 비교하며 자리를 계속 교환하는 방식
+   - 시간복잡도 : O(n^2)
+     ```python
+     def BubbleSort(arr):  # 정렬할 List, N 원소 수
+         for i in range(len(arr)-1, 0, -1):  # 범위의 끝 위치
+             for j in range(i):
+                 if arr[j] > arr[j+1]:
+                     arr[j], arr[j+1] = arr[j+1], arr[j]
+     ```
 
 ### 카운팅 정렬 (Counting Sort)
  - 카운팅 정렬
    - 항목들의 순서를 결정하기 위해 집합에 각 항목이 몇 개씩 있는지 세는 작업을 하여 선형 시간에 정렬하는 알고리즘
+   - 시간복잡도 : O(n+k)  # n은 리스트의 길이, k는 정수의 최대값
+     ```python
+     def Counting_Sort(arr):
+         count = [0] * (max(arr) + 1)  # 0자리를 만들어야 하기 때문
+  
+         for num in arr:
+             count[num] += 1
+  
+         for i in range(1, len(count)):
+             count[i] += count[i-1]  # 누적으로 표시
+  
+         result = [0] * (len(arr))
+  
+         for num in arr:
+             idx = count[num]
+             result[idx - 1] = num  # index는 0부터 시작하기 때문에 idx - 1
+             count[num] -= 1
+  
+         print(result)
+     ```
 
 ### 완전검색
  - 문제의 해법으로 생각할 수 있는 모든 경우의 수를 나열해보고 확인하는 기법
