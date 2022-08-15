@@ -109,8 +109,7 @@ def itoa(num):
            for jdx in range(M):
                if pattern[jdx] != text[idx]:
                    break
-               else:  # break문이 작동되지 않았을 때 실행
-                      # 패턴이 매칭된 상태
+               else:  # 패턴이 매칭된 상태
                    return idx
        else:
            return -1
