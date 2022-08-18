@@ -3,6 +3,7 @@
 ### Algorithm 정리
 1. [배열](./Algorithm/array.md)
 2. [문자열](./Algorithm/string.md)
+3. [스택](Algorithm/stack.md)
 
 ### Basic 기본적인 내용 정리
 

@@ -205,3 +205,47 @@ for i in range(21):
    - 방문하지 않은 정점 w가 있으면 정점 v를 스택에 push하고 정점 w를 방문
    - 방문하지 않은 정점이 없으면 탐색의 방향을 바꾸기 위해서 스택을 pop하여 받은 가장 마지막 방문 정점을 v로 하여 다시 (2)를 반복한다
 3) 스택이 공백이 될 때까지 (2)를 반복한다
+   ```python
+   def dfs(v):                       # v: 시작점
+       top = -1
+       visited[v] = 1                # 시작점 방문 표시
+       while True:
+           for w in adjList[v]:
+           # adjList는 리스트의 각 인덱스에 선이 연결되어있는 숫자가 입력되어 있음
+               if visited[w] == 0:
+                   top += 1          # push(v)
+                   stack[top] = v
+                   v = w             # w에 방문
+                   visited[w] = 1
+                   print(v)
+                   break
+           else:
+               if top != -1:         # 스택이 비어있지 않은 경우
+                   v = stack[top]    # pop()
+                   top -= 1
+               else:                 # 스택이 비어있으면
+                   break             # while문 빠져나옴
+   # visited와 stack 리스트 생성
+   N = int(input())              # 정점의 개수 받기
+   visited = [0] * (N + 1)       # visited 생성
+   stack = [0] * (N + 1)         # stack 생성
+   # adjList 입력받기
+   L = list(map(int, input().split()))   # 모든 경로를 받기
+   E = len(L) // 2                       # 간선의 개수
+   adjList = [[] for _ in range(N + 1)]  # N은 정점의 개수
+   for i in range(E):
+       a, b = list(map(int, input().split()))
+       adjList[a].append(b)
+       adjList[b].append(a)
+       print(adjList)
+   dfs(v)
+   ```
+#### 재귀 이용
+   ```python
+   def dfs(v):
+       print(v)  # v 방문
+       visited[v] = 1
+       for w in adjList[v]:
+           if visited[w] == 0:  # 방문하지 않은 w
+               dfs(w)
+   ```
