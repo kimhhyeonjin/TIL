@@ -38,20 +38,20 @@
    - 시간복잡도 : O(n+k)  # n은 리스트의 길이, k는 정수의 최대값
      ```python
      def Counting_Sort(arr):
-         count = [0] * (max(arr) + 1)  # 0자리를 만들어야 하기 때문
+         counts = [0] * (max(arr) + 1)  # 0자리를 만들어야 하기 때문
   
          for num in arr:
-             count[num] += 1
+             counts[num] += 1
   
-         for i in range(1, len(count)):
-             count[i] += count[i-1]  # 누적으로 표시
+         for i in range(1, len(counts)):
+             counts[i] += counts[i-1]  # 누적으로 표시
   
          result = [0] * (len(arr))
   
          for num in arr:
-             idx = count[num]
+             idx = counts[num]
              result[idx - 1] = num  # index는 0부터 시작하기 때문에 idx - 1
-             count[num] -= 1
+             counts[num] -= 1
   
          print(result)
      ```
