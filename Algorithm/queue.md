@@ -121,3 +121,70 @@
    front = (front + 1) % N          # dequeue()
    print(q[front])
    ```
+
+## BFS(Breadth First Search)
+### DFS / BFS
+ - 그래프를 탐색하는 방법에는 크게 두 가지가 있음
+   - 깊이우선탐색(Depth First Search, DFS)
+   - 너비우선탐색(Breadth First Search, BFS)
+ - 너비우선탐색은 탐색 시작점의 인접한 정점들을 먼저 모두 차례로 방문한 후에, 방문했던 정점을 시작점으로 하여 다시 인접한 정점들을 차례로 방문하는 방식
+ - 인접한 정점들에 대해 탐색을 한 후 차례로 다시 너비우선탐색을 진행해야 하므로 선입선출 형태의 자료구조인 큐를 활용
+```python
+def bfs(v, N):  # v: 시작정점, N: 마지막정점
+    visited = [0] * (N+1)  # visited 생성
+    q = []  # 큐 생성
+    q.append(v)  # 시작점 인큐
+    visited[v] = 1  # 시작점 처리 표시
+
+    while q:  # 큐가 비어있지 않으면
+        v = q.pop(0)  # 디큐
+        print(v)  # visit(v)
+        for w in adjList[v]:  # 인접하고 미방문(인큐되지 않은) 정점 w가 있으면
+            if visited[w] == 0:
+                q.append(w)
+                visited[w] = visited[v] + 1
+
+V, E = map(int, input().split())
+N = V + 1
+adjList = [[] for _ in range(N)]
+for _ in range(E):
+    a, b = map(int, input().split())
+    adjList[a].append(b)
+    adjList[b].append(a)
+
+bfs(0, V)
+```
+ - 미로 문제 풀기
+   ```python
+   def bfs(i, j, N):
+       visited = [[0] * N for _ in range(N)]
+       q = []
+       q.append((i, j))
+       visited[i][j] = 1
+       while q:
+           i, j = q.pop(0)
+           if maze[i][j] == 3:
+               return 1
+           for di, dj in [[0, 1], [1, 0], [0, -1], [-1, 0]]:
+               ni, nj = i+di, j+dj
+               if 0 <= ni < N and 0 <= nj < N and maze[ni][nj] != 1 and visited[ni][nj] == 0:
+                   q.append((ni, nj))
+                   visited[ni][nj] = visited[i][j] + 1
+       return 0
+
+   T = int(input())
+   for tc in range(1, T+1):
+       N = int(input())
+       maze = [list(map(int, input())) for _ in range(N)]
+
+       sti = -1
+       stj = -1
+       for i in range(N):
+           for j in range(N):
+               if maze[i][j] == 2:
+                   sti, stj = i, j
+                   break
+           if sti != -1:
+               break
+       print(f'#{tc} {bfs(sti, stj, N)}')
+   ```
