@@ -169,7 +169,7 @@
 
 ### 이진 트리의 표현
 
-![binary_tree](Tree_assets/binary_tree.png)
+![binary_tree](tree_assets/binary_tree.png)
 
 ### 이진 트리의 표현 - 배열
 
@@ -191,7 +191,7 @@
   
   - 편향 이진 트리의 경우
     
-    ![binary_tree_array](tree_assets/9520dda05ebb4ae18c17a3c94a1f0acf40fb902f.png)
+    ![binary_tree_array](tree_assets/binary_tree_array.png)
 
 - 배열을 이용한 이진 트리 표현의 단점
   
@@ -246,7 +246,7 @@
 
 - 중위 순회하면 오름차순으로 정렬된 값을 얻을 수 있음
 
-![binary_search_tree](tree_assets/79289ffb471af1252f7b1e601b5d8e947de71321.png)
+![binary_search_tree](tree_assets/binary_search_tree.png)
 
 ### 이진 탐색 트리 - 연산
 
