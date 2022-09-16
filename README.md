@@ -20,7 +20,8 @@
 ### Python 정리
 
 1. [Python 기초](./Python/basic.md)
-2. [Python 조건문_반복문_함수](./Python/control_statement_function.md)
+2. [조건문_반복문_함수](./Python/control_statement_function.md)
+3. [데이터 구조 및 활용](./Python/data_structure.md)
 
 ### Web 정리
 
