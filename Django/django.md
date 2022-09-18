@@ -114,3 +114,18 @@
       path('articles/', include('articles.urls')),
   ]
   ```
+
+### admin 계정 생성
+
+- `python manage.py createsuperuser`
+  
+  - username과 password를 입력해 관리자 계정 생성
+
+- 모델의 record를 보기 위해서는 `admin.py`에 등록 필요
+  
+  - ```python
+    from django.comtrib import admin
+    from .models import 모델명
+    
+    admin.site.register(모델명)
+    ```
