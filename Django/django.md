@@ -1,8 +1,6 @@
 # 장고
 
-# 장고 프로젝트
-
-## 가상환경 생성하기
+## 장고 프로젝트
 
 ### 가상환경 설정 및 활성화
 
@@ -13,11 +11,12 @@
 - 가상환경 활성화
   
   - `source venv/Script/activate` : 윈도우
-  - `source venv/Bin/activate` : 맥
-
-- `pip list`를 통해 가상환경이 정상적으로 적용되었는지 확인
   
-  ### 장고 설치
+  - `source venv/Bin/activate` : 맥
+  
+  - `pip list`를 통해 가상환경이 정상적으로 적용되었는지 확인
+
+### 장고 설치
 
 - `pip install django==3.2` : Django의 LTS 버전이 3.2
 
@@ -28,27 +27,30 @@
 - 이미 작성된 패키지 리스트 설치
   
   - `pip install -r requirements.txt`
-    
-    ### 장고 프로젝트 생성
+
+### 장고 프로젝트 생성
 
 - `django-admin startproject config .`
   
   - django-admin startproject 프로젝트폴더명 [.]
+  
   - 마지막에 .이 있는 경우 현재 폴더에 바로 생성
+  
   - .이 없는 경우 프로젝트 폴더를 만들고 그 내부에 필요한 폴더와 파일 생성
-    
-    ### 장고 application 생성
+
+### 장고 application 생성
 
 - `python manage.py startapp articles`
   
   - python manage.py startapp application이름
+  
   - application이름은 복수형으로
 
 - `setting.py`에 방금 생성한 application 등록
   
   - `INSTALLED_APPS` 리스트 내부에 application 이름 등록
-    
-    ### base.html 생성
+
+### base.html 생성
 
 - base.html은 코드의 재사용성을 높이기 위한 파일
 
@@ -57,6 +59,7 @@
 - `setting.py`의 `TEMPLATES`의 `DIRS`에 방금 생성한 폴더의 경로 등록
   
   - `'DIRS': [BASE_DIR / 'templates'],`
+    
     - BASE_DIR : 전체 폴더 경로를 의미
 
 - `templates` 폴더 내부에 base.html 파일 생성
@@ -80,8 +83,8 @@
   </body>
   </html>
   ```
-  
-  ### url 분리
+
+### url 분리
 
 - application 폴더 내부에 `urls.py` 파일 생성
 
