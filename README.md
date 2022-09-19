@@ -8,10 +8,16 @@
 4. [큐](./Algorithm/queue.md)
 5. [트리](./Algorithm/tree.md)
 6. [컴퓨팅사고](./Algorithm/computational_thinking.md)
+7. [APS 응용](./Algorithm/APS%20응용.md)
 
 ### Basic 기본적인 내용 정리
 
 1. [웹크롤링](./Basic/0729.md)
+
+### Django
+
+1. [Django 기본코드](./Django/django.md)
+2. [Django url, view, html, admin](./Django/django_1/)
 
 ### Git 정리
 
