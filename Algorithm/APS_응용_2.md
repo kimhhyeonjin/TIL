@@ -180,6 +180,15 @@
   used = [0] * N
   p = [0] * R
   f(0, N, R)
+  
+  # 만약 2를 맨 앞으로 고정하고 싶은 경우는 아래 3줄을 변형
+  '''
+  used = [0] * N
+  p = [0] * R
+  p[0] = 2
+  used[1] = 1
+  f(1, N, R)
+  '''
   ```
 
 ### 부분 집합
@@ -226,3 +235,138 @@
   bit = [0] * n
   f(0, n)
   ```
+
+### 조합 (Combination)
+
+- 조합
+  
+  - 서로 다른 n개의 원소 중 r개를 순서 없이 골라낸 것
+  - 조합의 수식 (재귀적 표현으로)
+    - nCr = n-1Cr-1 + n-1Cr
+
+- 10개의 원소 중 3개를 고르는 조합
+  
+  ```python
+  N = 10
+  for i in range(N-2):
+      for j in range(i+1, N-1):
+          for k in range(j+1, N):
+              print(i, j, k)
+  ```
+
+- 재귀 호출을 이용한 조합 생성 알고리즘
+  
+  ```python
+  def nCr(n, r, s):
+  # n개에서 r개를 고르는 조합, s: 선택할 수 있는 구간의 시
+      if r == 0:
+          print(*comb)
+      else:
+          for i in range(s, n-r+1):
+              comb[r-1] = A[i]
+              nCr(n, r-1, i+1)
+  
+  A = [i for i in range(0, 10)]
+  n = len(A)
+  r = 5
+  comb = [0] * r
+  nCr(n, r, 0)
+  ```
+
+- n개에서 r개를 고르는 조합
+
+### 탐욕(Greedy) 알고리즘
+
+- 탐욕 알고리즘
+  
+  - 최적해를 구하는데 사용되는 근시안적인 방법
+  - 여러 경우 중 하나를 선택할 때마다 그 순간에 최적이라고 생각되는 것을 선택해나가는 방식으로 진행하여 최종적인 해답에 도달
+  - 각 선택 시점에서 이루어지는 결정은 지역적으로는 최적이지만 그 선택을 계속 수집하여 최종적인 해답을 만들었다고 해서 그것이 최적이라는 보장은 없음
+
+- 탐욕 알고리즘의 동작 과정
+  
+  1. 해 선택: 현재 상태에서 부분 문제의 최적 해를 구한 뒤, 이를 부분 해 집합(Solution Set)에 추가
+  
+  2. 실행 가능성 검사: 새로운 부분 해 집합이 실행가능한지를 확인
+  
+  3. 해 검사: 새로운 부분 해 집합이 문제의 해가 되는지를 확인한 후 아직 전체 문제의 해가 완성되지 않았다면 위의 과정을 반복
+
+- 탐욕 기법과 동적 계획법의 비교
+  
+  | 탐욕 기법                      | 동적 계획법                       |
+  | -------------------------- | ---------------------------- |
+  | 매 단계에서 가장 좋게 보이는 것을 빠르게 선택 | 매 단계의 선택은 해결한 하위 문제의 해를 기반으로 |
+  | 하위 문제를 풀기 전에 선택이 먼저 이루어짐   | 하위 문제가 우선 해결                 |
+  | Top-down 방식                | Bottom-up 방식                 |
+  | 일반적으로 빠르고 간결               | 상대적으로 느리고 복잡                 |
+
+### Baby Gin
+
+```python
+# 1. 순열을 만들어 조건을 만족하는지 확인
+def f(i, k):
+    if i == k:
+        run = 0
+        tri = 0
+        if card[0] == card[1] and card[1] == card[2]:
+            tri += 1
+        if card[0]+1 == card[1] and card[1]+1 == card[2]:
+            run += 1
+        if card[3] == card[4] and card[4] == card[5]:
+            tri += 1
+        if card[3]+1 == card[4] and card[4]+1 == card[5]:
+            run += 1
+        if tri + run == 2:
+            return 1
+        else:
+            return 0
+    else:
+        for j in range(i, k):
+            card[i], card[j] = card[j], card[i]
+            if f(i+1, k):
+                return 1
+            card[i], card[j] = card[j], card[i]
+        return 0
+
+
+T = int(input())
+for tc in range(1, T+1):
+    card = list(map(int, input()))
+    ans = f(0, 6)
+    if ans:
+        print(f'#{tc} Baby Gin')
+    else:
+        print(f'#{tc} Lose')
+
+# 2. 카운팅배열 이용
+T = int(input())
+for tc in range(1, T+1):
+    card = int(input())
+    c = [0] * 12
+
+    i = 0
+    while i < 6:
+        c[card % 10] += 1
+        card //= 10
+        i += 1
+
+    tri = 0
+    run = 0
+    i = 1
+    while i < 10:
+        if c[i] >= 3:
+            c[i] -= 3
+            tri += 1
+            continue
+        if c[i] >= 1 and c[i+1] >= 1 and c[i+2] >= 1:
+            c[i] -= 1
+            c[i+1] -= 1
+            c[i+2] -= 1
+            run += 1
+            continue
+        i += 1
+    if run + tri == 2:
+        print(f'#{tc} Baby Gin')
+    else:
+        print(f'#{tc} Lose')
+```
