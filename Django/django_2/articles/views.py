@@ -20,6 +20,19 @@ def new(request):
 
 
 def create(request):
+    form = ArticleForm(request.POST)
+    # 유효성 검사
+    if form.is_valid():
+        article = form.save()       # 저장 후 인스턴스를 반환
+        return redirect('articles:detail', article.pk)
+    # print(f'에러: {form.errors}')
+    # 에러가 발생하는 경우 에러메시지를 포함한 new.html로 돌아가도록
+    context = {
+        'form': form,
+    }
+    return render(request, 'articles/new.html', context)
+
+'''
     # 사용자의 데이터를 받아서 (2가지 방법)
     # 1. method =GET인 경우
     # print(request.GET)  # 딕셔너리 형태
@@ -49,10 +62,10 @@ def create(request):
     # 3. (QuerySet API 중 create() 메서드 활용)
     # Article.objects.create(title = title, content = content)
 
-
     # 글 작성을 완료한 후 뜨는 페이지 설정
     # 방금 작성한 글 페이지(detail)로 이동
     return redirect('articles:detail', article.id)
+'''
 
 
 def detail(request, article_id):
@@ -65,18 +78,31 @@ def detail(request, article_id):
 
 def edit(request, article_id):
     article = Article.objects.get(id=article_id)
+    form = ArticleForm(instance=article)
     context = {
         'article' : article,
+        'form': form,
     }
     return render(request, 'articles/edit.html', context)
 
 
 def update(request, article_id):
     article = Article.objects.get(id=article_id)
-    article.title = request.POST.get('title')
-    article.content = request.POST.get('content')
-    article.save()   
-    return redirect('articles:detail', article.id)
+    form = ArticleForm(request.POST, instance=article)
+    if form.is_valid():
+        article = form.save()
+        return redirect('articles:detail', article.id)
+    # 유효성 검증을 실패한 경우
+    context = {
+        'form': form,
+    }
+    return render(request, 'articles/edit.html', context)
+'''
+    # article.title = request.POST.get('title')
+    # article.content = request.POST.get('content')
+    # article.save()   
+    # return redirect('articles:detail', article.id)
+'''
 
 
 def delete(request, article_id):
