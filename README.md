@@ -8,7 +8,7 @@
 4. [큐](./Algorithm/queue.md)
 5. [트리](./Algorithm/tree.md)
 6. [컴퓨팅사고](./Algorithm/computational_thinking.md)
-7. [APS_응용](./Algorithm/APS_응용.md)
+7. [APS_응용_1](./Algorithm/APS_응용_1.md)
 8. [APS_응용_2](./Algorithm/APS_응용_2.md)
 9. [APS_응용_3](./Algorithm/APS_응용_3.md)
 10. [APS_응용_4](./Algorithm/APS_응용_4.md)
