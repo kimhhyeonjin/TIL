@@ -17,6 +17,10 @@
 
 1. [웹크롤링](./Basic/0729.md)
 
+### DB
+
+1. [DB](./DB/SQL_ORM.md)
+
 ### Django
 
 1. [Django 기본코드](./Django/django.md)
