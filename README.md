@@ -19,7 +19,8 @@
 
 ### DB
 
-1. [DB](./DB/SQL_ORM.md)
+1. [SQL_기본](./DB/SQL_ORM.md)
+2. [Django에서의_N:1_관계](./DB/Database_Relationship.md)
 
 ### Django
 
