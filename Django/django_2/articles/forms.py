@@ -28,7 +28,7 @@ class ArticleForm(forms.ModelForm):
         # 위젯은 유효성검사와 상관 없는 부분
         widget=forms.TextInput(
             attrs={
-                'class': 'my-title',
+                'class': 'my-title form-control',
                 'placeholder': 'Enter the title',
                 # 길이를 정하더라도 유효성검사를 하지는 않음
                 'maxlength': 10,
@@ -40,7 +40,7 @@ class ArticleForm(forms.ModelForm):
         label='내용',
         widget=forms.Textarea(
             attrs={
-                'class': 'my-content',
+                'class': 'my-content form-control',
                 'placeholder': 'Enter the content',
                 'rows': 5,
                 'cols': 50,
