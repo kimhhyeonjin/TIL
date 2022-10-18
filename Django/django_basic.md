@@ -155,9 +155,35 @@
 
 - 모델의 record를 보기 위해서는 `admin.py`에 등록 필요
   
-  - ```python
-    from django.comtrib import admin
-    from .models import 모델명
+  ```python
+  from django.comtrib import admin
+  from .models import 모델명
+  
+  admin.site.register(모델명)
+  ```
+
+### Model 작성
+
+- Migrations
+  
+  - 모델에 대한 청사진을 만들고 이를 통해 테이블을 생성하는 일련의 과정
+  
+  - Django가 모델에 생긴 변화(필드 추가, 모델 삭제 등)를 DB에 반영하는 방법
+
+- makemigrations
+  
+  - 테이블을 만들기 위한 설계도 생성
     
-    admin.site.register(모델명)
+    ```bash
+    $ python manage.py makemigrations
+    ```
+
+- migrate
+  
+  - makemigrations로 만든 설계도를 실제 db.sqlite3 DB 파일에 반영하는 과정
+  
+  - 모델과 DB의 동기화
+    
+    ```bash
+    $ python manage.py migrate
     ```
