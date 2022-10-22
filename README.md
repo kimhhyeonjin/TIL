@@ -25,8 +25,9 @@
 
 ### Django
 
-1. [Django 기본코드](./Django/django.md)
-2. [Django url, view, html, admin](./Django/django_1/)
+1. [Django 기본코드](./Django/django_basic.md)
+2. [Django 개념](./Django/django_crud.md)
+3. [Django 게시판 CRUD](./Django/article_crud.md)
 
 ### Git 정리
 
