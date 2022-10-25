@@ -269,3 +269,152 @@ class ArticleForm(forms.ModelForm):
         model = Article
         fields = '__all__'
 ```
+
+## Handling HTTP requests
+
+- new와 create / edit과 update를 view 함수에서 method에 따라 로직이 분리되도록 변경
+
+### Create
+
+- request.method로 new와 create를 나누어 하나의 view 함수로 나타냄
+  
+  ```python
+  # articles/views.py
+  
+  def create(request):
+      if request.method == 'POST':
+          # create
+          form = ArticleForm(request.POST)
+          if form.is_valid():
+              article = form.save()
+              return redirect('articles:detail', article.pk)
+  
+      else:
+          # new
+          form = ArticleForm()
+  
+      context = {
+          'form' : form,
+      }
+      return render(request, 'articles/create.html', context)
+  ```
+  
+  - 기존의 new 함수와 url path 삭제
+  
+  - new.html의 이름을 create.html로 수정
+    
+    ```html
+    <!-- articles/create.html -->
+    
+    {% extends 'base.html' %}
+    
+    {% block content %}
+      <h1>CREATE</h1>
+      ...
+    
+    {% endblock content %}
+    ```
+  
+  - index 페이지에 있던 new 관련 링크 수정
+    
+    ```html
+    <!-- articles/index.html -->
+    
+    {% extends 'base.html' %}
+    
+    {% block content %}
+      <h1>Articles</h1>
+      <a href="{% url 'articles:create' %}">CREATE</a>
+      ...
+    {% endblock content %}
+    ```
+
+### Update
+
+- request.method로 edit과 update를 나누어 하나의 view 함수로 나타냄
+  
+  ```python
+  # articles/views.py
+  
+  def update(request, article_id):
+      article = Article.objects.get(id=article_id)
+      if request.method == 'POST':
+          form = ArticleForm(request.POST, instance=article)
+          if form.is_valid():
+              article = form.save()
+              return redirect('articles:detail', article.id)
+  
+      else:
+          form = ArticleForm(instance=article)
+  
+      context = {
+          'article': article,
+          'form': form,
+      }
+      return render(request, 'articles/update.html', context)
+  ```
+  
+  - 기존의 edit 함수와 url path 삭제
+  
+  - edit.html의 이름을 update.html로 수정
+    
+    ```html
+    <!-- articles/update.html -->
+    
+    {% extends 'base.html' %}
+    
+    {% block content %}
+      <h1>글 수정하기</h1>
+      ...
+    
+    {% endblock content %}
+    ```
+  
+  - detail 페이지에 있던 edit 관련 링크 수정
+    
+    ```html
+    <!-- articles/detail.html -->
+    
+    {% extends 'base.html' %}
+    
+    {% block content %}
+      ...
+      <a href="{% url 'articles:update' article.id %}">[수정하기]</a><br>
+      ...
+    {% endblock content %}
+    ```
+
+## View decorators
+
+- 데코레이터 (Decorator)
+  
+  - 기존에 작성된 함수에 기능을 추가하고 싶을 때, 해당 함수를 수정하지 않고 기능을 추가해주는 함수
+  
+  - require_http_methods()
+    
+    - View 함수가 특정한 요청 method만 허용하도록 하는 데코레이터
+      
+      ```python
+      from django.views.decorators.http import require_http_methods
+      @require_http_methods(['GET', 'POST'])
+      ```
+  
+  - require_POST
+    
+    - View 함수가 POST 요청 method만 허용하도록 하는 데코레이터
+      
+      ```python
+      from django.views.decorators.http import require_POST
+      @require_POST
+      ```
+  
+  - require_safe()
+    
+    - View 함수가 GET 요청 method만 허용하도록 하는 데코레이터
+    
+    - require_GET이 있지만 Django에서는 require_safe를 사용하는 것을 권장함
+      
+      ```python
+      from django.views.decorators.http import require_safe
+      @require_safe
+      ```
