@@ -35,6 +35,12 @@
 1. [git basic 정리](./Git/Git%20basic.md)
 2. [git 심화 정리](./Git/Git_advanced.md)
 
+### JavaScript 정리
+
+1. [JavaScript_기초](./JavaScript/JavaScript_기초.md)
+2. [DOM_Event_this](./JavaScript/DOM_Event_this.md)
+3. [동기와_비동기](./JavaScript/동기와_비동기.md)
+
 ### Python 정리
 
 1. [Python 기초](./Python/basic.md)
