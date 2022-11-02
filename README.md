@@ -50,6 +50,7 @@
 
 ### Vue 정리
 1. [Vue basic](./Vue/Vue_basic.md)
+2. [Vue CLI](./Vue/Vue_CLI.md)
 
 ### Web 정리
 
