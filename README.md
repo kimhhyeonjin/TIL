@@ -48,6 +48,9 @@
 3. [데이터 구조 및 활용](./Python/data_structure.md)
 4. [객체지향프로그래밍](./Python/OOP.md)
 
+### Vue 정리
+1. [Vue basic](./Vue/Vue_basic.md)
+
 ### Web 정리
 
 1. [HTML & CSS](./Web/HTML_CSS.md)
