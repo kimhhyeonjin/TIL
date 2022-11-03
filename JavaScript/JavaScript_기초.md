@@ -406,3 +406,279 @@
     const result = Math.PI > 4 ? 'true' : 'false'
     console.log(result)  // false
     ```
+
+### 조건문
+
+- 조건문의 종류와 특징
+  
+  - `if` statement
+    
+    - 조건 표현식의 결과값을 boolean 타입으로 변환 후 참/거짓을 판단
+    
+    - 조건이 많은 경우 가독성이 좋지 않고 유지보수하기 힘들어짐
+  
+  - `switch` statement
+    
+    - 조건 표현식의 결과값이 어느 경우에 해당하는지 판별
+    
+    - 주로 특정 변수의 값에 따라 조건을 분기할 때 활용
+      
+      - 조건이 많아질 경우 if문보다 가독성이 나을 수 있음
+
+- if statement
+  
+  - if, else if, else
+    
+    - 조건은 소괄호(condition) 안에 작성
+    
+    - 실행한 코드는 중괄호 안에 작성
+    
+    - 블록 스코프 생성
+    
+    ```js
+    const name = 'admin'
+    
+    if (name === 'admin') {
+      console.log('관리자님 환영합니다.')
+    } else if (name === 'manager') {
+      console.log('매니저님 환영합니다.')
+    } else {
+      console.log(`${name}님 환영합니다.`)
+    }
+    ```
+
+- switch statement
+  
+  - 표현식의 결과값을 이용한 조건문
+  
+  - break 및 default 문은 선택적으로 사용 가능
+  
+  - break문이 없는 경우 break문을 만나거나 default문을 실행할 때까지 다음 조건문 실행
+    
+    - Fall-through 현상
+      
+      ```js
+      const name = 'admin'
+      
+      switch(name) {
+        case 'admin': {
+          console.log('관리자님 환영합니다.')
+        }
+        case 'manager': {
+          console.log('매니저님 환영합니다.')
+        }
+        default: {
+          console.log(`${name}님 환영합니다.`)
+        }
+      }
+      
+      // 관리자님 환영합니다.
+      // 매니저님 환영합니다.
+      // admin님 환영합니다.
+      ```
+      
+      - break를 작성하면 의도한대로 동작
+        
+        ```js
+        const name = 'admin'
+        
+        switch(name) {
+          case 'admin': {
+            console.log('관리자님 환영합니다.')
+            break
+          }
+          case 'manager': {
+            console.log('매니저님 환영합니다.')
+            break
+          }
+          default: {
+            console.log(`${name}님 환영합니다.`)
+          }
+        }
+        
+        // 관리자님 환영합니다.
+        ```
+  
+  - 블록 스코프 생성
+
+### 반복문
+
+- while
+  
+  - 조건문이 참이기만 하면 문장을 계속해서 수행
+    
+    ```js
+    let i = 0
+    
+    while (i < 6) {
+      console.log(i)
+      i += 1
+    }
+    
+    // 0
+    // 1
+    // 2
+    // 3
+    // 4
+    // 5
+    ```
+
+- for
+  
+  - 특정한 조건이 거짓으로 판별될 때까지 반복
+  
+  - 초기문에 정의한 변수를 재할당하면서 사용하기 때문에 const를 사용하면 에러가 발생함
+    
+    ```js
+    for ([초기문]; [조건문]; [증감문]) {
+      // 실행할 내용
+    }
+    
+    for (let i = 0; i < 6; i++) {
+        console.log(i)
+    }
+    
+    // 0
+    // 1
+    // 2
+    // 3
+    // 4
+    // 5
+    ```
+
+- for ... in
+  
+  - **객체의 속성을 순회**할 때 사용
+    
+    ```js
+    for (variable in object) {
+      statements
+    }
+    
+    const fruits = { a: 'apple', b: 'banana' }
+    
+    for (const key in fruits) {
+      console.log(key)
+      console.log(fruits[key])
+    }
+    
+    // a
+    // apple
+    // b
+    // banana
+    ```
+
+- for ... of
+  
+  - **반복 가능한 객체를 순회**할 때 사용: Array, Set, String 등
+    
+    ```js
+    for (variable of object) {
+      statements
+    }
+    
+    const numbers = [0, 1, 2, 3]
+    
+    for (const number of numbers) {
+      console.log(number)
+    }
+    
+    // 0
+    // 1
+    // 2
+    // 3
+    ```
+
+- for ... in과 for ... of
+  
+  - for ... in은 속성 이름을 통해 반복
+  
+  - for ... of는 속성 값을 통해 반복
+  
+  - 재할당이 아니라 매 반복 시 변수를 새로 정의하여 사용하므로 에러가 발생하지 않음
+
+## 함수
+
+- 개요
+  
+  - 참조 타입 중 하나로써 function 타입에 속함
+  
+  - JavaScript에서 함수를 정의하는 방법은 주로 2가지로 구분됨
+    
+    - 함수 선언식 (function declaration)
+    
+    - 함수 표현식 (function expression)
+
+### 함수의 정의
+
+- 함수 선언식
+  
+  - 일반적인 프로그래밍 언어의 함수 정의 방식
+    
+    ```js
+    function add(num1, num2) {
+      return num1 + num2
+    }
+    
+    add(2, 7)
+    ```
+
+- 함수 표현식
+  
+  - 표현식 내에서 함수를 정의하는 방식
+  
+  - 함수 표현식은 함수의 이름을 생략한 익명 함수로 정의 가능
+    
+    ```js
+    const sub = function (num1, num2) {
+      return num1 - num2
+    }
+    
+    sub(7, 2)
+    ```
+  
+  - 표현식에서 함수 이름을 명시하는 것도 가능
+  
+  - 다만 이 경우 함수 이름은 호출에 사용되지 못하고 디버깅 용도로 사용됨
+    
+    ```js
+    const mySub = function namedSub(num1, num2) {
+      return num1 - num2
+    }
+    
+    mySub(1, 2)
+    namedSub(1, 2)  // ReferenceError: namedSub is not defined
+    ```
+
+- 기본 인자 (Default arguments)
+  
+  - 인자 작성 시 = 문자 뒤 기본 인자 선언 가능
+    
+    ```js
+    const greeting = function (name = 'admin') {
+      return `Hi ${name}`
+    }
+    
+    greeting()  // Hi admin
+    ```
+
+- 매개변수와 인자의 개수 불일치 허용
+  
+  - 매개변수보다 인자의 개수가 많거나 적을 경우
+    
+    ```js
+    const threeArgs = function (arg1, arg2, arg3) {
+      return [arg1, arg2, arg3]
+    }
+    
+    threeArgs()
+    // [ undefined, undefined, undefined ]
+    threeArgs(1)
+    // [ 1, undefined, undefined ]
+    threeArgs(1, 2)
+    // [ 1, 2, undefined ]
+    threeArgs(1, 2, 3)
+    // [ 1, 2, 3 ]
+    threeArgs(1, 2, 3, 4)
+    // [ 1, 2, 3 ]
+    ```
