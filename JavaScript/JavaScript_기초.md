@@ -682,3 +682,168 @@
     threeArgs(1, 2, 3, 4)
     // [ 1, 2, 3 ]
     ```
+
+### 선언식과 표현식
+
+- 함수의 타입
+  
+  - 선언식 함수와 표현식 함수 모두 타입은 function으로 동일
+    
+    ```js
+    // 함수 표현식
+    const add = function (args) {
+      // return
+    }
+    
+    // 함수 선언식
+    function add(args) {
+      // return
+    }
+    ```
+  
+  - 함수 선언식
+    
+    - 호이스팅 발생
+  
+  - 함수 표현식
+    
+    - 함수 정의 전에 호출 시 에러 발생
+    
+    - 함수 표현식으로 정의된 함수는 변수로 평가되어 변수의 scope 규칙을 따름
+
+### 화살표 함수 (Arrow Function)
+
+- 화살표 함수
+  
+  1. function 키워드 생략 및 화살표 추가
+  
+  2. 함수의 매개변수가 하나 뿐이라면 매개변수의 `()` 생략 가능
+  
+  3. 함수의 내용이 한 줄이라면 `{}`와 `return`도 생략 가능
+
+- 화살표 함수는 익명 함수이므로 함수 표현식에서만 사용 가능
+  
+  ```js
+  // 화살표 함수는 함수 표현식에서만 가능
+  // 함수 표현식
+  const arrow1 = function (name) {
+    return `hello, ${name}`
+  }
+  
+  console.log(arrow1('Tom'))  // hello, Tom
+  
+  // 화살표 함수
+  const arrow2 = (name) => `hello, ${name}`
+  
+  console.log(arrow2('Tom'))  // hello, Tom
+  ```
+
+## Array와 Object
+
+### 배열 (Array)
+
+- 배열
+  
+  - 키와 속성을 담고 있는 참조 타입의 객체
+  
+  - 순서를 보장
+  
+  - 대괄호를 이용하여 생성하고, 0부터 시작하는 인덱스로 특정 값에 접근 가능
+  
+  - 배열의 길이는 `array.length` 형태로 접근 가능
+
+### 배열 메서드 기본
+
+- array.reverse()
+  
+  - 원본 배열 요소의 순서를 반대로 정렬
+    
+    ```js
+    const numbers = [1, 2, 3, 4, 5]
+    numbers.reverse()
+    console.log(numbers)  // [ 5, 4, 3, 2, 1 ]
+    ```
+
+- arr.push() & array.pop()
+  
+  - 배열의 가장 뒤에 요소를 추가 또는 제거
+    
+    ```js
+    const numbers = [1, 2, 3, 4, 5]
+    
+    // push
+    numbers.push(6)
+    console.log(numbers)  // [ 1, 2, 3, 4, 5, 6 ]
+    
+    // pop
+    numbers.pop()
+    console.log(numbers)  // [ 1, 2, 3, 4, 5 ]
+    ```
+
+- array.unshift() & array.shift()
+  
+  - 배열의 가장 앞에 요소를 추가 또는 제거
+    
+    ```js
+    const numbers = [1, 2, 3, 4, 5]
+    
+    // unshift
+    numbers.unshift(0)
+    console.log(numbers)  // [ 0, 1, 2, 3, 4, 5 ]
+    
+    // shift
+    numbers.shift()
+    console.log(numbers)  // [ 1, 2, 3, 4, 5 ]
+    ```
+
+- array.includes(value)
+  
+  - 배열에 특정 값(value)이 존재하는지 판별 후 true 또는 false 반환
+    
+    ```js
+    const numbers = [1, 2, 3, 4, 5]
+    
+    console.log(numbers.includes(5))  // true
+    
+    console.log(numbers.includes(50))  // false
+    ```
+
+- array.indexOf(value)
+  
+  - 배열에 특정 값이 존재하는지 확인 후 가장 첫번째로 찾은 요소의 인덱스 반환
+  
+  - 만약 해당 값이 없을 경우 -1 반환
+    
+    ```js
+    const numbers = [1, 2, 3, 4, 5]
+    let idx
+    
+    idx = numbers.indexOf(5)
+    console.log(idx)  // 4
+    
+    idx = numbers.indexOf(50)
+    console.log(idx)  // -1
+    ```
+
+- array.join([separator])
+  
+  - 배열의 모든 요소를 연결하여 반환
+  
+  - separator는 선택적으로 지정 가능하며 생략 시 쉼표를 기본값으로 사용
+    
+    ```js
+    const numbers = [1, 2, 3, 4, 5]
+    let idx
+    
+    idx = numbers.join()
+    console.log(idx)  // 1,2,3,4,5
+    
+    idx = numbers.join('')
+    console.log(idx)  // 12345
+    
+    idx = numbers.join(' ')
+    console.log(idx)  // 1 2 3 4 5
+    
+    idx = numbers.join('-')
+    console.log(idx)  // 1-2-3-4-5
+    ```
