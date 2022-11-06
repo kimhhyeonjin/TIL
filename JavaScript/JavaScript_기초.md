@@ -754,7 +754,7 @@
 
 ### 배열 메서드 기본
 
-- array.reverse()
+- `array.reverse()`
   
   - 원본 배열 요소의 순서를 반대로 정렬
     
@@ -764,7 +764,7 @@
     console.log(numbers)  // [ 5, 4, 3, 2, 1 ]
     ```
 
-- arr.push() & array.pop()
+- `array.push() & array.pop()`
   
   - 배열의 가장 뒤에 요소를 추가 또는 제거
     
@@ -780,7 +780,7 @@
     console.log(numbers)  // [ 1, 2, 3, 4, 5 ]
     ```
 
-- array.unshift() & array.shift()
+- `array.unshift() & array.shift()`
   
   - 배열의 가장 앞에 요소를 추가 또는 제거
     
@@ -796,7 +796,7 @@
     console.log(numbers)  // [ 1, 2, 3, 4, 5 ]
     ```
 
-- array.includes(value)
+- `array.includes(value)`
   
   - 배열에 특정 값(value)이 존재하는지 판별 후 true 또는 false 반환
     
@@ -808,7 +808,7 @@
     console.log(numbers.includes(50))  // false
     ```
 
-- array.indexOf(value)
+- `array.indexOf(value)`
   
   - 배열에 특정 값이 존재하는지 확인 후 가장 첫번째로 찾은 요소의 인덱스 반환
   
@@ -825,7 +825,7 @@
     console.log(idx)  // -1
     ```
 
-- array.join([separator])
+- `array.join([separator])`
   
   - 배열의 모든 요소를 연결하여 반환
   
@@ -847,3 +847,141 @@
     idx = numbers.join('-')
     console.log(idx)  // 1-2-3-4-5
     ```
+
+### 배열 헬퍼 메서드 (Array Helper Methods)
+
+- Array Helper Methods
+  
+  - 배열을 순회하며 특정 로직을 수행하는 메서드
+  
+  - 메서드 호출 시 인자로 callback 함수를 받는 것이 특징
+    
+    - callback 함수: 어떤 함수의 내부에서 실행될 목적으로 인자로 넘겨받는 함수
+      
+      - 3가지 매개변수로 구성
+        
+        - element: 배열의 요소
+        
+        - index: 배열 요소의 인덱스
+        
+        - array: 배열 자체
+
+- forEach
+  
+  - `array.forEach(callback(element[, index[, array]]))`
+  
+  - return 값 없음
+    
+    ```js
+    const cafeStuff = ['table', 'chair', 'book', 'cup', 'window']
+    
+    cafeStuff.forEach((cafe) => console.log(cafe))
+    
+    // table
+    // chair
+    // book
+    // cup
+    // window
+    ```
+
+- map
+  
+  - `array.map(callback(element[, index[, array]]))`
+  
+  - 배열의 각 요소에 대해 콜백 함수를 한 번씩 실행
+  
+  - 콜백 함수의 반환 값을 요소로 하는 새로운 배열 반환
+    
+    ```js
+    const numbers = [1, 2, 3]
+    
+    const tripleNumbers = numbers.map((number) => {
+        return number * 3
+    })
+    
+    console.log(tripleNumbers)  // [ 3, 6, 9 ]
+    ```
+
+- filter
+  
+  - `array.filter(callback(element[, index[, array]]))`
+  
+  - 배열의 각 요소에 대해 콜백 함수를 한 번씩 실행
+  
+  - 콜백 함수의 반환 값이 true인 요소만 모아 새로운 배열 반환
+    
+    ```js
+    const foods = [
+        { name: 'cucumber', type: 'vegetable' },
+        { name: 'banana', type: 'fruit' },
+        { name: 'carrot', type: 'vegetable' },
+        { name: 'apple', type: 'fruit' },
+    ]
+    
+    const fruits = foods.filter((food) => {
+        return food.type === 'fruit'
+    })
+    
+    console.log(fruits)
+    // [ { name: 'banana', type: 'fruit' }, { name: 'apple', type: 'fruit' } ]
+    ```
+
+- reduce
+  
+  - `array.reduce(callback(acc, element, [index[, array]])[, initialValue])`
+  
+  - 인자로 주어지는 함수(콜백 함수)를 배열의 각 요소에 대해 한 번씩 실행해서, 하나의 결과 값을 반환
+  
+  - 배열을 하나의 값으로 계산하는 동작이 필요할 때 사용(총합, 평균 등)
+  
+  - acc
+    
+    - 이전 callback 함수의 반환 값이 누적되는 변수
+  
+  - initialValue(선택)
+    
+    - 최초 callback 함수 호출 시 acc에 할당되는 값, default 값은 배열의 첫 번째 값
+      
+      - 지정하지 않을 시 첫번째 요소의 값
+      
+      - 빈 배열의 경우 지정하지 않으면 에러 발생
+    
+    ```js
+    const score = [90, 80, 70, 60]
+    
+    const sum = score.reduce((total, x) => total + x, 0)
+    console.log(sum)  // 300
+    
+    const avg = score.reduce((total, x) => total + x, 0) / score.length
+    console.log(avg)  // 75
+    ```
+
+- find
+  
+  - `array.find(callback(element[, index[, array]]))`
+  
+  - 배열의 각 요소에 대해 콜 백 함수를 한 번씩 실행
+  
+  - 콜백 함수의 반환 값이 true이면 조건을 만족하는 첫번째 요소를 반환
+  
+  - 찾는 값이 배열에 없으면 undefined 반환
+
+- some
+  
+  - `array.some(callback(element[, index[, array]]))`
+  
+  - 배열의 요소 중 하나라도 주어진 판별 함수를 통과하면 true 반환
+  
+  - 모든 요소가 통과하지 못하면 거짓 반환
+  
+  - 빈 배열은 항상 false 반환
+
+- every
+  
+  - `array.every(callback(element[, index[, array]]))`
+  
+  - 배열의 모든 요소가 주어진 판별 함수를 통과하면 true 반환
+  
+  - 하나의 요소라도 통과하지 못하면 false 반환
+  
+  - 빈 배열은 항상 true 반환
