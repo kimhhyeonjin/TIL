@@ -302,3 +302,336 @@ export default new Vuex.Store({
     - actions의 두번째 인자
     
     - 넘겨준 데이터를 받아서 사용
+
+## Lifecycle Hooks
+
+### Lifecycle Hooks
+
+![Lifecycle_hooks](Vuex_assets/Lifecycle_hooks.png)
+
+- Lifecycle Hooks
+  
+  - 각 Vue 인스턴스는 생성과 소멸의 과정 중 단계별 초기화 과정을 거침
+    
+    - Vue 인스턴스가 생성된 경우, 인스턴스를 DOM에 마운트하는 경우, 데이터가 변경되어 DOM를 업데이트하는 경우 등
+  
+  - 각 단계가 트리거가 되어 특정 로직을 실행할 수 있음
+
+- created
+  
+  - Vue instance가 생성된 후 호출됨
+  
+  - data, computed 등의 설정이 완료된 상태
+  
+  - 서버에서 받은 데이터를 Vue instance의 data에 할당하는 로직을 구현하기 적합
+  
+  - mount되기 전이기 때문에 DOM에 접근할 수 없으므로 동작하지 않음
+
+- mounted
+  
+  - Vue instance가 요소에 mount된 후 호출됨
+  
+  - mount된 요소를 조작할 수 있음
+
+- updated
+  
+  - 데이터가 변경되어 DOM에 변화를 줄 때 호출됨
+
+- Lifecycle Hooks의 특징
+  
+  - instance마다 각각의 Lifecycle을 가지고 있음
+  
+  - Lifecycle Hooks는 컴포넌트 별로 정의할 수 있음
+    
+    ![instance_lifecycle](Vuex_assets/instance_lifecycle.png)
+  
+  - 부모 컴포넌트의 mounted hook이 실행되었다고 해서 자식이 mount된 것이 아니고 부모 컴포넌트가 updated hook이 실행되었다고 해서 자식이 updated된 것이 아님 (서로 영향이 있는 것이 아님)
+    
+    - 부착 여부가 부모-자식 관계에 따라 순서를 가지고 있지 않음
+    
+    - instance마다 각각의 Lifecycle을 가지고 있기 때문
+
+## Todo with Vuex
+
+- 구현 기능
+  
+  - Todo CRUD
+    
+    - TodoForm.vue에서 TodoList를 작성하면 TodoList.vue에서 받아서 v-for를 이용해 TodoListItem으로 prop시켜 보여주도록 설정
+    
+    - TodoList 옆에 삭제 버튼을 만들어 버튼을 클릭하면 해당 TodoList가 삭제되도록 설정
+    
+    - TodoList를 클릭하면 가로줄이 표시되고 이미 표시된 TodoList를 클릭하면 가로줄이 사라지도록 설정
+  
+  - Todo 개수 계산: 전체 Todo / 완료된 Todo / 미완료된 Todo
+  
+  - 브라우저 새로고침 시 TodoList가 사라지지 않도록 설정
+
+### 사전준비
+
+- 컴포넌트 구성
+  
+  ![todo_component](Vuex_assets/todo_component.png)
+
+- 프로젝트 생성 및 vuex 플러그인 추가
+  
+  ```bash
+  $ vue create todo-vuex-app
+  
+  $ cd todo-vuex-app
+  
+  $ vue add vuex
+  ```
+
+- 컴포넌트 작성
+  
+  - TodoListItem.vue
+  
+  - TodoList.vue
+  
+  - TodoForm.vue
+  
+  - App.vue
+
+### 결과 코드
+
+- App.vue
+  
+  ```html
+  <template>
+    <div id="app">
+      <h1>Todo List</h1>
+      <h2>모든 Todo 개수: {{ allTodosCount }}</h2>
+      <h2>완료된 Todo 개수: {{ completedTodosCount }}</h2>
+      <h2>미완료된 Todo 개수: {{ unCompletedTodosCount }}</h2>
+      <TodoList/>
+      <TodoForm/>
+    </div>
+  </template>
+  ```
+  
+  ```js
+  <script>
+  import TodoList from '@/components/TodoList'
+  import TodoForm from '@/components/TodoForm'
+  
+  export default {
+    name: 'App',
+    components: {
+      TodoForm,
+      TodoList,
+    },
+  
+    computed: {
+      allTodosCount() {
+        return this.$store.getters.allTodosCount
+      },
+      completedTodosCount() {
+        return this.$store.getters.completedTodosCount
+      },
+      unCompletedTodosCount() {
+        return this.$store.getters.unCompletedTodosCount
+      }
+    },
+  
+    methods: {
+      loadTodos() {
+        this.$store.dispatch('loadTodos')
+      }
+    },
+  }
+  </script>
+  ```
+
+- TodoList.vue
+  
+  ```html
+  <template>
+    <div>
+      <TodoListItem
+        v-for="(todo, index) in todos"
+        :key="index"
+        :todo="todo"
+      />
+      <!-- {{ todos }} -->
+    </div>
+  </template>
+  ```
+  
+  ```js
+  <script>
+  import TodoListItem from '@/components/TodoListItem'
+  
+  export default {
+    name: 'TodoList',
+    components: {
+      TodoListItem,
+    },
+    computed: {
+      todos() {
+        return this.$store.state.todos
+      }
+    },
+  }
+  </script>
+  ```
+
+- TodoListItem.vue
+  
+  ```html
+  <template>
+    <div>
+      <span 
+        @click="updateTodoStatus"
+        :class="{ 'is-completed': todo.isCompleted }"
+      >
+        {{ todo.title }}
+      </span>
+      <button @click="deleteTodo">Delete</button>
+    </div>
+  </template>
+  ```
+  
+  ```js
+  <script>
+  export default {
+    name: 'TodoListItem',
+    props: {
+      todo: Object,
+    },
+  
+    methods: {
+      deleteTodo() {
+      // console.log('delete')
+      this.$store.dispatch('deleteTodo', this.todo)
+      // actions가 필요하지 않은 경우 바로 commit 호출 가능
+      // this.$store.commit('DELETE_TODO', this.todo)
+      },
+      updateTodoStatus() {
+        this.$store.dispatch('updateTodoStatus', this.todo)
+      },
+    },
+  
+  }
+  </script>
+  ```
+  
+  ```
+  <style>
+    .is-completed {
+      text-decoration: line-through;
+    }
+  </style>
+  ```
+
+- TodoForm.vue
+  
+  ```html
+  <template>
+    <div>
+      <input
+        type="text"
+        v-model.trim="todoTitle"
+        @keyup.enter="createTodo"
+      >
+    </div>
+  </template>
+  ```
+  
+  ```js
+  <script>
+  export default {
+    name: 'TodoForm',
+    data() {
+      return {
+        todoTitle: null,
+      }
+    },
+    methods: {
+      createTodo() {
+      // console.log(this.todoTitle)
+      if (this.todoTitle) {
+        this.$store.dispatch('createTodo', this.todoTitle)
+      }
+      this.todoTitle = null
+      }
+    }
+  }
+  </script>
+  ```
+
+- index.js
+  
+  ```js
+  import Vue from 'vue'
+  import Vuex from 'vuex'
+  import createPersistedState from 'vuex-persistedstate'
+  
+  Vue.use(Vuex)
+  
+  export default new Vuex.Store({
+    // 기본적으로 key 이름은 vuex
+    plugins: [
+      createPersistedState(),
+    ],
+  
+    state: {
+      todos: [],
+    },
+    getters: {
+      allTodosCount(state) {
+        return state.todos.length
+      },
+      completedTodosCount(state) {
+        const completedTodos = state.todos.filter((todo) => {
+          return todo.isCompleted === true
+        })
+        return completedTodos.length
+      },
+      unCompletedTodosCount(state, getters) {
+        return getters.allTodosCount - getters.completedTodosCount
+      }
+    },
+    mutations: {
+      CREATE_TODO(state, todoItem) {
+        state.todos.push(todoItem)
+      },
+      DELETE_TODO(state, todoItem) {
+        const index = state.todos.indexOf(todoItem)
+        state.todos.splice(index, 1)
+      },
+      UPDATE_TODO_STATUS(state, todoItem) {
+        console.log(todoItem)
+        // todos 배열에서 선택된 todo의 is_completed값만 토글한 후
+        // 업데이트 된 todos 배열로 되어야 함
+        state.todos = state.todos.map((todo) => {
+          if (todo === todoItem) {
+            todo.isCompleted = !todo.isCompleted
+          }
+          return todo
+        })
+        // const index = state.todos.indexOf(todoItem)
+        // state.todos[index].isCompleted = !state.todos[index].isCompleted
+      },
+    },
+    actions: {
+      createTodo(context, todoTitle) {
+        // Todo객체 만들기
+        const todoItem = {
+          title: todoTitle,
+          isCompleted: false,
+        }
+        // console.log(todoItem)
+        context.commit('CREATE_TODO', todoItem)
+      },
+      deleteTodo(context, todoItem) {
+        context.commit('DELETE_TODO', todoItem)
+      },
+      updateTodoStatus(context, todoItem) {
+        context.commit('UPDATE_TODO_STATUS', todoItem)
+      },
+    },
+    modules: {
+    }
+  })
+  ```
