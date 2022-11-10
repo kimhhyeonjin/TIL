@@ -314,6 +314,7 @@
       <template>
         <div id="app">
           <nav>
+            ...
             <router-link :to="{ name: 'hello', params: {userName: 'gello'} }">Hello</router-link>
           </nav>
           <router-view/>
@@ -368,6 +369,355 @@
     
     - 모든 파일을 한 번에 로드하지 않아도 되기 때문에 최초에 로드하는 시간이 빨라짐
     
-    - 당장 사용하지 않을 컴포넌트는 먼저 로드하지 않는 것이 포인트
+    - 당장 사용하지 않을 컴포넌트는 먼저 로드하지 않는 것이 포인트 
 
-# 
+## Navigation Guard
+
+- 네비게이션 가드
+  
+  - Vue router를 통해 특정 URL에 접근할 때 다른 url로 redirect를 하거나 해당 URL로의 접근을 막는 방법
+    
+    - 예) 사용자의 인증 정보가 없으면 특정 페이지에 접근하지 못하게 함
+  
+  - 종류
+    
+    - 전역 가드: 애플리케이션 전역에서 동작
+    
+    - 라우터 가드: 특정 URL에서만 동작
+    
+    - 컴포넌트 가드: 라우터 컴포넌트 안에 정의
+
+### 전역 가드
+
+- Global Before Guard
+  
+  - 다른 url 주소로 이동할 때 항상 실행
+  
+  - router/index.js에 `router.beforeEach()`를 사용하여 설정
+  
+  - 콜백 함수의 값으로 3개의 인자를 받음
+    
+    ![global_before_guard](Vue_Router_assets/global_before_guard.png)
+    
+    - `to`: 이동할 URL 정보가 담긴 Route 객체
+    
+    - `from`: 현재 URL 정보가 담긴 Route 객체
+    
+    - `next`: 지정한 URL로 이동하기 위해 호출하는 함수
+      
+      - 콜백 함수 내부에서 반드시 한 번만 호출되어야 함
+      
+      - 기본적으로 to에 해당하는 URL로 이동
+  
+  - URL이 변경되어 화면이 전환되기 전 router.beforeEach()가 호출됨
+    
+    - next()가 없다면 화면이 전환되지 않고 대기 상태가 됨
+  
+  - 변경된 URL로 라우팅하기 위해서는 next()를 호출해줘야 함
+    
+    - next()가 호출되기 전까지 화면이 전환되지 않음
+    
+    ```js
+    // router/index.js
+    
+    const router = new VueRouter({
+      mode: 'history',
+      base: process.env.BASE_URL,
+      routes
+    })
+    
+    router.beforeEach((to, from, next) => {
+      console.log('to', to)
+      console.log('from', from)
+      console.log('next', next)
+      next()
+    })
+    
+    export default router
+    ```
+
+- Login 여부에 따른 라우팅 처리
+  
+  - Login 페이지 생성 후 App.vue에 라우터 링크 추가
+    
+    - views/LoginView.vue
+      
+      ```html
+      <template>
+        <div>
+          <h1>로그인 페이지</h1>
+        </div>
+      </template>
+      
+      <script>
+      export default {
+        name: 'LoginView',
+      }
+      </script>
+      
+      <style>
+      
+      </style>
+      ```
+    
+    - router/index.js
+      
+      ```js
+      import LoginView from '@/views/LoginView'
+      
+      const routes = [
+        ...
+        {
+          path: '/login',
+          name: 'login',
+          component: LoginView,
+        },
+      ]
+      ```
+    
+    - App.vue
+      
+      ```html
+      <template>
+        <div id="app">
+          <nav>
+            ...
+            <router-link :to="{ name: 'login' }">Login</router-link>
+          </nav>
+          <router-view/>
+        </div>
+      </template>
+      ```
+  
+  - Login이 되어있지 않다면 Login 페이지로 이동하는 기능 추가
+    
+    ```js
+    // router/index.js
+    
+    const router = new VueRouter({
+      mode: 'history',
+      base: process.env.BASE_URL,
+      routes
+    })
+    
+    router.beforeEach((to, from, next) => {
+      // 로그인 여부
+      const isLoggedIn = false
+    
+      // 로그인이 필요한 페이지 (지금은 hello)
+      const authPages = ['hello']
+    
+      const isAuthRequired = authPages.includes(to.name)
+    
+      // 로그인이 필요하지 않은 페이지만 따로 받을 수도 있음
+      // const allowAllPages = ['login']
+      // const isAuthRequired2 = !allowAllPages.includes(to.name)
+    
+      if (isAuthRequired && !isLoggedIn) {
+        console.log('Login으로 이동!')
+        next({ name: 'login'})
+      } else {
+        console.log('to로 이동!')
+        next()
+      }
+    })
+    
+    export default router
+    ```
+  
+  - console창에 log가 2개 찍힌 이유
+    
+    - 첫번째 출력은 about으로 접속 시도 후 전역 가드에서 login으로 이동 요청할 때 출력
+    
+    - 두 번째 출력은 login으로 이동 요청할 때 출력
+    
+    - 재귀 알고리즘 생각하면 이해 쉬움
+      
+      - 그래도 이해가 안되면 console.log('Login으로 이동!')과 next({ name: 'login'})의 순서를 바꾼 후 실행해보기
+  
+  - 반대로 Login하지 않아도 되는 페이지를 모아둘 수도 있음
+
+### 라우터 가드
+
+- 라우터 가드
+  
+  - 전체 route가 아닌 `특정 route에 대해서만 가드를 설정하고 싶을 때` 사용
+  
+  - `beforeEnter()`
+    
+    - route에 진입했을 때 실행됨
+    
+    - 라우터를 등록한 위치에 추가
+    
+    - 매개변수, 쿼리, 해시 값이 변경될 때는 실행되지 않고 다른 경로에서 탐색할 때만 실행됨
+    
+    - 콜백 함수는 to, from, next를 인자로 받음
+
+- Login 여부에 따른 라우팅 처리
+  
+  - 이미 로그인 되어 있는 경우 Login 페이지 접속 시도 시 HomeView로 이동하기
+    
+    ```js
+    // router/index.js
+    
+    // 로그인 여부에 대한 임시 변수 생성
+    const isLoggedIn = true
+    
+    const routes = [
+      {
+        path: '/login',
+        name: 'login',
+        component: LoginView,
+        beforeEnter(to, from, next) {
+          if (isLoggedIn === true) {
+            console.log('이미 로그인 되어있음')
+            next({ name: 'home' })
+          } else {
+            next()
+          }
+        }
+      },
+    ]
+    ```
+
+### 컴포넌트 가드
+
+- 컴포넌트 가드
+  
+  - 특정 컴포넌트 내에서 가드를 지정하고 싶을 때 사용
+  
+  - `beforeRouteUpdate()`
+    
+    - 해당 컴포넌트를 렌더링하는 경로가 변경될 때 실행
+
+- Params 변화 감지
+  
+  - About 페이지에서 값을 입력 후 Hello 페이지로 이동
+    
+    - URL은 변하지만 페이지는 변화하지 않음
+      
+      ![component_guard](Vue_Router_assets/component_guard.png)
+      
+      - 컴포넌트가 재사용되었기 때문
+      
+      - 기존 컴포넌트를 지우고 새로 만드는 것보다 효율적
+        
+        - lifecycle hook이 호출되지는 않음
+        
+        - beforeRouteUpdate()를 이용하여 처리
+  
+  - beforeRouteUpdate() 이용
+    
+    ```js
+    // views/HelloView.vue
+    
+    <script>
+    export default {
+      name: 'HelloView',
+      data() {
+        return {
+          userName: this.$route.params.userName
+        }
+      },
+      beforeRouteUpdate(to, from, next) {
+        this.userName = to.params.userName
+        next()
+      }
+    }
+    </script>
+    ```
+    
+    - userName을 이동할 params에 있는 userName으로 재할당
+
+### 404 Not Found
+
+- 404 Not Found
+  
+  - 404 Not Found 페이지 만들기
+    
+    - views/NotFound404.vue
+      
+      ```html
+      <template>
+        <div>
+          <h1>404 Not Found</h1>
+        </div>
+      </template>
+      
+      <script>
+      export default {
+        name: 'NotFound404',
+      }
+      </script>
+      ```
+    
+    - router/index.js
+      
+      ```js
+      import NotFound404 from '@/views/NotFound404'
+      
+      const routes = [
+        ...
+        {
+          path: '/404',
+          name: 'NotFound404',
+          component: NotFound404,
+        },
+      ]
+      ```
+  
+  - 요청한 리소스가 존재하지 않는 경우
+    
+    - 모든 경로에 대해서 404 page로 redirect 시키기
+      
+      - 기존에 명시한 경로가 아닌 모든 경로가 404 page로 redirect 됨
+      
+      - 이 때 `routes에 최하단부에 작성해야 함`
+        
+        ```js
+        // router/index.js
+        
+        const routes = [
+          ...
+          {
+            path: '*',
+            redirect: '/404',
+          },
+        ]
+        ```
+  
+  - 형식은 유효하지만 특정 리소스를 찾을 수 없는 경우
+    
+    - 데이터가 없음을 명시하고 404 page로 이동
+      
+      ```js
+      // vue 파일
+      
+      axios({
+          method: 'get',
+          url: url
+      })
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((error) => {
+          this.message = `${this.$route.params.Url}은 없는 주소입니다.`
+          console.log(error)
+        })
+      ```
+    
+    - 요청이 실패할 경우 `this.$router.push`를 이용하여 404 페이지로 이동시킬 수도 있음
+      
+      ```js
+      axios({
+          method: 'get',
+          url: url
+      })
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((error) => {
+          this.$router.push('/404')
+          console.log(error)
+        })
+      ```
