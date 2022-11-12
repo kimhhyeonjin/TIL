@@ -14,6 +14,10 @@
 
 - HTML : Hyper Text Markup Language
 
+- Hyper Text : 하이퍼링크를 통해 사용자가 한 문서에서 다른 문서로 즉시 접근할 수 있는 텍스트
+
+- Markup Language : 태그 등을 이용하여 문서나 데이터의 구조를 명시하는 언어
+
 ### HTML 기본구조
 
 - html : 문서의 최상위(root) 요소
@@ -79,10 +83,24 @@
 - form
   
   - **`<form>`은 정보(데이터)를 서버에 제출하기 위해 사용하는 태그**
+  
+  - 기본 속성
+    
+    - action: form을 처리할 서버의 URL
+    
+    - method: form을 제출할 때 사용할 HTTP 메서드
+    
+    - enctype: method가 post인 경우 데이터의 유형
+      
+      - application/x-www-form-urlencoded: 기본값
+      
+      - multipart/form-data: 파일 전송 시
 
 - input
   
   - 다양한 타입을 가지는 입력 데이터 유형과 위젯이 제공됨
+  
+  - label과 함께 사용하는 경우 input의 id 속성을, label의 for 속성을 활용하여 상호 연관시킴
 
 ## CSS
 
@@ -146,7 +164,9 @@
   
   - 상속 되지 않는 것
     
-    > Box model 관련 요소(width, height, margin, padding, border, box-sizing, display) / position 관련 요소(position, top/right/bottom/left) 등
+    > Box model 관련 요소(width, height, margin, padding, border, box-sizing, display)
+    > 
+    > position 관련 요소(position, top/right/bottom/left) 등
 
 ### CSS Box model
 
