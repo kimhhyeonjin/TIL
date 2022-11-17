@@ -24,6 +24,12 @@
 
 - vue tree 작성 후 큼직한 컴포넌트 생성하기
 
+- CORS 설정을 통해 Vue에서 Django에 요청을 보냈을 때 브라우저에서 막지 않도록 설정
+  
+  - Django에 요청을 보내 데이터가 제대로 받아와지는지 확인
+
+- dj-rest-auth를 활용한 회원가입, 로그인 구현
+
 ## 배포
 
 ### Django
@@ -35,5 +41,3 @@
   - [django_decouple](https://pypi.org/project/python-decouple/) 참고하여 설치 및 settings.py 파일 변경
   
   - .env 파일 생성 후 따로 관리해야할 정보 입력
-
- 
