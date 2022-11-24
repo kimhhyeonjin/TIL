@@ -40,6 +40,43 @@
     
     - 정보가 어떤 경우는 정상적으로 넘어오고 어떤 경우는 넘어오지 않음
 
+- 마이페이지 생성
+  
+  - created를 이용하여 함수를 실행하여 실행 결과를 html에 표현하려고 했음
+    
+    - 비동기 방식을 이용하였기 때문에 함수 실행 이전의 결과를 출력
+      
+      - setTimeout()과 nextTick을 이용하여 해결
+        
+        ```javascript
+        export default {
+          ...
+          data() {
+            return {
+              is_user: false,
+            }
+          },
+          ...
+          methods: {
+            isUser: function() {
+              setTimeout(() => {
+                if (this.article.username === this.$store.state.user.username) {
+                  this.is_user = true
+                }
+              }, 40)
+            },
+          },
+          ...
+          mounted() {
+            this.$nextTick(function () {
+              this.isUser()
+            })
+          },
+        }
+        ```
+        
+        - 권장하는 방법은 아님
+
 ## 배포
 
 ### Django
