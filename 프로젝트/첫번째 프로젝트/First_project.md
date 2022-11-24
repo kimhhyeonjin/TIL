@@ -20,6 +20,12 @@
 
 - models.py에 사용할 model 입력
 
+- serializers.py에 JSON 파일 형태로 Vue로 보내줄 항목 작성
+
+- urls.py에 정보를 받아올 때 사용할 url 주소 작성
+
+- views.py에서는 필요한 조건의 데이터를 선택한 후 serializer를 이용하여 JSON 파일로 응답
+
 ### Vue.js
 
 - vue tree 작성 후 큼직한 컴포넌트 생성하기
