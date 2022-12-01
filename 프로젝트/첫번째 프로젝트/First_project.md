@@ -20,6 +20,14 @@
 
 - models.py에 사용할 model 입력
 
+- serializers.py에 JSON 파일 형태로 Vue로 보내줄 항목 작성
+
+- urls.py에 정보를 받아올 때 사용할 url 주소 작성
+
+- views.py에서는 필요한 조건의 데이터를 선택한 후 serializer를 이용하여 JSON 파일로 응답
+  
+  - 필요한 부분을 추출하는 알고리즘 작성 등
+
 ### Vue.js
 
 - vue tree 작성 후 큼직한 컴포넌트 생성하기
@@ -33,6 +41,22 @@
   - 로그인에 성공한 경우 회원정보를 메인페이지에 표시하고 싶은데
     
     - 정보가 어떤 경우는 정상적으로 넘어오고 어떤 경우는 넘어오지 않음
+
+- store.js
+  
+  - 중앙 저장소에 데이터를 모아서 상태를 관리
+  
+  - dispatch
+    
+    - store의 actions
+    
+    - state의 상태 변화를 제외한 나머지
+  
+  - commit
+    
+    - store의 mutations
+    
+    - mutations에서 state의 상태 변화
 
 - 마이페이지 생성
   
