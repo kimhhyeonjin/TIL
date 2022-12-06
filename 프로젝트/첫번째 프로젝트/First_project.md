@@ -12,6 +12,8 @@
 
 - ERD
 
+- Vue tree
+
 ## 코딩
 
 ### Django REST framework
@@ -30,7 +32,7 @@
 
 ### Vue.js
 
-- vue tree 작성 후 큼직한 컴포넌트 생성하기
+- 컴포넌트 생성하기
 
 - CORS 설정을 통해 Vue에서 Django에 요청을 보냈을 때 브라우저에서 막지 않도록 설정
   
