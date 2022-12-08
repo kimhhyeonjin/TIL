@@ -1,5 +1,6 @@
 ## HTTP response status code
 
+- 클라이언트에게 특정 HTTP 요청이 성공적으로 완료되었는지 여부를 알려줌
 1. Informational responses (100 - 199)
 
 2. Successful responses(200 - 299)
@@ -19,6 +20,10 @@
 - 202 Accepted
 
 - 204 No Content
+
+### 3. Redirection messages
+
+- 302 Found
 
 ### 4. Client error responses
 
