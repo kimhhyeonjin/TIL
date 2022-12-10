@@ -233,6 +233,12 @@ def update(request, article_id):
 
 ### Widgets 활용하기
 
+- widgets
+
+  - Django의 HTML input element의 표현을 담당
+
+  - 단순히 HTML 렌더링을 처리하는 것이며 유효성 검증과 아무런 관계가 없음
+
 ```python
 # articles/forms.py
 
