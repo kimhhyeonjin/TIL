@@ -411,7 +411,7 @@ class ArticleForm(forms.ModelForm):
       @require_http_methods(['GET', 'POST'])
       ```
   
-  - require_POST
+  - require_POST()
     
     - View 함수가 POST 요청 method만 허용하도록 하는 데코레이터
       
