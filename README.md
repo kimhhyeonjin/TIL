@@ -29,6 +29,7 @@
 2. [Django 개념](./Django/django_crud.md)
 3. [Django 게시판 CRUD](./Django/article_crud.md)
 4. [Form과 ModelForm](./Django/Form_ModelForm.md)
+5. [Django 인증 시스템](./Django/django_authentication.md)
 
 ### Framework
 
