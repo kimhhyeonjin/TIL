@@ -186,7 +186,7 @@
   ]
   ```
   
-  ```python
+  ```html
   <!-- accounts/login.html -->
   
   {% extends 'base.html' %}
@@ -288,7 +288,7 @@
   
   ### Logout
 
-  - logout()
+  - `logout()`
     
     - logout(request)
     
@@ -343,4 +343,150 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
   </body>
+  ```
+
+## Authentication with User
+
+### 회원가입
+
+- 회원가입은 User를 Create하는 것이며 UserCreationForm built-in form을 사용
+
+- UserCreationForm
+  
+  - 주어진 username과 password로 권한이 없는 새 user를 생성하는 ModelForm
+  
+  - 3개의 필드를 가짐
+    
+    - username
+    
+    - password1
+    
+    - password2
+
+- 회원가입 페이지 작성
+  
+  ```python
+  # accounts/urls.py
+  
+  urlpatterns = [
+      ...
+      path('signup/', views.signup, name='signup'),
+  ]
+  ```
+  
+  ```html
+  <!-- accounts/signup.html -->
+  
+  {% extends 'base.html' %}
+  
+  {% block content %}
+    <h1>SIGNUP</h1>
+    <form action="{% url 'accounts:signup' %}" method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit">
+    </form>
+  {% endblock content %}
+  ```
+  
+  ```python
+  # accounts/views.py
+  
+  from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+  
+  def signup(request):
+      if request.method == 'POST':
+          form = UserCreationForm(request.POST)
+          if form.is_valid():
+              form.save()
+              return redirect('articles:index')
+      else:
+          form = UserCreationForm()
+      context = {
+          'form': form,
+      }
+      return render(request, 'accounts/signup.html', context)
+  ```
+  
+  - views.py 로직을 위와 같이 작성하면 에러 남
+    
+    - 회원가입에 사용하는 `UserCreationForm`이 대체한 커스텀 유저 모델이 아닌 `기존 유저 모델로 인해 작성된 클래스이기 때문`
+
+### Custom user와 Built-in auth forms
+
+- AbstractBaseUser의 모든 subclass와 호환되는 forms
+  
+  - 아래의 Form 클래스는 기존의 User 모델을 참조하는 Form이 아니기 때문에 User 모델을 대체하더라도 커스텀하지 않아도 사용 가능
+    
+    - AuthenticationForm
+    
+    - SetPasswordForm
+    
+    - PasswordChangeForm
+    
+    - AdminPasswordChangeForm
+
+- 커스텀 유저 모델을 사용하려면 다시 작성하거나 확장해야 하는 forms
+  
+  - UserCreationForm
+  
+  - UserChangeForm
+  
+  - 두 form 모두 Meta 클래스에서 `model = User`이므로 반드시 커스텀해야 함
+
+- UserCreationForm() 커스텀하기
+  
+  ```python
+  # accounts/forms.py
+  
+  from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+  from django.contrib.auth import get_user_model
+  
+  class CustomUserCreationForm(UserCreationForm):
+  
+      class Meta(UserCreationForm.Meta):
+          # 장고에서는 유저모델을 참고할 때
+          # User를 바로 import하는 것을 권장하지 않음
+          model = get_user_model()
+          # 기존의 필드에 email을 추가하고 싶은 경우
+          fields = UserCreationForm.Meta.fields + ('email',)
+  
+  class CustomUserChangeForm(UserChangeForm):
+  
+      class Meta(UserChangeForm.Meta):
+          model = get_user_model()
+          fields = ('email', 'first_name', 'last_name',)
+  ```
+  
+  - get_user_model()
+    
+    - 현재 프로젝트에서 활성화된 사용자 모델을 반환
+    
+    - Django에서는 User클래스를 직접 참조하는 대신 get_user_model()을 사용해 참조할 것을 권장
+
+- views.py에서 UserCreationForm을 CustomCreationForm()으로 대체하기
+  
+  ```python
+  # accounts/views.py
+  
+  from .forms import CustomUserCreationForm, CustomUserChangeForm
+  
+  def signup(request):
+      if request.method == 'POST':
+          # User를 auth.User에서 accounts.User로 바꾸었으므로 해당 사항을
+          # forms.py에 입력하여 새로운 폼으로 받아와야 함
+          # form = UserCreationForm(request.POST)
+          form = CustomUserCreationForm(request.POST)
+          if form.is_valid():
+              user = form.save()
+              # 회원가입 후 자동으로 로그인 상태 만들어주기
+              auth_login(request, user)
+              return redirect('articles:index')
+      else:
+          # form = UserCreationForm()
+          form = CustomUserCreationForm()
+      context = {
+          'form': form,
+      }
+      return render(request, 'accounts/signup.html', context)
   ```
