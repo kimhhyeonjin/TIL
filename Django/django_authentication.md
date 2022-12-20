@@ -48,7 +48,7 @@
       
       ```python
       urlpatterns = [
-          ...
+          ...,
           path('accounts/', include('accounts.urls')),
       ]
       ```
@@ -311,7 +311,7 @@
   
   ...
   urlpatterns = [
-      ...
+      ...,
       path('logout/', views.logout, name='logout'),
   ]
   ```
@@ -369,7 +369,7 @@
   # accounts/urls.py
   
   urlpatterns = [
-      ...
+      ...,
       path('signup/', views.signup, name='signup'),
   ]
   ```
@@ -464,6 +464,10 @@
     
     - Django에서는 User클래스를 직접 참조하는 대신 get_user_model()을 사용해 참조할 것을 권장
 
+  - CustomUserChangeForm fields 재정의
+    
+    - 원하는 fields만 선택하여 출력
+
 - views.py에서 UserCreationForm을 CustomCreationForm()으로 대체하기
   
   ```python
@@ -489,4 +493,143 @@
           'form': form,
       }
       return render(request, 'accounts/signup.html', context)
+  ```
+
+### 회원 탈퇴
+
+- 회원 탈퇴 로직 작성
+  
+  ```python
+  # accounts/urls.py
+  
+  urlpatterns = [
+      ...,
+      path('delete/', views.delete, name='delete'),
+  ]
+  ```
+  
+  ```python
+  # accounts/views.py
+  
+  def delete(request):
+      # 탈퇴할 때 그냥 탈퇴만 하면 session id가 남아있기 때문에
+      # 로그아웃 과정도 함께 진행
+      # 이 과정에서 먼저 로그아웃해버리면 해당 요청 객체 정보가 없어지기 때문에
+      # 탈퇴 후 로그아웃의 순서로 진행
+      request.user.delete()
+      auth_logout(request)
+      return redirect('articles:index')
+  ```
+  
+  - 탈퇴하면서 해당 유저의 세션 정보도 함께 지우고 싶은 경우
+    
+    - 탈퇴 후 로그아웃의 순서를 지켜야 함
+      
+      - 먼저 로그아웃 해버리면 해당 요청 객체 정보가 없어지기 때문에 탈퇴를 진행할 수 없음
+  
+  ```html
+  <!-- base.html -->
+  
+  <body>
+    <div class="container">
+      ...
+      <form action="{% url 'accounts:delete' %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="회원탈퇴">
+      </form>
+      <hr>
+      {% block content %}
+      {% endblock content %}
+    </div>
+  </body>
+  ```
+
+### 회원정보 수정
+
+- UserChangeForm
+  
+  - 사용자의 정보 및 권한을 변경하기 위해 admin 인터페이스에서 사용되는 ModelForm
+  
+  - UserChangeForm도 ModelForm이기 때문에 instance 인자로 기존 user 데이터 정보를 받는 구조 또한 동일
+    
+    - CustomUserChangeForm
+
+- 회원정보 수정 페이지 작성
+  
+  ```python
+  # accounts/urls.py
+  
+  urlpatterns = [
+      ...,
+      path('update/', views.update, name='update'),
+  ]
+  ```
+  
+  ```html
+  <!-- accounts/update.html -->
+  
+  {% extends 'base.html' %}
+  
+  {% block content %}
+    <h1>회원정보수정</h1>
+    <form action="{% url 'accounts:update' %}" method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit">
+    </form>
+  {% endblock content %}
+  ```
+  
+  ```python
+  # accounts/views.py
+  
+  def update(request):
+      if request.method == 'POST':
+          form = CustomUserChangeForm(request.POST, instance=request.user)
+          if form.is_valid():
+              form.save()
+              return redirect('articles:index')
+      else:
+          form = CustomUserChangeForm(instance=request.user)
+      context = {
+          'form': form,
+      }
+      return render(request, 'accounts/update.html', context)
+  ```
+
+  - UserChangeForm 사용 시 문제점
+  
+    - 일반 사용자가 모든 필드에 접근이 가능해짐
+    
+      - admin 인터페이스에서 사용되는 ModelForm이기 때문
+    
+      - CustomUserChangeForm에서 접근 가능한 필드를 조정해야 함
+    
+      - `Custom user와 Built-in auth forms`의 `UserCreationForm() 커스텀하기` 참고
+
+- 회원정보 수정 페이지 링크 작성
+  
+  ```html
+  <!-- base.html -->
+  
+  <body>
+    <div class="container">
+      <h3>{{ user }}</h3>
+      <a href="{% url 'accounts:login' %}">Login</a>
+      <form action="{% url 'accounts:logout' %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Logout">
+      </form>
+      <a href="{% url 'accounts:signup' %}">Signup</a>
+      <form action="{% url 'accounts:delete' %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="회원탈퇴">
+      </form>
+      <a href="{% url 'accounts:update' %}">회원정보수정</a>
+      <hr>
+      {% block content %}
+      {% endblock content %}
+    </div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+  </body>
   ```
