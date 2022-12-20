@@ -216,8 +216,6 @@
               # login(request, 유저정보)
               # login으로 받으면 함수 login과 겹치기 때문에 이름을 바꾸어 사용
               auth_login(request, form.get_user())
-              # 단축평가를 이용하여 next뒤 값이 있는 경우 
-              # 로그인 후 해당하는 곳으로 돌아감
               return redirect('articles:index')
       else:
           form = AuthenticationForm()
@@ -633,3 +631,161 @@
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
   </body>
   ```
+
+### 비밀번호 변경
+
+- PasswordChangeForm
+  
+  - 사용자가 비밀번호를 변경할 수 있도록 하는 Form
+  
+  - 이전 비밀번호를 입력하여 비밀번호를 변경할 수 있도록 함
+  
+  - 이전 비밀번호를 입력하지 않고 비밀번호를 설정할 수 있는 `SetPasswordForm을 상속`받는 서브 클래스
+
+- 비밀번호 변경 페이지 작성
+  
+  ```python
+  # accounts/urls.py
+  
+  urlpatterns = [
+      ...,
+      path('password/', views.change_password, name='change_password'),
+  ]
+  ```
+  
+  ```html
+  <!-- accounts/change_password.html -->
+  
+  {% extends 'base.html' %}
+  
+  {% block content %}
+    <h1>비밀번호변경</h1>
+    <form action="{% url 'accounts:change_password' %}" method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit">
+    </form>
+  {% endblock content %}
+  ```
+  
+  ```python
+  # accounts/views.py
+  
+  from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+  from django.contrib.auth import update_session_auth_hash
+  
+  def change_password(request):
+      if request.method == 'POST':
+          form = PasswordChangeForm(request.user, request.POST)
+          if form.is_valid():
+              form.save()
+              update_session_auth_hash(request, form.user)
+              return redirect('articles:index')
+      else:
+          form = PasswordChangeForm(request.user)
+      context = {
+          'form': form,
+      }
+      return render(request, 'accounts/change_password.html', context)
+  ```
+  
+  - `update_session_auth_hash(request, form.user)`를 작성하지 않는 경우
+    
+    - 비밀번호 변경 후 로그인 상태가 지속되지 못하는 문제 발생
+    
+    - 비밀번호가 변경되면 기존 세션과의 회원 인증 정보가 일치하지 않게 돼 로그인 상태가 유지되지 못함
+  
+  - update_session_auth_hash()
+    
+    - `update_session_auth_hash(request, user)` 형태
+    
+    - 현재 요청과 새 session data가 파생 될 업데이트 된 사용자 객체를 가져오고, session data를 적절하게 업데이트해 줌
+
+## Limiting access to logged-in users
+
+- 로그인 사용자에 대해 접근을 제한하는 2가지 방법
+    
+  - `is_authenticated` attribute
+    
+  - The `login_required` decorator
+
+- is_authenticated
+  
+  - User model의 속성 중 하나
+  
+  - 사용자가 인증되었는지 여부를 알 수 있는 방법
+  
+  - 모든 User 인스턴스에 대해 항상 True인 읽기 전용 속성
+    
+    - AnonymousUser에 대해서는 항상 False
+  
+  - `권한과는 관련이 없으며 사용자가 활성화 상태이거나 유효한 세션을 갖고 있는지도 확인하지 않음`
+  
+  - 적용하기
+    
+    - 로그인과 비로그인 상태에서 출력되는 링크를 다르게 설정
+      
+      ```html
+      <!-- base.html -->
+      
+      <body>
+        <div class="container">
+          {% if request.user.is_authenticated %}
+            <!-- 현재 로그인 되어있는 유저 정보 출력 -->
+            <!-- settings.py의 context processors 설정 값 때문에 context 데이터 없이 이용 가능 -->
+            <h3>{{ user }}</h3>
+            <form action="{% url 'accounts:logout' %}" method="POST">
+              {% csrf_token %}
+              <input type="submit" value="Logout">
+            </form>
+            <form action="{% url 'accounts:delete' %}" method="POST">
+              {% csrf_token %}
+              <input type="submit" value="회원탈퇴">
+            </form>
+            <a href="{% url 'accounts:update' %}">회원정보수정</a>
+          {% else %}
+            <a href="{% url 'accounts:login' %}">Login</a>
+            <a href="{% url 'accounts:signup' %}">Signup</a>
+          {% endif %}
+          <hr>
+          {% block content %}
+          {% endblock content %}
+        </div>
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+      </body>
+      ```
+    
+    - 인증된 사용자만 게시글 작성 링크를 볼 수 있도록 처리
+      
+      ```html
+      <!-- articles/index.html -->
+      
+      {% extends 'base.html' %}
+      
+      {% block content %}
+        <h1>Articles</h1>
+        {% if request.user.is_authenticated %}
+          <a href="{% url 'articles:create' %}">CREATE</a>
+        {% else %}
+          <a href="{% url 'accounts:login' %}">새 글을 작성하려면 로그인하세요</a>
+        {% endif %}
+        <hr>
+        {% for article in articles %}
+          <a href="{% url 'articles:detail' article.id %}">{{ article.title }}</a>
+          <hr>
+        {% endfor %}
+      {% endblock content %}
+      ```
+    
+    - 하지만 아직 비로그인 상태로도 URL을 직접 입력하면 게시글 작성 페이지로 연결됨
+      
+      - 인증된 사용자라면 로그인 로직을 수행할 수 없도록 처리
+        
+        ```python
+        # accounts/views.py
+        
+        def login(request):
+            if request.user.is_authenticated:
+                return redirect('articles:index')
+            ...
+        ```
