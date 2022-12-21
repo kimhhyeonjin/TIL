@@ -789,3 +789,164 @@
                 return redirect('articles:index')
             ...
         ```
+
+- login_required
+
+  - `login_required` decorator
+  
+  - 사용자가 로그인되어 있으면 정상적으로 view 함수를 실행
+  
+  - 로그인하지 않은 경우 settings.py의 LOGIN_URL 문자열 주소로 redirect
+    
+    - LOGIN_URL의 기본값은 `/accounts/login`
+    
+    - app이름을 accounts로 고정했던 이유 중 하나
+  
+  - 로그인 상태에서만 글을 작성/수정/삭제할 수 있도록 변경
+    
+    ```python
+    # articles/views.py
+    
+    from django.contrib.auth.decorators import login_required
+    
+    @login_required
+    @require_http_methods(['GET', 'POST'])
+    def create(request):
+        ...
+    
+    @login_required
+    @require_http_methods(['GET', 'POST'])
+    def update(request, article_id):
+        ...
+    
+    @login_required
+    @require_POST
+    def delete(request, article_id):
+        ...
+    ```
+
+- `next` query string parameter
+  
+  - 로그인이 정상적으로 진행되면 이전에 요청했던 주소로 redirect하기 위해 Django가 제공하는 쿼리 스트링 파라미터
+  
+  - 해당 값을 처리할지 말지는 자유이며 별도로 처리해주지 않으면 view에 설정한 redirect 경로로 이동
+  
+  ```python
+  # accounts/views.py
+  
+  def login(request):
+      if request.user.is_authenticated:
+          return redirect('articles:index')
+  
+      if request.method == 'POST':
+          form = AuthenticationForm(request, request.POST)
+          # form = AuthenticationForm(request, data=request.POST)
+          if form.is_valid():
+              auth_login(request, form.get_user())
+              # 단축평가를 이용하여 next뒤 값이 있는 경우 
+              # 로그인 후 해당하는 곳으로 돌아감
+              return redirect(request.GET.get('next') or 'articles:index')
+      ...
+  ```
+
+- `next` query string parameter 주의사항
+  
+  - 만약 login 템플릿에서 `form action이 작성되어 있다면 동작하지 않음`
+  
+  - next 파라미터가 작성되어있는 현재 url이 아닌 해당 action 주소인 /accounts/login/으로 요청을 보내기 때문
+    
+    - action 주소 삭제
+    
+    ```html
+    <!-- accounts/login.html -->
+    
+    {% extends 'base.html' %}
+    
+    {% block content %}
+      <h1>LOGIN</h1>
+      <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit">
+      </form>
+    {% endblock content %}
+    ```
+
+- 두 데코레이터로 인해 발생하는 구조적 문제
+  
+  - 예시
+    
+    - 비로그인 상태로 detail 페이지에서 게시글 삭제 시도
+    
+    - delete(삭제) view 함수의 @login_required로 인해 로그인 페이지로 redirect
+    
+    - redirect로 이동한 로그인 페이지에서 로그인 진행
+    
+    - 로그인 성공 이후 `GET method`로 next 파라미터 주소에 redirect
+    
+    - delete view 함수의 @required_POST로 인한 405 status code
+  
+  - 발생한 문제
+    
+    - redirect 과정에서 POST 요청 데이터의 손실
+    
+    - redirect로 인한 요청은 GET request method로만 요청됨
+  
+  - 해결방안
+    
+    - `@login_required`는 GET request method를 처리할 수 있는 view 함수에서만 사용해야 함
+
+- 두 데코레이터로 인해 발생하는 구조적 문제 해결
+  
+  - POST method만 허용하는 delete 같은 함수는 내부에서 is_authenticated 속성값을 사용해서 처리
+    
+    ```python
+    # articles/views.py
+    
+    @require_POST
+    def delete(request, article_id):
+        if request.user.is_authenticated:
+            # if request.method == 'POST':        # 데코레이터 있으면 없어도 됨
+            article = Article.objects.get(id=article_id)
+            article.delete()
+        return redirect('articles:index')
+    ```
+    
+    - require_POST decorator를 사용한 경우 if request.method == 'POST'는 사용하지 않아도 됨
+
+- accounts view 함수에 모든 데코레이터 및 속성값 적용해보기
+  
+  ```python
+  # accounts/views.py
+  
+  from django.contrib.auth.decorators import login_required
+  from django.views.decorators.http import require_POST, require_http_methods
+  
+  @require_http_methods(['GET', 'POST'])
+  def login(request):
+      ...
+  
+  @require_POST
+  def logout(request):
+      if request.user.is_authenticated:
+          ...
+  
+  @require_http_methods(['GET', 'POST'])
+  def signup(request):
+      ...
+  
+  def delete(request):
+      request.user.delete()
+      auth_logout(request)
+      return redirect('articles:index')
+  
+  @login_required
+  @require_http_methods(['GET', 'POST'])
+  def update(request):
+      ...
+  
+  @login_required
+  @require_http_methods(['GET', 'POST'])
+  def change_password(request):
+      ...
+  ```
