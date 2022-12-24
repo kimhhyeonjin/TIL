@@ -67,3 +67,61 @@
   - C 계열의 언어가 갖고 있는 자료구조로 쉽게 변환할 수 있는 key-value 형태의 구조를 갖고 있음
   
   - 사람이 읽고 쓰기 쉽고 기계가 파싱하고 만들어내기 쉽게 때문에 현재 API에서 가장 많이 사용하는 데이터타입
+
+## Response JSON
+
+### 서버가 응답하는 것
+
+- 서버가 응답하는 것
+  
+  - 지금까지 Django로 작성한 서버는 사용자에게 페이지(html)만을 응답하고 있었지만 페이지 뿐 아니라 다양한 데이터 타입 응답 가능
+    
+    - html, JSON 데이터
+
+### Response
+
+- JSON 데이터 응답하기
+  
+  - JsonResponse()를 사용한 JSON 응답
+    
+    - Django가 기본적으로 제공하는 JsonResponse 객체를 활용하여 Python 데이터 타입을 손쉽게 JSON으로 변환하여 응답
+      
+      ```python
+      from django.http.response import JsonResponse
+      ```
+    
+    - JsonResponse()
+      
+      - JSON-encoded response를 만드는 클래스
+      
+      - safe parameter
+        
+        - 디폴트 값은 True
+        
+        - False로 설정 시 모든 타입의 객체를 serialize 할 수 있음
+
+- Django Serializer를 사용한 JSON 응답
+  
+  - Django의 내장 HttpResponse()를 활용한 JSON 응답
+  
+  - 위의 방법은 JSON의 모든 필드를 전부 작성해야 했지만 이 방법은 그렇지 않음
+  
+  - Serialization
+    
+    - 직렬화
+    
+    - `데이터 구조나 객체 상태를` 동일하거나 다른 컴퓨터 환경에 저장하고 `나중에 재구성할 수 있는 포맷으로 변환하는 과정`
+    
+    - 변환 포맷은 대표적으로 json, xml, yaml이 있으며 json이 가장 보편적으로 사용됨
+
+- Django REST framework (DRF)
+  
+  - Django에서 RESTful API 서버를 쉽게 구축할 수 있도록 도와주는 오픈소스 라이브러리
+  
+  - Web API 구축을 위한 강력한 tool kit을 제공
+  
+  - REST framework를 작성하기 위한 여러 기능을 제공
+  
+  - DRF의 serializer는 Django의 Form 및 ModelForm 클래스와 매우 유사하게 작동
+  
+  - [DRF참고하기](https://www.django-rest-framework.org/)
