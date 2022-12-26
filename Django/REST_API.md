@@ -125,3 +125,11 @@
   - DRF의 serializer는 Django의 Form 및 ModelForm 클래스와 매우 유사하게 작동
   
   - [DRF참고하기](https://www.django-rest-framework.org/)
+
+## Django REST framework - Single Model
+
+- [Postman](https://www.postman.com/downloads)
+  
+  - API를 구축하고 사용하기 위한 플랫폼
+  
+  - API를 빠르게 만들 수 있는 여러 도구 및 기능을 제공
