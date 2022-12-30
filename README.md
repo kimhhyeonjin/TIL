@@ -22,6 +22,7 @@
 1. [SQL_기본](./DB/SQL_ORM.md)
 2. [SQL 심화](./DB/QuerySet_API.md)
 3. [Django에서의 관계(N:1 / N:N)](./DB/Database_Relationship.md)
+4. [Event Scheduler](./DB/Event_Scheduler.md)
 
 ### Django
 
