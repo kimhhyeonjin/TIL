@@ -133,3 +133,19 @@
   - API를 구축하고 사용하기 위한 플랫폼
   
   - API를 빠르게 만들 수 있는 여러 도구 및 기능을 제공
+
+### ModelSerializer
+
+- ModelSerializer
+  
+  - ModelSerializer 클래스는 모델 필드에 해당하는 필드가 있는 Serializer 클래스를 자동으로 만들 수 있는 shortcut 제공
+    
+    - Model 정보에 맞춰 자동으로 필드 생성
+    
+    - serializer에 대한 유효성 검사기를 자동으로 생성
+    
+    - `.create()` 및 `.update()`의 간단한 기본 구현이 포함됨
+
+- ModelSerializer 작성
+  
+  - serializers.py의 위치나 파일명은 자유롭게 작성 가능
