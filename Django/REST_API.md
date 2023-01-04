@@ -149,3 +149,7 @@
 - ModelSerializer 작성
   
   - serializers.py의 위치나 파일명은 자유롭게 작성 가능
+
+- `many` option
+  
+  - 단일 객체 인스턴스 대신 QuerySet 또는 객체 목록을 serialize 하려면 many=True를 작성해야 함
