@@ -149,6 +149,19 @@
 - ModelSerializer 작성
   
   - serializers.py의 위치나 파일명은 자유롭게 작성 가능
+    
+    ```python
+    # articles/serializers.py
+    
+    from rest_framework import serializers
+    from .models import Article
+    
+    class ArticleListSerializer(serializers.ModelSerializer):
+    
+        class Meta:
+            model = Article
+            fields = ('id', 'title', 'content',)
+    ```
 
 - `many` option
   
