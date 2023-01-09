@@ -105,3 +105,21 @@ npm start
   - JavaScript에 XML을 추가한 문법
   
   - 리액트 팀이 개발하고 도입한 특수 구문
+
+### React
+
+```bash
+npm i prop-types
+```
+
+- 전달받은 props가 원하는 props인지를 확인
+
+- 설치 확인
+  
+  - package.json의 dependencies에서 `prop-types` 확인
+  
+  ```js
+  Food.propTypes = {
+    name: PropTypes.string.isRequired
+  } 
+  ```
