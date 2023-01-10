@@ -1,37 +1,26 @@
-import React from 'react'
+import axios from 'axios';
+import React from 'react';
 
 class App extends React.Component{
-  constructor(props) {
-    super(props);
-    console.log("hello");
-  }
   state = {
-    count: 0
+    isLoading: true,
+    movies: []
   };
-  add = () => {
-    this.setState(current => ({ count: current.count + 1 }));
-  };
-  minus = () => {
-    this.setState(current => ({ count: current.count - 1 }));
-  };
-  componentDidMount(){
-    console.log("component rendered")
-  };
-  componentDidUpdate(){
-    console.log("I just updated")
-  };
-  componentWillUnmount(){
-    console.log("Goodbye")
+  getMovies = async () => {
+    // const movies = await axios.get("https://yts-proxy.now.sh/list_movies.json")
+    // console.log(movies.data.data.movies)
+    const {data: {data: {movies}}} = await axios.get("https://yts-proxy.now.sh/list_movies.json")
+    console.log(movies)
+    // this.setState({movies:movies});
+    // 앞의 movies는 state의 movies, 뒤의 movies는 axios를 통해 얻은 movies
+    this.setState({ movies, isLoading: false });
   }
-  render(){
-    console.log("I am rendering");
-    return (
-      <div>
-        <h1>The number is: {this.state.count}</h1>
-        <button onClick={this.add}>Add</button>
-        <button onClick={this.minus}>Minus</button>
-      </div>
-    );
+  componentDidMount(){
+    this.getMovies();
+  }
+  render() {
+    const { isLoading } = this.state;
+    return <div>{isLoading ? "Loading..." : "We are ready"}</div>
   }
 }
 

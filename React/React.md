@@ -124,6 +124,16 @@ npm i prop-types
   } 
   ```
 
+```bash
+npm i axios
+```
+
+- axios 설치 후 import
+  
+  ```js
+  import axios from "axios";
+  ```
+
 ### component life cycle
 
 - Mounting
@@ -152,6 +162,12 @@ npm i prop-types
     ```js
       componentDidMount(){
         console.log("component rendered")
+      }
+      
+      componentDidMount(){
+        setTimeout(() => {
+          this.setState({ isLoading: false })
+        }, 6000);
       }
     ```
 
