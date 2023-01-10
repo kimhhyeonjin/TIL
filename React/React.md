@@ -163,7 +163,7 @@ npm i axios
       componentDidMount(){
         console.log("component rendered")
       }
-      
+    
       componentDidMount(){
         setTimeout(() => {
           this.setState({ isLoading: false })
