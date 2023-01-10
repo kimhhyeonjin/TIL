@@ -123,3 +123,62 @@ npm i prop-types
     name: PropTypes.string.isRequired
   } 
   ```
+
+### component life cycle
+
+- Mounting
+  
+  - constructor()
+    
+    - super()
+      
+      ```js
+        constructor(props) {
+          super(props)
+          console.log("hello")
+        }
+      ```
+  
+  - render()
+    
+    ```js
+      render(){
+        console.log("I am rendering")
+      }
+    ```
+  
+  - componentDidMount()
+    
+    ```js
+      componentDidMount(){
+        console.log("component rendered")
+      }
+    ```
+
+- Updating
+  
+  - render()
+    
+    ```js
+      render(){
+        console.log("I am rendering")
+      }
+    ```
+  
+  - componentDidUpdate()
+    
+    ```js
+      componentDidUpdate(){
+        console.log("I just updated")
+      }
+    ```
+
+- Unmounting
+  
+  - componentWillUnmount()
+    
+    ```js
+      componentWillUnmount(){
+        console.log("Goodbye")
+      }
+    ```
