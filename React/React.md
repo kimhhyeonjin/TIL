@@ -106,32 +106,42 @@ npm start
   
   - 리액트 팀이 개발하고 도입한 특수 구문
 
-### React
+### npm
 
-```bash
-npm i prop-types
-```
-
-- 전달받은 props가 원하는 props인지를 확인
-
-- 설치 확인
+- `npm i prop-types`
   
-  - package.json의 dependencies에서 `prop-types` 확인
+  - 전달받은 props가 원하는 props인지를 확인
+    
+    ```bash
+    npm i prop-types
+    ```
   
-  ```js
-  Food.propTypes = {
-    name: PropTypes.string.isRequired
-  } 
+  - 설치 확인
+    
+    - package.json의 dependencies에서 `prop-types` 확인
+      
+      ```js
+      Food.propTypes = {
+        name: PropTypes.string.isRequired
+      } 
+      ```
+
+- `axios`
+  
+  ```bash
+  npm i axios
   ```
-
-```bash
-npm i axios
-```
-
-- axios 설치 후 import
   
-  ```js
-  import axios from "axios";
+  - axios 설치 후 import
+    
+    ```js
+    import axios from "axios";
+    ```
+
+- `router`
+  
+  ```bash
+  npm i react-router-dom
   ```
 
 ### component life cycle
