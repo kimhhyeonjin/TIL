@@ -25,10 +25,23 @@
     - 선언형 프로그래밍
       
       - 무엇을 할 것인가
+        
+        ```js
+        <div className="App">
+          <h2>Let's get started!</h2>
+          <p>This is also visible!</p>
+        </div>
+        ```
     
     - 명령형(절차형) 프로그래밍
       
       - 어떤 일을 어떻게 할 것인가
+        
+        ```js
+        const para = document.createElement('p');
+        para.textContent = 'This is also visible';
+        document.getElementById('root').append(para);
+        ```
 
 ### Create React app
 
@@ -95,6 +108,10 @@ npm start
   - 브라우저에서 로딩되는 유일한 HTML 파일
   
   - 그 외 웹 페이지 상의 모든 사용자 인터페이스 관련 변경 사항은 React가 처리
+
+- auto format shortcut
+  
+  - File > Preferences > Keyboard Shortcuts > 'format document' 검색
 
 ### JSX
 
@@ -208,3 +225,154 @@ npm start
         console.log("Goodbye")
       }
     ```
+
+### Props
+
+- 재사용 가능한 컴포넌트 생성
+
+- 컴포넌트에서 컴포넌트로 데이터 전달 가능
+  
+  ```js
+  // App.js
+  
+  import ExpenseItem from "./components/ExpenseItem";
+  
+  function App() {
+    const expenses = [
+      {
+        id: 'e1',
+        title: "Toilet Paper",
+        amount: 94.12,
+        date: new Date(2020, 7, 14),
+      },
+      {
+        id: 'e2',
+        title: "New TV",
+        amount: 799.49,
+        date: new Date(2021, 2, 12),
+      },
+      {
+        id: 'e3',
+        title: "Car Insurance",
+        amount: 294.67,
+        date: new Date(2021, 2, 28),
+      },
+      {
+        id: 'e4',
+        title: "New Desk (Wooden)",
+        amount: 450,
+        date: new Date(2021, 5, 12),
+      },
+    ];
+  
+    return (
+      <div className="App">
+        <h2>Let's get started!</h2>
+        <ExpenseItem
+          title={expenses[0].title}
+          amount={expenses[0].amount}
+          date={expenses[0].date}
+        ></ExpenseItem>
+        <ExpenseItem
+          title={expenses[1].title}
+          amount={expenses[1].amount}
+          date={expenses[1].date}
+        ></ExpenseItem>
+        <ExpenseItem
+          title={expenses[2].title}
+          amount={expenses[2].amount}
+          date={expenses[2].date}
+        ></ExpenseItem>
+        <ExpenseItem
+          title={expenses[3].title}
+          amount={expenses[3].amount}
+          date={expenses[3].date}
+        ></ExpenseItem>
+      </div>
+    );
+  }
+  
+  export default App;
+  ```
+  
+  ```js
+  // ExpenseItem.js
+  
+  import "./ExpenseItem.css";
+  
+  function ExpenseItem(props) {
+  
+    return (
+      <div className="expense-item">
+        <div>{props.date.toISOString()}</div>
+        <div className="expense-item__description">
+          <h2>{props.title}</h2>
+          <div className="expense-item__price">${props.amount}</div>
+        </div>
+      </div>
+    );
+  }
+  
+  export default ExpenseItem;
+  ```
+  
+  ```css
+  /* ExpenseItem.css */
+  
+  .expense-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+      padding: 0.5rem;
+      margin: 1rem 0;
+      border-radius: 12px;
+      background-color: #4b4b4b;
+  }
+  
+  .expense-item__description {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-end;
+      flex-flow: column-reverse;
+      justify-content: flex-start;
+      flex: 1;
+  }
+  
+  .expense-item h2 {
+      color: #3a3a3a;
+      font-size: 1rem;
+      flex: 1;
+      margin: 0 1rem;
+      color: white;
+  }
+  
+  .expense-item__price {
+      font-size: 1rem;
+      font-weight: bold;
+      color: white;
+      background-color: #40005d;
+      border: 1px solid white;
+      padding: 0.5rem;
+      border-radius: 12px;
+  }
+  
+  @media (min-width: 500px) {
+      .expense-item__description {
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-start;
+          flex: 1;
+      }
+  }
+  
+  .expense-item__description h2 {
+      font-size: 1.25rem;
+  }
+  
+  .expense-item__price {
+      font-size: 1.25rem;
+      padding: 0.5rem 1.5rem;
+  }
+  ```
