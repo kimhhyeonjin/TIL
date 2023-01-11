@@ -424,3 +424,5 @@ npm start
     
     export default Expenses;
     ```
+
+### User interaction & State
