@@ -376,3 +376,51 @@ npm start
       padding: 0.5rem 1.5rem;
   }
   ```
+
+- children prop
+  
+  - 사용자 지정 컴포넌트에 있는 열고 닫는 태그 사이에 있는 컨텐츠를 모두 표시하는 props
+  
+  - 중복된 코드 뿐 아니라 Html 코드와 JSX 코드 등을 추출할 수 있음
+    
+    ```js
+    // Card.js
+    
+    import './Card.css';
+    
+    function Card(props) {
+        const classes = 'card ' + props.className;
+    
+        return (
+            <div className={classes}>{props.children}</div>
+        );
+    }
+    
+    export default Card;
+    ```
+    
+    ```css
+    /* Card.css */
+    
+    .card {
+         border-radius: 12px;
+         box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+    }
+    ```
+    
+    ```js
+    // Expenses.js
+    
+    import Card from './Card';
+    import './Expenses.css';
+    
+    function Expenses(props) {
+      return (
+        <Card className="expenses">
+          ...
+        </Card>
+      );
+    }
+    
+    export default Expenses;
+    ```
