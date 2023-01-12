@@ -425,6 +425,66 @@ npm start
     export default Expenses;
     ```
 
+### 자식 컴포넌트에서 부모 컴포넌트로 데이터 이동
+
+- Lifting State up
+  
+  - props를 사용해서 부모 컴포넌트로부터 함수를 받고 자식 컴포넌트에서 그 함수를 불러옴
+    
+    - 자식 컴포넌트인 NewExpense의 데이터를 부모 컴포넌트인 App으로 이동
+      
+      ```js
+      // NewExpense.js
+      
+      import React from "react";
+      import ExpenseForm from './ExpenseForm';
+      import './NewExpense.css';
+      
+      const NewExpense = (props) => {
+        const saveExpenseDataHandler = (enteredExpenseData) => {
+          const expenseData = {
+            ...enteredExpenseData,
+            id: Math.random().toString()
+          };
+          props.onAddExpense(expenseData);
+        };
+      
+        return <div className="new-expense">
+          <ExpenseForm onSaveExpenseData={saveExpenseDataHandler} />
+        </div>;
+      };
+      
+      export default NewExpense;
+      ```
+      
+      ```js
+      // App.js
+      
+      import React from 'react';
+      import Expenses from './components/Expenses/Expenses';
+      import NewExpense from './components/NewExpense/NewExpense';
+      
+      const App = () => {
+        const expenses = [
+          ...
+        ];
+      
+        const addExpenseHandler = (expense) => {
+          console.log('In App.js');
+          console.log(expense)
+        };
+      
+        return (
+          <div className="App">
+            <NewExpense onAddExpense={addExpenseHandler} />
+            <Expenses items={expenses}/>
+          </div>
+        );
+      }
+      
+      export default App;
+      ```
+
 ### User interaction & State
 
 - Event Handler
@@ -468,6 +528,83 @@ npm start
   - onSubmit
     
     - 폼이 제출될 때마다 함수를 실행
+      
+      ```js
+      // ExpenseForm.js
+      
+      import React, { useState } from "react";
+      import "./ExpenseForm.css";
+      
+      const ExpenseForm = () => {
+      
+        const [enteredTitle, setEnteredTitle] = useState("");
+        const [enteredAmount, setEnteredAmount] = useState("");
+        const [enteredDate, setEnteredDate] = useState("");
+      
+        // EventListener
+        const titleChangeHandler = (event) => {
+          setEnteredTitle(event.target.value);
+        };
+      
+        const amountChangeHandler = (event) => {
+          setEnteredAmount(event.target.value);
+        };
+      
+        const dateChangeHandler = (event) => {
+          setEnteredDate(event.target.value);
+        };
+      
+        const submitHandler = (event) => {
+          event.preventDefault();
+      
+          const expenseData = {
+            title: enteredTitle,
+            amount: enteredAmount,
+            date: new Date(enteredDate),
+          };
+      
+          console.log(expenseData);
+          setEnteredTitle('');
+          setEnteredAmount('');
+          setEnteredDate('');
+        };
+      
+        return (
+          <form onSubmit={submitHandler}>
+            <div className="new-expense__controls"></div>
+            <div className="new-expense__control">
+              <label>Title</label>
+              <input
+                type="text"
+                value={enteredTitle}
+                onChange={titleChangeHandler}
+              />
+            </div>
+            <div className="new-expense__control">
+              <label>Amount</label>
+              <input
+                ...
+                value={enteredAmount}
+                onChange={amountChangeHandler}
+              />
+            </div>
+            <div className="new-expense__control">
+              <label>Date</label>
+              <input
+                ...
+                value={enteredDate}
+                onChange={dateChangeHandler}
+              />
+            </div>
+            <div className="new-expense__actions">
+              <button type="submit">Add Expense</button>
+            </div>
+          </form>
+        );
+      };
+      
+      export default ExpenseForm;
+      ```
 
 - State
   
