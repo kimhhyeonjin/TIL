@@ -426,3 +426,74 @@ npm start
     ```
 
 ### User interaction & State
+
+- Event Handler
+  
+  ```js
+  // ExpenseItem.js
+  
+  import React from 'react';
+  import ExpenseDate from './ExpenseDate';
+  import Card from '../UI/Card';
+  import "./ExpenseItem.css";
+  
+  const ExpenseItem = (props) => {
+    const clickHandler = () => {
+      console.log('Clicked!!!!!');
+    };
+  
+    return (
+      <Card className="expense-item">
+        <ExpenseDate date={props.date} />
+        <div className="expense-item__description">
+          <h2>{props.title}</h2>
+          <div className="expense-item__price">${props.amount}</div>
+        </div>
+        <button onClick={clickHandler}>Change Title</button>
+      </Card>
+    );
+  }
+  
+  export default ExpenseItem;
+  ```
+
+- State
+  
+  - useState
+    
+    - 컴포넌트 함수가 다시 호출되는 곳에서 `변경된 값을 반영`하기 위해 state로 값을 정의할 수 있게 해주는 함수
+    
+    - `컴포넌트 함수 내부`에서 useState 함수 호출
+      
+      - `const [관리되고 있는 값, 새로운 값을 설정하기 위해 호출하는 함수] = useState(초기값)`
+        
+        ```js
+        // ExpenseItem.js
+        
+        import React, { useState } from 'react';
+        import ExpenseDate from './ExpenseDate';
+        import Card from '../UI/Card';
+        import "./ExpenseItem.css";
+        
+        const ExpenseItem = (props) => {
+          const [title, setTitle] = useState(props.title);
+        
+          const clickHandler = () => {
+            // title = 'Updated!';
+            setTitle('Updated!');
+            // console.log가 setTitle보다 먼저 실행되기 떄문에
+            // console.log에는 이전의 title이 출력
+            console.log(title);
+          };
+        
+          return (
+            <Card className="expense-item">
+              <ExpenseDate date={props.date} />
+              ...
+              <button onClick={clickHandler}>Change Title</button>
+            </Card>
+          );
+        }
+        
+        export default ExpenseItem;
+        ```
