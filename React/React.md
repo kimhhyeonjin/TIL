@@ -429,33 +429,45 @@ npm start
 
 - Event Handler
   
-  ```js
-  // ExpenseItem.js
+  - onClick
+    
+    - 클릭이 발생했을 때
+      
+      ```js
+      // ExpenseItem.js
+      
+      import React from 'react';
+      import ExpenseDate from './ExpenseDate';
+      import Card from '../UI/Card';
+      import "./ExpenseItem.css";
+      
+      const ExpenseItem = (props) => {
+        const clickHandler = () => {
+          console.log('Clicked!!!!!');
+        };
+      
+        return (
+          <Card className="expense-item">
+            <ExpenseDate date={props.date} />
+            <div className="expense-item__description">
+              <h2>{props.title}</h2>
+              <div className="expense-item__price">${props.amount}</div>
+            </div>
+            <button onClick={clickHandler}>Change Title</button>
+          </Card>
+        );
+      }
+      
+      export default ExpenseItem;
+      ```
   
-  import React from 'react';
-  import ExpenseDate from './ExpenseDate';
-  import Card from '../UI/Card';
-  import "./ExpenseItem.css";
+  - onChange
+    
+    - input 안의 값이 변경될 때
   
-  const ExpenseItem = (props) => {
-    const clickHandler = () => {
-      console.log('Clicked!!!!!');
-    };
-  
-    return (
-      <Card className="expense-item">
-        <ExpenseDate date={props.date} />
-        <div className="expense-item__description">
-          <h2>{props.title}</h2>
-          <div className="expense-item__price">${props.amount}</div>
-        </div>
-        <button onClick={clickHandler}>Change Title</button>
-      </Card>
-    );
-  }
-  
-  export default ExpenseItem;
-  ```
+  - onSubmit
+    
+    - 폼이 제출될 때마다 함수를 실행
 
 - State
   
@@ -476,6 +488,8 @@ npm start
         import "./ExpenseItem.css";
         
         const ExpenseItem = (props) => {
+          // title에 값을 할당하는 것이 아니기 때문에
+          // const 사용가능
           const [title, setTitle] = useState(props.title);
         
           const clickHandler = () => {
@@ -497,3 +511,98 @@ npm start
         
         export default ExpenseItem;
         ```
+  
+  - updating State
+    
+    ```js
+    // ExpenseForm.js
+    
+    import React, { useState } from "react";
+    
+    const ExpenseForm = () => {
+      // 첫 번째 방법
+      // const [enteredTitle, setEnteredTitle] = useState('');
+      // const [enteredAmount, setEnteredAmount] = useState('');
+      // const [enteredDate, setEnteredDate] = useState('');
+    
+      // 두 번째, 세 번째 방법
+      const [userInput, setUserInput] = useState({
+        enteredTitle: "",
+        enteredAmount: "",
+        enteredDate: "",
+      });
+    
+      // EventListener
+      const titleChangeHandler = (event) => {
+        // 첫 번째 방법
+        // setEnteredTitle(event.target.value);
+    
+        // 두 번째 방법
+        setUserInput({
+          // 기존의 값을 불러온 후 수정할 부분을 업데이트
+          ...userInput,
+          enteredTitle: event.target.value,
+        });
+    
+        // 세 번째 방법(권장)
+        setUserInput((prevState) => {
+            return { ...prevState, enteredTitle: event.target.value };
+        });
+      };
+    
+      const amountChangeHandler = (event) => {
+        // 첫 번째 방법
+        // setEnteredAmount(event.target.value);
+    
+        // 두 번째 방법
+        setUserInput({
+          ...userInput,
+          enteredAmount: event.target.value,
+        });
+    
+        // 세 번째 방법(권장)
+        setUserInput((prevState) => {
+            return { ...prevState, enteredAmout: event.target.value };
+        });
+      };
+    
+      const dateChangeHandler = (event) => {
+        // 첫 번째 방법
+        // setEnteredDate(event.target.value);
+    
+        // 두 번째 방법
+        setUserInput({
+          ...userInput,
+          enteredDate: event.target.value,
+        });
+    
+        // 세 번째 방법(권장)
+        setUserInput((prevState) => {
+            return { ...prevState, enteredDate: event.target.value };
+        });
+      };
+    
+      return (
+        <form action="">
+          ...
+          <div className="new-expense__control">
+            ...
+            <input type="text" onChange={titleChangeHandler} />
+          </div>
+          <div className="new-expense__control">
+            ...
+            <input ... onChange={amountChangeHandler}/>
+          </div>
+          <div className="new-expense__control">
+            ...
+            <input ... onChange={dateChangeHandler}/>
+          </div>
+          <div className="new-expense__actions">
+            <button type="submit">Add Expense</button>
+          </div>
+        </form>
+      );
+    };
+    
+    export default ExpenseForm;
+    ```

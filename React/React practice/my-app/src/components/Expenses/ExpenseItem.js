@@ -4,7 +4,10 @@ import Card from '../UI/Card';
 import "./ExpenseItem.css";
 
 const ExpenseItem = (props) => {
+  // title에 값을 할당하는 것이 아니기 때문에
+  // const 사용가능
   const [title, setTitle] = useState(props.title);
+  console.log('ExpenseItem evaluated by React');
 
   // let title = props.title;
 
