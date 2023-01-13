@@ -743,3 +743,43 @@ npm start
     
     export default ExpenseForm;
     ```
+
+### etc
+
+- styling CSS
+  
+  ```js
+  // CourseInput.js
+  
+  import React, { useState } from "react";
+  import Button from "../../UI/Button/Button";
+  import "./CourseInput.css";
+  
+  const CourseInput = (props) => {
+    ...
+    const [isValid, setIsValid] = useState(true);
+  
+    const formSubmitHandler = (event) => {
+      ...
+    };
+  
+    return (
+      <form onSubmit={formSubmitHandler}>
+        <div className={`form-control ${!isValid ? 'invalid' : ''}`}>
+          ...
+        </div>
+        ...
+      </form>
+    );
+  };
+  
+  export default CourseInput;
+  ```
+  
+  - `<div className={`form-control ${!isValid ? 'invalid' : ''}`}>`
+    
+    - isValid가 true이면 className="form-control"
+    
+    - isValid가 false이면 className="form-control invalid"
+
+- ... syntax
