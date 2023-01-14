@@ -782,4 +782,69 @@ npm start
     
     - isValid가 false이면 className="form-control invalid"
 
+- media query
+  
+  ```css
+  @media (조건) {
+    스타일
+  }
+  ```
+
+- CSS 모듈
+  
+  - css 클래스나 css 파일을 가지고 그 클래스 이름을 고유하게 바꿈
+  
+  - css 파일에서 설정한 css 스타일의 범위가 import하는 컴포넌트에 한정됨
+  
+  - CSS 모듈 사용하기
+    
+    - css 파일명은 보통 `클래스명.module.css`
+      
+      ```js
+      // CourseInput.js
+      
+      import React, { useState } from "react";
+      import Button from "../../UI/Button/Button";
+      import styles from "./CourseInput.module.css";
+      
+      const CourseInput = (props) => {
+        const [enteredValue, setEnteredValue] = useState("");
+        const [isValid, setIsValid] = useState(true);
+      
+        const goalInputChangeHandler = (event) => {
+          if (event.target.value.trim().length > 0) {
+            setIsValid(true);
+          }
+          setEnteredValue(event.target.value);
+        };
+      
+        const formSubmitHandler = (event) => {
+          event.preventDefault();
+          if (enteredValue.trim().length === 0) {
+            setIsValid(false);
+            return;
+          }
+          props.onAddGoal(enteredValue);
+        };
+      
+        return (
+          <form onSubmit={formSubmitHandler}>
+            <div className={`${styles['form-control']} ${!isValid && styles.invalid}`}>
+              <label>Course Goal</label>
+              <input type="text" onChange={goalInputChangeHandler} />
+            </div>
+            <Button type="submit">Add Goal</Button>
+          </form>
+        );
+      };
+      
+      export default CourseInput;
+      ```
+      
+      - `import styles from "./CourseInput.module.css";`
+      
+      - 여러 개의 클래스를 사용할 때는 백틱(`) 사용
+      
+      - ``<div className={`${styles['form-control']} ${!isValid && styles.invalid}`}>``
+
 - ... syntax
