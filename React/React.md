@@ -123,6 +123,26 @@ npm start
   
   - 리액트 팀이 개발하고 도입한 특수 구문
 
+- className
+  
+  - class 대신 className을 사용
+    
+    ```js
+    // App.js
+    
+        <div className="App">
+          ...
+        </div>
+    ```
+
+- htmlFor
+  
+  - label에서 for 대신 htmlFor 사용
+    
+    ```js
+    <label htmlFor="username">Username</label>
+    ```
+
 ### npm
 
 - `npm i prop-types`
