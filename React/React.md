@@ -505,7 +505,7 @@ npm start
       export default App;
       ```
 
-### User interaction & State
+### Event Handler
 
 - Event Handler
   
@@ -626,48 +626,50 @@ npm start
       export default ExpenseForm;
       ```
 
-- State
+### React Hook
+
+- 함수형 컴포넌트 안에서만 사용 가능
+
+- useState
   
-  - useState
+  - 컴포넌트 함수가 다시 호출되는 곳에서 `변경된 값을 반영`하기 위해 state로 값을 정의할 수 있게 해주는 함수
+  
+  - `컴포넌트 함수 내부`에서 useState 함수 호출
     
-    - 컴포넌트 함수가 다시 호출되는 곳에서 `변경된 값을 반영`하기 위해 state로 값을 정의할 수 있게 해주는 함수
-    
-    - `컴포넌트 함수 내부`에서 useState 함수 호출
+    - `const [관리되고 있는 값, 새로운 값을 설정하기 위해 호출하는 함수] = useState(초기값)`
       
-      - `const [관리되고 있는 값, 새로운 값을 설정하기 위해 호출하는 함수] = useState(초기값)`
-        
-        ```js
-        // ExpenseItem.js
-        
-        import React, { useState } from 'react';
-        import ExpenseDate from './ExpenseDate';
-        import Card from '../UI/Card';
-        import "./ExpenseItem.css";
-        
-        const ExpenseItem = (props) => {
-          // title에 값을 할당하는 것이 아니기 때문에
-          // const 사용가능
-          const [title, setTitle] = useState(props.title);
-        
-          const clickHandler = () => {
-            // title = 'Updated!';
-            setTitle('Updated!');
-            // console.log가 setTitle보다 먼저 실행되기 떄문에
-            // console.log에는 이전의 title이 출력
-            console.log(title);
-          };
-        
-          return (
-            <Card className="expense-item">
-              <ExpenseDate date={props.date} />
-              ...
-              <button onClick={clickHandler}>Change Title</button>
-            </Card>
-          );
-        }
-        
-        export default ExpenseItem;
-        ```
+      ```js
+      // ExpenseItem.js
+      
+      import React, { useState } from 'react';
+      import ExpenseDate from './ExpenseDate';
+      import Card from '../UI/Card';
+      import "./ExpenseItem.css";
+      
+      const ExpenseItem = (props) => {
+        // title에 값을 할당하는 것이 아니기 때문에
+        // const 사용가능
+        const [title, setTitle] = useState(props.title);
+      
+        const clickHandler = () => {
+          // title = 'Updated!';
+          setTitle('Updated!');
+          // console.log가 setTitle보다 먼저 실행되기 떄문에
+          // console.log에는 이전의 title이 출력
+          console.log(title);
+        };
+      
+        return (
+          <Card className="expense-item">
+            <ExpenseDate date={props.date} />
+            ...
+            <button onClick={clickHandler}>Change Title</button>
+          </Card>
+        );
+      }
+      
+      export default ExpenseItem;
+      ```
   
   - updating State
     
@@ -762,6 +764,149 @@ npm start
     };
     
     export default ExpenseForm;
+    ```
+
+- useRef
+  
+  - 다른 DOM 요소에 접근해서 작업할 수 있도록 함
+  
+  - 리렌더링하지 않고 컴포넌트의 속성만 조회, 수정함
+  
+  - DOM을 조작하는 예외적인 작업을 해야 함
+    
+    ```js
+    // AddUser.js
+    
+    import React, { useState, useRef } from "react";
+    import Card from "../UI/Card";
+    import Button from "../UI/Button";
+    import ErrorModal from "../UI/ErrorModal";
+    import Wrapper from "../Helpers/Wrapper";
+    import classes from "./AddUser.module.css";
+    
+    const AddUser = (props) => {
+      const nameInputRef = useRef();
+      const ageInputRef = useRef();
+    
+      const [error, setError] = useState();
+    
+      const addUserHandler = (event) => {
+        event.preventDefault();
+        const enteredName = nameInputRef.current.value;
+        const enteredUserAge = ageInputRef.current.value;
+        if (enteredName.trim().length === 0 || enteredUserAge.trim().length === 0) {
+          ...
+          });
+          return;
+        }
+        if (+enteredUserAge < 1) {
+          ...
+          });
+          return;
+        }
+        props.onAddUser(enteredName, enteredUserAge);
+        nameInputRef.current.value = '';
+        ageInputRef.current.value = '';
+      };
+    
+      const errorHandler = () => {
+        setError(null);
+      };
+    
+      return (
+        <Wrapper>
+          ...
+          <Card className={classes.input}>
+            <form onSubmit={addUserHandler}>
+              <label htmlFor="username">Username</label>
+              <input
+                id="username"
+                type="text"
+                ref={nameInputRef}
+              />
+              <label htmlFor="age">Age (Years)</label>
+              <input
+                id="age"
+                type="number"
+                ref={ageInputRef}
+              />
+              <Button type="submit">Add user</Button>
+            </form>
+          </Card>
+        </Wrapper>
+      );
+    };
+    
+    export default AddUser;
+    ```
+
+### Portal
+
+- 컴포넌트를 렌더링 할 때, 부모 컴포넌트의 DOM 외부에 존재하는 DOM 노드에 렌더링 할 수 있게 해줌
+
+- Modal 컴포넌트를 만들어야 할 때 유용하게 사용
+  
+  - index.html
+    
+    ```html
+      <body>
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <div id="backdrop-root"></div>
+        <div id="overlay-root"></div>
+        <div id="root"></div>
+        ...
+      </body>
+    ```
+  
+  - ErrorModal.js
+    
+    ```js
+    import React from "react";
+    import ReactDOM from "react-dom";
+    import Card from "./Card";
+    import Button from "./Button";
+    import classes from "./ErrorModal.module.css";
+    
+    const Backdrop = (props) => {
+      return <div className={classes.backdrop} onClick={props.onConfirm}></div>;
+    };
+    
+    const ModalOverlay = (props) => {
+      return (
+        <Card className={classes.modal}>
+          <header className={classes.header}>
+            <h2>{props.title}</h2>
+          </header>
+          <div className={classes.content}>
+            <p>{props.message}</p>
+          </div>
+          <footer className={classes.actions}>
+            <Button onClick={props.onConfirm}>Okay</Button>
+          </footer>
+        </Card>
+      );
+    };
+    
+    const ErrorModal = (props) => {
+      return (
+        <React.Fragment>
+          {ReactDOM.createPortal(
+            <Backdrop onConfirm={props.onConfirm} />,
+            document.getElementById("backdrop-root")
+          )}
+          {ReactDOM.createPortal(
+            <ModalOverlay
+              title={props.title}
+              message={props.message}
+              onConfirm={props.onConfirm}
+            />,
+            document.getElementById("overlay-root")
+          )}
+        </React.Fragment>
+      );
+    };
+    
+    export default ErrorModal;
     ```
 
 ### etc
