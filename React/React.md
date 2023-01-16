@@ -857,6 +857,105 @@ npm start
   - 두 번째 인수는 지정된 의존성
     
     - 의존성으로 구성된 배열
+    
+    - 두 번째 인수를 지정하지 않는 경우
+      
+      - 컴포넌트가 처음으로 마운트되었을 때 실행되고 state가 없데이트될 때마다 실행됨
+        
+        ```js
+          useEffect(() => {
+            console.log("EFFECT RUNNING");
+          });
+        ```
+    
+    - 두 번째 인수가 빈 배열인 경우
+      
+      - 컴포넌트가 처음으로 마운트되고 렌더링될 때 한 번만 실행
+        
+        ```js
+          useEffect(() => {
+            console.log("EFFECT RUNNING");
+          }, []);
+        ```
+  
+  ```js
+  // App.js
+  
+  import React, { useState, useEffect } from "react";
+  
+  import Login from "./components/Login/Login";
+  import Home from "./components/Home/Home";
+  import MainHeader from "./components/MainHeader/MainHeader";
+  
+  function App() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+    useEffect(() => {
+      const storedUserLoggedInInformation = localStorage.getItem("isLoggedIn");
+  
+      // useState를 사용하면 무한루프 생성
+      if (storedUserLoggedInInformation === "1") {
+        setIsLoggedIn(true);
+      }
+    }, []);
+  
+    const loginHandler = (email, password) => {
+      // We should of course check email and password
+      // But it's just a dummy/ demo anyways
+      localStorage.setItem("isLoggedIn", "1");
+      setIsLoggedIn(true);
+    };
+  
+    const logoutHandler = () => {
+      localStorage.removeItem("isLoggedIn");
+      setIsLoggedIn(false);
+    };
+  
+    return (
+      <React.Fragment>
+        <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} />
+        <main>
+          {!isLoggedIn && <Login onLogin={loginHandler} />}
+          {isLoggedIn && <Home onLogout={logoutHandler} />}
+        </main>
+      </React.Fragment>
+    );
+  }
+  
+  export default App;
+  ```
+  
+  - cleanup function
+    
+    - effect를 특정한 컴포넌트가 DOM에서 마운트 해제될 때마다(재사용될 때마다) 실행
+    
+    - 모든 새로운 side effect 함수가 실행되기 전, 컴포넌트가 제거되기 전 실행
+      
+      ```js
+      // Login.js
+      
+      ...
+      
+      const Login = (props) => {
+        ...
+      
+        useEffect(() => {
+          const identifier = setTimeout(() => {
+            console.log("Checking form validity!");
+            setFormIsValid(
+              enteredEmail.includes("@") && enteredPassword.trim().length > 6
+            );
+          }, 500);
+          return () => {
+            console.log("CLEANUP");
+            clearTimeout(identifier);
+          };
+        }, [enteredEmail, enteredPassword]);
+      
+        ...
+      
+      export default Login;
+      ```
 
 ### Portal
 
@@ -1031,3 +1130,25 @@ npm start
       - ``<div className={`${styles['form-control']} ${!isValid && styles.invalid}`}>``
 
 - ... syntax
+
+- localStorage 사용하기
+  
+  - localStorage
+    
+    - 사용자의 로컬에 존재하는 저장소
+    
+    - 데이터를 브라우저에 반영구적으로 저장
+    
+    - 브라우저를 종료 후 재시작해도 데이터가 남아있음
+  
+  - 데이터 추가
+    
+    - `localStorage.setItem('데이터이름', '데이터');`
+  
+  - 데이터 조회
+    
+    - `localStorage.getItem('데이터이름');`
+  
+  - 데이터 삭제
+    
+    - `localStorage.removeItem('데이터이름');`
