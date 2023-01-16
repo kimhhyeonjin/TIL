@@ -957,6 +957,112 @@ npm start
       export default Login;
       ```
 
+- useReducer
+  
+  - state 관리를 도와줌
+  
+  - 다른 state를 기반으로 하는 state를 업데이트하는 경우 유용
+    
+    ```js
+    const [state, dispatchFn] = useReducer(reducerFn, initialState, initFn);
+    ```
+    
+    - 항상 두 개의 값이 있는 배열 반환
+    
+    - `state`
+      
+      - 컴포넌트에서 사용할 상태
+    
+    - `dispatchFn`
+      
+      - reducerFn 실행
+      
+      - action 객체를 인자로 받으며 action 객체는 어떤 행동인지를 나타내는 type 속성과 해당 행동과 관련된 payload를 담고 있음
+    
+    - `reducerFn`
+      
+      - 컴포넌트 외부에서 state를 업데이트하는 함수
+    
+    - `initialState`
+      
+      - 초기 state
+    
+    - `initFn`
+      
+      - 초기 함수
+    
+    ```js
+    // Login.js
+    
+    import React, { useState, useEffect, useReducer } from "react";
+    ...
+    
+    const emailReducer = (state, action) => {
+      if (action.type === "USER_INPUT") {
+        return { value: action.val, isValid: action.val.includes("@") };
+      }
+      if (action.type === "INPUT_BLUR") {
+        return { value: state.value, isValid: state.value.includes("@") };
+      }
+      return { value: "", isValid: false };
+    };
+    
+    const Login = (props) => {
+      const [enteredPassword, setEnteredPassword] = useState("");
+      const [passwordIsValid, setPasswordIsValid] = useState();
+      const [formIsValid, setFormIsValid] = useState(false);
+    
+      const [emailState, dispatchEmail] = useReducer(emailReducer, {
+        value: "",
+        isValid: null,
+      });
+    
+      const emailChangeHandler = (event) => {
+        dispatchEmail({ type: "USER_INPUT", val: event.target.value });
+        setFormIsValid(
+          event.target.value.includes("@") && enteredPassword.trim().length > 6
+        );
+      };
+    
+      ...
+    
+      const validateEmailHandler = () => {
+        dispatchEmail({ type: "INPUT_BLUR" });
+      };
+    
+      ...
+    
+      const submitHandler = (event) => {
+        event.preventDefault();
+        props.onLogin(emailState.value, enteredPassword);
+      };
+    
+      return (
+        <Card className={classes.login}>
+          <form onSubmit={submitHandler}>
+            <div
+              className={`${classes.control} ${
+                emailState.isValid === false ? classes.invalid : ""
+              }`}
+            >
+              <label htmlFor="email">E-Mail</label>
+              <input
+                type="email"
+                id="email"
+                value={emailState.value}
+                onChange={emailChangeHandler}
+                onBlur={validateEmailHandler}
+              />
+            </div>
+            ...
+          </form>
+        </Card>
+      );
+    };
+    
+    export default Login;
+    ```
+
 ### Portal
 
 - 컴포넌트를 렌더링 할 때, 부모 컴포넌트의 DOM 외부에 존재하는 DOM 노드에 렌더링 할 수 있게 해줌
