@@ -1222,7 +1222,27 @@ npm start
     export default Navigation;
     ```
 
-- useContext
+- useContext (Consumer 설정 외 다른 방법)
+  
+  ```js
+  // Navigation.js
+  
+  import React, { useContext } from "react";
+  
+  import AuthContext from "../../store/auth-context";
+  import classes from "./Navigation.module.css";
+  
+  const Navigation = (props) => {
+    const ctx = useContext(AuthContext);
+    return (
+      ...
+    );
+  };
+  
+  export default Navigation;
+  ```
+  
+  
 
 ### etc
 
