@@ -1132,6 +1132,98 @@ npm start
     export default ErrorModal;
     ```
 
+### Context API
+
+- 리액트 내부적으로 state를 관리할 수 있도록 함
+
+- prop을 이용하지 않고 공급자에 설정하여 모든 자식 컴포넌트에서 리스닝할 수 있음
+
+- Provider - Consumer
+  
+  ```js
+  // auth-context.js
+  
+  import React from "react";
+  
+  const AuthContext = React.createContext({
+    isLoggedIn: false,
+  });
+  
+  export default AuthContext;
+  ```
+  
+  - 데이터를 보낼 범위에 Provider 설정
+    
+    ```js
+    // App.js
+    
+    import React, { useState, useEffect } from "react";
+    
+    import Login from "./components/Login/Login";
+    import Home from "./components/Home/Home";
+    import MainHeader from "./components/MainHeader/MainHeader";
+    import AuthContext from "./store/auth-context";
+    
+    ...
+    
+      return (
+        <AuthContext.Provider value={{ isLoggedIn: isLoggedIn }}>
+          <MainHeader onLogout={logoutHandler} />
+          <main>
+            {!isLoggedIn && <Login onLogin={loginHandler} />}
+            {isLoggedIn && <Home onLogout={logoutHandler} />}
+          </main>
+        </AuthContext.Provider>
+      );
+    
+    export default App;
+    ```
+  
+  - 데이터를 받을 범위에 Consumer 설정
+    
+    ```js
+    // Navigation.js
+    
+    import React from "react";
+    
+    import AuthContext from "../../store/auth-context";
+    import classes from "./Navigation.module.css";
+    
+    const Navigation = (props) => {
+      return (
+        <AuthContext.Consumer>
+          {(ctx) => {
+            return (
+              <nav className={classes.nav}>
+                <ul>
+                  {ctx.isLoggedIn && (
+                    <li>
+                      <a href="/">Users</a>
+                    </li>
+                  )}
+                  {ctx.isLoggedIn && (
+                    <li>
+                      <a href="/">Admin</a>
+                    </li>
+                  )}
+                  {ctx.isLoggedIn && (
+                    <li>
+                      <button onClick={props.onLogout}>Logout</button>
+                    </li>
+                  )}
+                </ul>
+              </nav>
+            );
+          }}
+        </AuthContext.Consumer>
+      );
+    };
+    
+    export default Navigation;
+    ```
+
+- useContext
+
 ### etc
 
 - styling CSS
