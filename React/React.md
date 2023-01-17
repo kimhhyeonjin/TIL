@@ -505,6 +505,109 @@ npm start
       export default App;
       ```
 
+### Context API를 이용한 중앙 state에서의 데이터 관리
+
+- 하나의 중앙 state에서 관리 
+
+- 집중적이고 분리된 접근 방식
+
+- 구성을 하는 경우는 프롭 사용을 권장하고 컴포넌트 또는 전체 앱에서 state 관리를 하는 경우는 컨텍스트 사용을 권장
+  
+  - index.js
+    
+    ```js
+    import React from "react";
+    import ReactDOM from "react-dom/client";
+    
+    import "./index.css";
+    import App from "./App";
+    import { AuthContextProvider } from "./store/auth-context";
+    
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(
+      <AuthContextProvider>
+        <App />
+      </AuthContextProvider>
+    );
+    ```
+  
+  - App.js
+    
+    ```js
+    import React, { useContext } from "react";
+    
+    import Login from "./components/Login/Login";
+    import Home from "./components/Home/Home";
+    import MainHeader from "./components/MainHeader/MainHeader";
+    import AuthContext from "./store/auth-context";
+    
+    function App() {
+      const ctx = useContext(AuthContext);
+      return (
+        <React.Fragment>
+          <MainHeader />
+          <main>
+            {!ctx.isLoggedIn && <Login />}
+            {ctx.isLoggedIn && <Home />}
+          </main>
+        </React.Fragment>
+      );
+    }
+    
+    export default App;
+    ```
+  
+  - auth-context.js
+    
+    ```js
+    import React, { useState, useEffect } from "react";
+    
+    const AuthContext = React.createContext({
+      isLoggedIn: false,
+      // 자동완성 기능을 위해 입력
+      onLogout: () => {},
+      onLogin: (email, password) => {},
+    });
+    
+    // 전체 로그인 state 관리, 모든 컨텍스트 설정
+    export const AuthContextProvider = (props) => {
+      const [isLoggedIn, setIsLoggedIn] = useState(false);
+    
+      useEffect(() => {
+        const storedUserLoggedInInformation = localStorage.getItem("isLoggedIn");
+    
+        // useState를 사용하면 무한루프 생성
+        if (storedUserLoggedInInformation === "1") {
+          setIsLoggedIn(true);
+        }
+      }, []);
+    
+      const logoutHandler = () => {
+        localStorage.removeItem("isLoggedIn");
+        setIsLoggedIn(false);
+      };
+    
+      const loginHandler = () => {
+        localStorage.setItem("isLoggedIn", "1");
+        setIsLoggedIn(true);
+      };
+    
+      return (
+        <AuthContext.Provider
+          value={{
+            isLoggedIn: isLoggedIn,
+            onLogout: logoutHandler,
+            onLogin: loginHandler,
+          }}
+        >
+          {props.children}
+        </AuthContext.Provider>
+      );
+    };
+    
+    export default AuthContext;
+    ```
+
 ### Event Handler
 
 - Event Handler
@@ -628,7 +731,19 @@ npm start
 
 ### React Hook
 
-- 함수형 컴포넌트 안에서만 사용 가능
+- 단순히 use로 시작하는 모든 함수
+
+- 리액트 훅 규칙
+  
+  - 리액트 컴포넌트 함수 또는 사용자 정의 훅에서만 호출 가능
+  
+  - 리액트 컴포넌트 함수 또는 사용자 정의 훅 함수의 최상위 수준에서만 호출 가능
+    
+    - 중첩 함수에서 호출 불가능
+    
+    - block 문에서 호출 불가능
+  
+  - useEffect 훅의 경우 필요한 경우를 제외하고는 항상 참조하는 모든 항목을 의존성으로 useEffect 내부에 추가해야 함
 
 - useState
   
@@ -1063,6 +1178,8 @@ npm start
     export default Login;
     ```
 
+- useContext(검색해서 확인)
+
 ### Portal
 
 - 컴포넌트를 렌더링 할 때, 부모 컴포넌트의 DOM 외부에 존재하는 DOM 노드에 렌더링 할 수 있게 해줌
@@ -1241,8 +1358,6 @@ npm start
   
   export default Navigation;
   ```
-  
-  
 
 ### etc
 
