@@ -954,6 +954,28 @@ npm start
     
     export default AddUser;
     ```
+  
+  - React.forwardRef
+    
+    - 자식 컴포넌트에게 ref를 넘겨주는 기술
+      
+      ```js
+      // Input.js
+      
+      import React from "react";
+      import classes from "./Input.module.css";
+      
+      const Input = React.forwardRef((props, ref) => {
+        return (
+          <div className={classes.input}>
+            <label htmlFor={props.input.id}>{props.label}</label>
+            <input ref={ref} {...props.input} />
+          </div>
+        );
+      });
+      
+      export default Input;
+      ```
 
 - useEffect
   
