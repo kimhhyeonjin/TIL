@@ -1313,6 +1313,8 @@ npm start
         });
       }
       ```
+    
+    - `then / catch`가 아닌 `try / catch`를 이용
 
 ### Portal
 
