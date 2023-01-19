@@ -1253,6 +1253,67 @@ npm start
     const CallbackFn = useCallback(함수, 배열);
     ```
 
+### Axios vs Fetch
+
+- Axios
+  
+  - 서드파티 라이브러리로 CDN 혹은 npm과 같은 패키지 매니저를 통해 설치하여 프로젝트에 추가 가능
+  
+  - 설치
+    
+    - CDN
+      
+      ```js
+      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+      ```
+    
+    - npm
+      
+      ```bash
+      npm install axios
+      ```
+      
+      ```js
+      import axios from "axios";
+      ```
+    
+    ```js
+    axios({
+      method: 'post',
+      url: '/user/12345',
+      data: {
+        firstName: 'Fred',
+        lastName: 'Flintstone'
+      }
+    })
+      .then()
+      .catch()
+    ```
+
+- Fetch
+  
+  - 모던 브라우저에 내장되어 있어 따로 설치할 필요가 없음
+    
+    ```js
+    fetch(url, {
+      method: 'GET',  // 'POST', 'PUT', 'DELETE' 등
+    })
+      .then()
+      .catch()
+    ```
+  
+  - async ...await
+    
+    - 함수 앞에 `async` 예약어를 추가하고 프로미스를 반환하는 작업 앞에 `await` 예약어를 사용
+      
+      ```js
+      async function functionName() {
+        await fetch("url").then((response) => {
+          return response.json();
+        });
+      }
+      ```
+
 ### Portal
 
 - 컴포넌트를 렌더링 할 때, 부모 컴포넌트의 DOM 외부에 존재하는 DOM 노드에 렌더링 할 수 있게 해줌
