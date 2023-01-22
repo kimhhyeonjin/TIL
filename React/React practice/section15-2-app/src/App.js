@@ -7,24 +7,25 @@ import useHttp from "./hooks/use-http";
 function App() {
   const [tasks, setTasks] = useState([]);
 
-  const transformTasks = (tasksObjc) => {
-    const loadedTasks = [];
-
-    for (const taskKey in tasksObjc) {
-      loadedTasks.push({ id: taskKey, text: tasksObjc[taskKey].text });
-    }
-
-    setTasks(loadedTasks);
-  };
-
-  const { isLoading, error, sendRequest: fetchTasks } = useHttp(
-    { url: "https://create-http-77654-default-rtdb.firebaseio.com/tasks.json" },
-    transformTasks
-  );
+  const { isLoading, error, sendRequest: fetchTasks } = useHttp();
 
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    const transformTasks = (tasksObjc) => {
+      const loadedTasks = [];
+
+      for (const taskKey in tasksObjc) {
+        loadedTasks.push({ id: taskKey, text: tasksObjc[taskKey].text });
+      }
+
+      setTasks(loadedTasks);
+    };
+    fetchTasks(
+      {
+        url: "https://create-http-77654-default-rtdb.firebaseio.com/tasks.json",
+      },
+      transformTasks
+    );
+  }, [fetchTasks]);
 
   const taskAddHandler = (task) => {
     setTasks((prevTasks) => prevTasks.concat(task));
