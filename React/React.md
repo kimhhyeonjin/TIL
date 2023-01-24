@@ -1104,6 +1104,12 @@ npm start
       
       export default Login;
       ```
+    
+    - async, await와 동시에 사용할 수 없음
+      
+      - cleanup 함수는 useEffect와 동시에 실행되기 떄문에 promise와 같은 것을 반환하지 않음
+      
+      - 따라서 asyc, await와 함께 사용하고 싶다면 useEffect 안에서 새로운 함수를 만들어 사용
 
 - useReducer
   
