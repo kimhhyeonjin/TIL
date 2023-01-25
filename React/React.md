@@ -192,6 +192,21 @@ npm start
   npm i react-router-dom
   ```
 
+- `npm init`
+  
+  - package.json 생성
+    
+    ```bash
+    npm init
+    npm init -y
+    ```
+
+- `redux`
+  
+  ```bash
+  npm install redux
+  ```
+
 ### component life cycle
 
 - Mounting
@@ -1516,12 +1531,75 @@ npm start
   - 크로스 컴포넌트 또는 앱 와이드 상태를 위한 상태 관리 시스템
   
   - 상태를 변경하고 화면에 표시하는 데이터를 관리하도록 도움
+
+- useContext에서의 잠재적 단점
   
-  - useContext에서의 잠재적 단점
+  - 설정과 상태관리가 복잡해질 수 있음
+  
+  - 데이터가 자주 변경되는 경우 성능이 좋지 않음
+
+- 한 개의 중앙 데이터 저장소
+  
+  - 컴포넌트는 절대로 저장된 데이터를 직접 조작하지 않음
+  
+  - 중앙 데이터 저장소에서 컴포넌트를 구독
     
-    - 설정과 상태관리가 복잡해질 수 있음
+    - 데이터는 중앙 데이터 저장소에서 컴포넌트로만
+
+- Reducer Function(리듀서 함수)
+  
+  - 입력을 받아서 그 입력을 변환하고 새로운 결과를 리턴하는 함수
+
+![redux_flow](./React_assets/redux_flow.png)
+
+- redux 설치
+  
+  - `npm init -y`
+  
+  - `npm install redux`
+  
+  - redux import
     
-    - 데이터가 자주 변경되는 경우 성능이 좋지 않음
+    ```js
+    const redux = require('redux');
+    ```
+  
+  ```js
+  const redux = require("redux");
+  
+  // Reducer
+  const counterReducer = (state = { counter: 0 }, action) => {
+    if (action.type === "increment") {
+      return {
+        counter: state.counter + 1,
+      };
+    }
+  
+    if (action.type === "decrement") {
+      return {
+        counter: state.counter - 1,
+      };
+    }
+  
+    return state;
+  };
+  
+  const store = redux.createStore(counterReducer);
+  
+  // Subscriber
+  const counterSubscriber = () => {
+    const latestState = store.getState();
+    console.log(latestState);
+  };
+  
+  store.subscribe(counterSubscriber);
+  
+  // Action
+  store.dispatch({ type: "increment" });
+  store.dispatch({ type: "decrement" });
+  ```
+
+- Redux in React
 
 ### etc
 
