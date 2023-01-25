@@ -1748,6 +1748,103 @@ npm start
   
   - state의 변경 불가능성
 
+- 설치
+  
+  ```bash
+  npm install @reduxjs/toolkit
+  ```
+  
+  - package.json에서 `redux` 삭제
+    
+    - 이미 redux toolkit에 포함되어있음
+
+- `createSlice`, `configureStore`
+  
+  ```js
+  // store/index.js
+  
+  import { createSlice, configureStore } from "@reduxjs/toolkit";
+  
+  const initialState = { counter: 0, showCounter: true };
+  
+  const counterSlice = createSlice({
+    name: "counter",
+    initialState: initialState,
+    reducers: {
+      increment(state) {
+        state.counter++;
+      },
+      decrement(state) {
+        state.counter--;
+      },
+      increase(state, action) {
+        state.counter = state.counter + action.payload;
+      },
+      toggleCounter(state) {
+        state.showCounter = !state.showCounter;
+      },
+    },
+  });
+  
+  const store = configureStore({
+    // reducer: { counter: counterSlice.reducer }
+    reducer: counterSlice.reducer,
+  });
+  
+  export const counterActions = counterSlice.actions;
+  
+  export default store;
+  ```
+  
+  - state를 변경하는 코드를 작성할 수 있는 이유
+    
+    - Redux toolkit의 immer패키지가 state를 변경하는 코드를 감지하고 자동으로 원래 있는 state를 복제 후 새로운 상태 객체를 생성하고 오버라이드
+  
+  - actions
+    
+    ```js
+    // store/index.js
+    
+    export const counterActions = counterSlice.actions;
+    ```
+  
+  - dispatch
+    
+    ```js
+    // components/Counter.js
+    
+    import { counterActions } from "../store/index";
+    ...
+    
+    const Counter = () => {
+      const dispatch = useDispatch();
+      const counter = useSelector((state) => state.counter);
+      const show = useSelector((state) => state.showCounter);
+    
+      const incrementHandler = () => {
+        // dispatch({ type: "increment" });
+        dispatch(counterActions.increment());
+      };
+    
+      const increaseHandler = () => {
+        // dispatch({ type: "increase", amount: 5 });
+        dispatch(counterActions.increase(5));
+      };
+    
+      const decrementHandler = () => {
+        // dispatch({ type: "decrement" });
+        dispatch(counterActions.decrement());
+      };
+    
+      const toggleCounterHandler = () => {
+        // dispatch({ type: "toggle" });
+        dispatch(counterActions.toggleCounter());
+      };
+    
+      ...
+    };
+    ```
+
 ### etc
 
 - styling CSS
