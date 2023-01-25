@@ -1600,6 +1600,131 @@ npm start
   ```
 
 - Redux in React
+  
+  - npm install
+    
+    ```bash
+    npm install redux react-redux
+    ```
+  
+  - create 스토어, create 리듀서
+    
+    - createStore에는 리듀서 함수에서 매개변수로 포인터가 있어야 함
+      
+      ```js
+      // (src/store/index.js)
+      
+      import { createStore } from "redux";
+      
+      const counterReducer = (state = { counter: 0 }, action) => {
+        if (action.type === "increment") {
+          return {
+            counter: state.counter + 1,
+          };
+        }
+      
+        if (action.type === "decrement") {
+          return {
+            counter: state.counter - 1,
+          };
+        }
+      
+        return state;
+      };
+      
+      const store = createStore(counterReducer);
+      
+      export default store;
+      ```
+  
+  - react 앱과 redux store 연결
+    
+    - 앱의 컴포넌트가 dispatch하고 들을 수 있음
+    
+    - 보통 최고 수준에서 제공
+      
+      ```js
+      // (src/index.js)
+      
+      import React from "react";
+      import ReactDOM from "react-dom/client";
+      import { Provider } from "react-redux";
+      
+      import "./index.css";
+      import App from "./App";
+      import store from './store/index';
+      
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(
+        <Provider store={store}>
+          <App />
+        </Provider>
+      );
+      ```
+  
+  - `useSelector`
+    
+    - 저장소가 관리하는 상태 부분을 자동적으로 선택할 수 있음
+      
+      ```js
+      import { useSelector } from "react-redux";
+      
+      import classes from "./Counter.module.css";
+      
+      const Counter = () => {
+        const counter = useSelector((state) => state.counter);
+        const toggleCounterHandler = () => {};
+      
+        return (
+          <main className={classes.counter}>
+            <h1>Redux Counter</h1>
+            <div className={classes.value}>{counter}</div>
+            <button onClick={toggleCounterHandler}>Toggle Counter</button>
+          </main>
+        );
+      };
+      
+      export default Counter;
+      ```
+    
+    - connect 함수
+      
+      - 클래스 컴포넌트를 감싸는 래퍼로 사용해서 그 클래스 컴포넌트를 저장소에 연결할 수 있음
+  
+  - 내부 컴포넌트에서 Action을 Dispatch하기
+    
+    - `useDispatch`
+      
+      ```js
+      import { useSelector, useDispatch } from "react-redux";
+      ...
+      
+      const Counter = () => {
+        const dispatch = useDispatch();
+        ...
+      
+        const incrementHandler = () => {
+          dispatch({ type: "increment" });
+        };
+      
+        const decrementHandler = () => {
+          dispatch({ type: "decrement" });
+        };
+      
+        ...
+      
+        return (
+          ...
+            <div>
+              <button onClick={incrementHandler}>Increment</button>
+              <button onClick={decrementHandler}>Decrement</button>
+            </div>
+          ...
+        );
+      };
+      
+      export default Counter;
+      ```
 
 ### etc
 
