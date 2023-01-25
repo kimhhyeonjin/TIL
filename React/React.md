@@ -1507,6 +1507,22 @@ npm start
   export default Navigation;
   ```
 
+### Redux
+
+- Redux
+  
+  - A state management system for cross-component or app-wide state
+  
+  - 크로스 컴포넌트 또는 앱 와이드 상태를 위한 상태 관리 시스템
+  
+  - 상태를 변경하고 화면에 표시하는 데이터를 관리하도록 도움
+  
+  - useContext에서의 잠재적 단점
+    
+    - 설정과 상태관리가 복잡해질 수 있음
+    
+    - 데이터가 자주 변경되는 경우 성능이 좋지 않음
+
 ### etc
 
 - styling CSS
