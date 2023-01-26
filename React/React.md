@@ -1549,6 +1549,11 @@ npm start
 - Reducer Function(리듀서 함수)
   
   - 입력을 받아서 그 입력을 변환하고 새로운 결과를 리턴하는 함수
+  
+  - 순수함수이어야 하며 부수 효과가 없고 동기식이어야 함
+    
+    - 그렇다면 비동기 코드를 어디에 넣어야 할까?
+      - useEffect()를 이용하거나 자체 action creator를 생성
 
 ![redux_flow](./React_assets/redux_flow.png)
 
