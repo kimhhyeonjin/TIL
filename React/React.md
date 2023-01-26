@@ -1850,6 +1850,295 @@ npm start
     };
     ```
 
+### 리덕스 툴킷을 이용한 전체적인 흐름
+
+- bash 설치
+  
+  ```bash
+  npm install react-redux
+  npm install @reduxjs/toolkit
+  ```
+
+- src 파일에 store 파일 생성
+  
+  - 리덕스 등을 설정할 index.js 파일 추가
+  
+  - 만들고 싶은 slice.js 파일 추가
+
+- slice.js 파일에서 작업하기
+  
+  ```js
+  // ui-slice.js
+  
+  import { createSlice } from "@reduxjs/toolkit";
+  
+  const uiSlice = createSlice({
+    name: "ui",
+    initialState: { cartIsVisible: false },
+    reducers: {
+      toggle(state) {
+        state.cartIsVisible = !state.cartIsVisible;
+      },
+    },
+  });
+  
+  export const uiActions = uiSlice.actions;
+  
+  export default uiSlice;
+  ```
+  
+  - createSlice를 import한 후 name, initialState, reducers를 지정하고 export
+  
+  ```js
+  // cart-slice.js
+  
+  import { createSlice } from "@reduxjs/toolkit";
+  
+  const cartSlice = createSlice({
+    name: "cart",
+    initialState: {
+      items: [],
+      totalQuantity: 0,
+      totalAmount: 0,
+    },
+    reducers: {
+      addItemToCart(state, action) {
+        const newItem = action.payload;
+        const existingItem = state.items.find((item) => item.id === newItem.id);
+        state.totalQuantity++;
+        if (!existingItem) {
+          state.items.push({
+            id: newItem.id,
+            price: newItem.price,
+            quantity: 1,
+            totalPrice: newItem.price,
+            name: newItem.title,
+          });
+        } else {
+          existingItem.quantity++;
+          existingItem.totalPrice = existingItem.totalPrice + newItem.price;
+        }
+      },
+      removeItemFromCart(state, action) {
+        const id = action.payload;
+        const existingItem = state.items.find((item) => item.id === id);
+        state.totalQuantity--;
+        if (existingItem.quantity === 1) {
+          state.items = state.items.filter((item) => item.id !== id);
+        } else {
+          existingItem.quantity--;
+          existingItem.totalPrice = existingItem.totalPrice - existingItem.price;
+        }
+      },
+    },
+  });
+  
+  export const cartActions = cartSlice.actions;
+  
+  export default cartSlice;
+  ```
+  
+  - payload를 보내기 위해서는 reducers를 작성할 때 action도 함께 작성
+  
+  - createSlice를 import한 후 name, initialState, reducers를 지정하고 export
+
+- index.js 파일에 store 생성
+  
+  ```js
+  import { configureStore } from "@reduxjs/toolkit";
+  
+  import uiSlice from "./ui-slice";
+  import cartSlice from "./cart-slice";
+  
+  const store = configureStore({
+    reducer: { ui: uiSlice.reducer, cart: cartSlice.reducer },
+  });
+  
+  export default store;
+  ```
+  
+  - configureStore를 import한 후 store를 생성하고 export
+
+- 루트 애플리케이션 구성 요소를 렌더링하는 src 파일의 index.js에 import
+  
+  - store를 export한 상태를 적용하기 위함
+    
+    ```js
+    // src/index.js
+    
+    import ReactDOM from "react-dom/client";
+    import { Provider } from "react-redux";
+    
+    import "./index.css";
+    import App from "./App";
+    import store from "./store/index";
+    
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
+    ```
+    
+    - Provider와 store를 import한 후 store 적용
+
+- 적용하기1
+  
+  ```js
+  // CartButton.js
+  
+  import { useDispatch, useSelector } from "react-redux";
+  
+  import { uiActions } from "../../store/ui-slice";
+  import classes from "./CartButton.module.css";
+  
+  const CartButton = (props) => {
+    const dispatch = useDispatch();
+    const cartQuantity = useSelector((state) => state.cart.totalQuantity);
+  
+    const toggleCartHandler = () => {
+      dispatch(uiActions.toggle());
+    };
+  
+    return (
+      <button className={classes.button} onClick={toggleCartHandler}>
+        <span>My Cart</span>
+        <span className={classes.badge}>{cartQuantity}</span>
+      </button>
+    );
+  };
+  
+  export default CartButton;
+  ```
+  
+  - export한 action을 import
+    
+    - 여기서는 uiActions
+  
+  - useDispatch를 import하여 dispatch
+  
+  - 렌더링할 컴포넌트에서 적용
+    
+    ```js
+    // App.js
+    
+    import { useSelector } from "react-redux";
+    
+    import Cart from "./components/Cart/Cart";
+    import Layout from "./components/Layout/Layout";
+    import Products from "./components/Shop/Products";
+    
+    function App() {
+      const showCart = useSelector(state => state.ui.cartIsVisible);
+    
+      return (
+        <Layout>
+          {showCart && <Cart />}
+          <Products />
+        </Layout>
+      );
+    }
+    
+    export default App;
+    ```
+    
+    - useSelector를 import하고 해당 컴포넌트에서 실행
+    
+    - useSelector는 state를 통해 현재 상태를 자동으로 수신하고 컴포넌트에서 사용하려는 데이터를 반환
+
+- 적용하기2
+  
+  - 장바구니 설정을 위해 필요한 더미 데이터 생성
+  
+  ```js
+  // Products.js
+  
+  import ProductItem from "./ProductItem";
+  import classes from "./Products.module.css";
+  
+  const DUMMY_PRODUCTS = [
+    {
+      id: "p1",
+      price: 6,
+      title: "My First Book",
+      description: "The first book I ever wrote",
+    },
+    {
+      id: "p2",
+      price: 5,
+      title: "My Second Book",
+      description: "The second book I ever wrote",
+    },
+  ];
+  
+  const Products = (props) => {
+    return (
+      <section className={classes.products}>
+        <h2>Buy your favorite products</h2>
+        <ul>
+          {DUMMY_PRODUCTS.map((product) => (
+            <ProductItem
+              key={product.id}
+              id={product.id}
+              title={product.title}
+              price={product.price}
+              description={product.description}
+            />
+          ))}
+        </ul>
+      </section>
+    );
+  };
+  
+  export default Products;
+  ```
+  
+  - dispatch
+    
+    ```js
+    // ProductItem.js
+    
+    import { useDispatch } from "react-redux";
+    
+    import { cartActions } from "../../store/cart-slice";
+    import Card from "../UI/Card";
+    import classes from "./ProductItem.module.css";
+    
+    const ProductItem = (props) => {
+      const dispatch = useDispatch();
+    
+      const { title, price, description, id } = props;
+    
+      const addToCartHandler = () => {
+        dispatch(
+          cartActions.addItemToCart({
+            id,
+            title,
+            price,
+          })
+        );
+      };
+    
+      return (
+        <li className={classes.item}>
+          <Card>
+            <header>
+              <h3>{title}</h3>
+              <div className={classes.price}>${price.toFixed(2)}</div>
+            </header>
+            <p>{description}</p>
+            <div className={classes.actions}>
+              <button onClick={addToCartHandler}>Add to Cart</button>
+            </div>
+          </Card>
+        </li>
+      );
+    };
+    
+    export default ProductItem;
+    ```
+
 ### etc
 
 - styling CSS
