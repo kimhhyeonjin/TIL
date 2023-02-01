@@ -47,6 +47,7 @@
 1. [JavaScript_기초](./JavaScript/JavaScript_기초.md)
 2. [DOM_Event_this](./JavaScript/DOM_Event_this.md)
 3. [동기와_비동기](./JavaScript/동기와_비동기.md)
+4. [EventHandler](./JavaScript/EventHandler.md)
 
 ### Python 정리
 
