@@ -1293,9 +1293,72 @@ npm start
 
 ### Custom Hook
 
-- `use`로 시작하는 훅을 만들어야 함
+- Custom Hook
+  
+  - `use`로 시작하는 훅을 만들어야 함
+  
+  - 상태와 관련된 로직을 사용한다던가 다른 리액트 훅을 사용할 수 있으며 컴포넌트 간에 특정 로직을 공유할 수 있음
 
-- 상태와 관련된 로직을 사용한다던가 다른 리액트 훅을 사용할 수 있으며 컴포넌트 간에 특정 로직을 공유할 수 있음
+- useInterval
+  
+  - React에서 setInterval / clearInterval을 사용한 경우
+    
+    - Closure오류 발생
+      
+      - 어떤 내부 함수를 감싸는 외부 함수가 실행되고 나서 종료되어도 내부 함수에서 외부 함수의 값에 접근할 수 있는 오류
+  
+  - useInterval을 이용하여 해결
+    
+    - useInterval.js 파일을 만들고 아래와 같이 작성 후 필요로 하는 곳에서 import하여 사용
+      
+      ```js
+      // useInterval.js
+      
+      import { useEffect, useRef } from 'react';
+      
+      // useInterval
+      const useInterval = (callback, delay) => {
+          // useRef를 이용해 렌더를 해도 초기화되지 않도록 설정
+          const savedCallback = useRef();
+        
+          useEffect(() => {
+            // callback에 변경될 때마다 최신 상태를 저장
+            savedCallback.current = callback;
+          }, [callback]);
+        
+          // 인터벌 설정
+          useEffect(() => {
+            const tick = () => {
+              savedCallback.current();
+            };
+        
+            if (delay !== null) {
+              const timerId = setInterval(tick, delay);
+              return () => clearInterval(timerId);
+            }
+          }, [delay]);
+        };
+      
+      export default useInterval;
+      ```
+      
+      ```js
+      // 필요로 하는 파일
+      
+      import useInterval from "./userInterval";
+      
+        useInterval(() => {
+          // Your custom logic here
+        }, delay);
+      
+      ---
+      
+        useInterval(() => {
+          if (getSessionStatus) {
+            getSession();
+          }
+        }, 10000);
+      ```
 
 ### Axios vs Fetch
 
