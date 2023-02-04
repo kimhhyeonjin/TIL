@@ -1274,6 +1274,23 @@ npm start
     const CallbackFn = useCallback(함수, 배열);
     ```
 
+- useNavigate
+  
+  - 양식이 제출되거나 특정 event가 발생할 때, url을 조작할 수 있는 interface를 제공하는 훅
+  
+  - useNavigate()를 호출하면 경로 이동 처리를 할 수 있는 함수를 반환
+    
+    ```js
+    import { useNavigate } from "react-router-dom";
+    
+    const navigate = useNavigate();
+    navigate("../", { replace: true });
+    ```
+    
+    - replace 옵션을 통해 history에 이력을 남길지 여부 설정 가능
+      
+      - replace: true인 경우 이력을 남기지 않음
+
 ### Custom Hook
 
 - `use`로 시작하는 훅을 만들어야 함
