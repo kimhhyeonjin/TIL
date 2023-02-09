@@ -2361,3 +2361,70 @@ npm start
   - 데이터 삭제
     
     - `localStorage.removeItem('데이터이름');`
+
+- 별점 기능 구현
+  
+  ```bash
+  npm i react-icons
+  ```
+  
+  ```js
+  import React, { useState } from "react";
+  import { FaStar } from "react-icons/fa";
+  import classes from "./StarRating.module.css";
+  
+  const StarRating = () => {
+    const [rating, setRating] = useState(null);
+    const [hover, setHover] = useState(null);
+  
+    return (
+      <div>
+        <div>
+          {[...Array(5)].map((star, i) => {
+            const ratingValue = i + 1;
+            return (
+              <label>
+                <input
+                  className={classes["star-type"]}
+                  type="radio"
+                  name="rating"
+                  value={ratingValue}
+                  onClick={() => setRating(ratingValue)}
+                />
+                <FaStar
+                  className={classes.star}
+                  color={ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"}
+                  size={25}
+                  onMouseEnter={() => setHover(ratingValue)}
+                  onMouseLeave={() => setHover(null)}
+                />
+              </label>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+  
+  export default StarRating;
+  ```
+  
+  ```css
+  .section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+  }
+  
+  .star-type {
+      display: none;
+  }
+  
+  .star {
+      cursor: pointer;
+      transition: color 200ms;
+  }
+  ```
+
+- 
