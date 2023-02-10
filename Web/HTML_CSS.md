@@ -308,6 +308,33 @@
     
     - 속성을 적용한 박스는 평소에 문서 안에서 position: static 상태와 같이 일반적인 흐름에 따르지만 스크롤 위치가 임계점에 이르면 position: fixed와 같이 박스를 화면에 고정
 
+### 가상클래스 선택자
+
+- 참고: 겹치는 부분이 있으면 마지막에 작성한 css 코드가 실행됨
+  
+  ```css
+  /* 방문하지 않은 링크 */
+  a:link{
+      color:black;
+  }
+  /* 방문한 링크 */
+  a:visited{
+      color:red;
+  }
+  /* hover한 경우 */
+  a:hover{
+      color:yellow;
+  }
+  /* 활성화 된 경우 */
+  a:active{
+      color:green;
+  }
+  /* focus 된 경우 */
+  a:focus{
+      color:white;
+  }
+  ```
+
 ### etc
 
 - object-fit
@@ -375,3 +402,13 @@
     ```css
     transition: all 0.15s;
     ```
+
+- text-decoration
+  
+  - `underline`
+    
+    ```css
+    text-decoration: underline;
+    ```
+    
+    - 밑줄
