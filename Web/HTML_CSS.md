@@ -339,3 +339,39 @@
     - 크기가 조정되지 않고 원본사이즈로 처리 딤
     
     - 크면 잘리고 작으면 남음
+
+- transition
+  
+  - 속성을 서서히 변화시키는 속성
+  
+  - `transition: property timing-function duration delay |initial| inherit`
+  
+  - `property`
+    
+    - transition을 적용시킬 속성
+  
+  - `timing-function`
+    
+    - transition의 진행 속도
+  
+  - `duration`
+    
+    - transition의 총 시간
+  
+  - `delay`
+    
+    - transition의 시작을 연기
+  
+  - `initial`
+    
+    - 기본값 설정
+  
+  - `inherit`
+    
+    - 부모 요소의 속성값을 상속
+  
+  - 예시
+    
+    ```css
+    transition: all 0.15s;
+    ```
