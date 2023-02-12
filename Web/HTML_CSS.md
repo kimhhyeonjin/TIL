@@ -139,6 +139,32 @@
     - 자손 결합자( ), 자식 결합자(>)
     
     - 일반 형제 결합자(~), 인접 형제 결합자(+)
+  
+  - 기타
+    
+    - `:first-child`
+      
+      - 첫번째로 등장하는 모든 element
+      
+      - `p:first-child` : 첫 번째로 등장하는 모든 p
+      
+      - `div p:first-child` : div 아래에서 첫 번째로 등장하는 p
+    
+    - `:only-child`
+      
+      - 어떤 element 아래에서 유일하게 존재하는 element
+      
+      - `span:only-child` : 어떤 element 아래에서 유일하게 존재하는 span
+      
+      - `ul li:only-child` : ul 아래에서 유일하게 존재하는 li
+    
+    - `:last-child`
+      
+      - 마지막으로 등장하는 모든 element
+      
+      - `span:last-child` : 마지막으로 등장하는 모든 span
+      
+      - `ul li:last-child` : ul 아래에서 마지막으로 등장하는 li
 
 - CSS 적용 우선순위(cascading order)
   
