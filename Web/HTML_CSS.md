@@ -245,6 +245,12 @@
       - margin
         
         - 테두리 바깥의 외부 여백
+        
+        - margin collapsing
+          
+          - 인접한 element가 2개 있을 때, 둘 중 margin이 큰 값만 margin값으로 적용됨
+          
+          - 부모 element가 시각적인 요소가 없는 투명한 상태일 때 부모 element의 margin값과 자식 element의 margin값 중 큰 값이 자식 element의 margin값으로 사용됨
       
       - border
         
@@ -297,6 +303,28 @@
         - 해당 요소가 공간은 차지하나 화면에 표시만 하지 않음
   
   - position으로 위치의 기준을 변경
+
+- box-sizing
+  
+  - 기본값: content-box
+    
+    ```css
+    box-sizing: content-box;
+    ```
+    
+    - content의 크기만큼 width와 height가 지정됨
+  
+  - border-box
+    
+    - border의 두께에 관계없이 border의 경계의 크기를 동일하게
+    
+    - 모든 element에 대해서 border-box를 주고 시작하는 경우가 많음
+      
+      ```css
+      *{
+          box-sizing: border-box;
+      }
+      ```
 
 ### CSS Position
 
