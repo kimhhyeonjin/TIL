@@ -221,6 +221,8 @@
     - 상속의 영향을 받지 않음
     
     - 최상위 요소인 html 사이즈를 기준으로 배수 단위를 가짐
+    
+    - 기본값: 16px
 
 - viewport
   
@@ -466,3 +468,37 @@
     ```
     
     - 밑줄
+
+- background
+  
+  - background-color
+  
+  - background-image: url("해당 주소");
+  
+  - background-repeat: no-repeat;
+    
+    - 이미지가 반복되지 않도록 설정
+  
+  - background-repeat: repeat-x;
+    
+    - x축만 이미지가 반복되도록 설정
+  
+  - background-repeat: repeat-y;
+    
+    - y축만 이미지가 반복되도록 설정
+  
+  - background-attachment: fixed;
+    
+    - background 이미지는 스크롤되지 않도록 설정
+  
+  - background-size: cover;
+    
+    - 화면 전체를 이미지가 사용
+  
+  - background-size: contain;
+    
+    - 화면의 크기에 모든 이미지가 다 들어갈 수 있도록 설정
+  
+  - background-position
+    
+    - background 이미지의 위치
