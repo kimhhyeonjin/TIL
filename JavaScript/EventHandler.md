@@ -1,4 +1,4 @@
-# EventHandler
+# Event
 
 ### EventHandler
 
@@ -16,3 +16,18 @@
   | onmouseleave | 마우스 포인터가 요소를 벗어났을 시 / 버블링이 발생하지 않음   |
   | onblur       | input 요소에서 focus를 잃을 시               |
   | onfocus      | input 요소에서 focus가 주어질 시              |
+
+- beforeunload
+  
+  - 문서와 그 리소스가 언로드 되기 직전에 window에서 발생
+  
+  - 이벤트 발생 시점에는 아직 문서를 볼 수 있으며 이벤트 취소도 가능함
+    
+    ```js
+    window.addEventListener('beforeunload', (event) => {
+      // 표준에 따라 기본 동작 방지
+      event.preventDefault();
+      // Chrome에서는 returnValue 설정이 필요함
+      event.returnValue = '';
+    });
+    ```
