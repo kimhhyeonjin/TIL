@@ -31,3 +31,23 @@
       event.returnValue = '';
     });
     ```
+  
+  - 실제 사용 예시
+    
+    ```js
+      // 새로고침 시 axios 보내기
+      const beforeUnLoad = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        e.returnValue = "";
+      };
+    
+      useEffect(() => {
+        window.addEventListener("beforeunload", beforeUnLoad);
+        leaveSession();
+    
+        return () => {
+          window.removeEventListener("beforeunload", beforeUnLoad);
+        };
+      }, []);
+    ```
