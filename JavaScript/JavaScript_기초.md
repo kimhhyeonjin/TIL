@@ -1024,3 +1024,12 @@
     new Date(year, monthIndex, day, hours, minutes, seconds)
     new Date(year, monthIndex, day, hours, minutes, seconds, milliseconds)
     ```
+  
+  - toISOString()
+    
+    - Date를 ISOString 형식의 문자열로 변환
+      
+      ```js
+      const expenseDate = new Date(2023, 1, 22);
+      console.log(expenseDate.toISOString());
+      ```
