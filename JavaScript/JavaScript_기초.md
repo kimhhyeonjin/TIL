@@ -1005,3 +1005,22 @@
   - `.` 또는 `[]`로 접근
   
   - key 이름에 띄어쓰기 같은 구분자가 있으면 `[]`만 접근 가능
+
+## etc
+
+- Date() 생성자
+  
+  - 날짜, 시간 표현
+    
+    ```js
+    new Date()
+    new Date(value)
+    new Date(dateString)
+    
+    new Date(year, monthIndex)    // 월은 0부터 시작
+    new Date(year, monthIndex, day)
+    new Date(year, monthIndex, day, hours)
+    new Date(year, monthIndex, day, hours, minutes)
+    new Date(year, monthIndex, day, hours, minutes, seconds)
+    new Date(year, monthIndex, day, hours, minutes, seconds, milliseconds)
+    ```
