@@ -1033,3 +1033,15 @@
       const expenseDate = new Date(2023, 1, 22);
       console.log(expenseDate.toISOString());
       ```
+  
+  - toLocaleString()
+    
+    - 사용하는 객체에 따라 내용이 달라짐
+      
+      - Date, Number, Array, Object 등
+      
+      - Date의 경우 지정한 지역에서 표현하는 방식의 날짜를 문자열로 리턴
+        
+        ```js
+        DateObject.toLocaleString([locales, [, options]])
+        ```
