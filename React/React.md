@@ -672,7 +672,7 @@ npm start
   
   - onChange
     
-    - input 안의 값이 변경될 때
+    - input이나 드롭다운 메뉴와 같은 키 입력값이 변경될 때
   
   - onSubmit
     
@@ -777,6 +777,12 @@ npm start
   
   - `컴포넌트 함수 내부`에서 useState 함수 호출
     
+    - 리액트 컴포넌트 함수 안에서만 호출
+      
+      - 함수 밖에서 호출할 수 없음
+      
+      - 중첩된 함수 안에서도 호출할 수 없음
+    
     - `const [관리되고 있는 값, 새로운 값을 설정하기 위해 호출하는 함수] = useState(초기값)`
       
       ```js
@@ -795,7 +801,7 @@ npm start
         const clickHandler = () => {
           // title = 'Updated!';
           setTitle('Updated!');
-          // console.log가 setTitle보다 먼저 실행되기 떄문에
+          // console.log가 setTitle보다 먼저 실행되기 때문에
           // console.log에는 이전의 title이 출력
           console.log(title);
         };
@@ -1122,7 +1128,7 @@ npm start
     
     - async, await와 동시에 사용할 수 없음
       
-      - cleanup 함수는 useEffect와 동시에 실행되기 떄문에 promise와 같은 것을 반환하지 않음
+      - cleanup 함수는 useEffect와 동시에 실행되기 때문에 promise와 같은 것을 반환하지 않음
       
       - 따라서 asyc, await와 함께 사용하고 싶다면 useEffect 안에서 새로운 함수를 만들어 사용
 

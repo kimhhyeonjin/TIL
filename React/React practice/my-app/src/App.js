@@ -38,6 +38,8 @@ const App = () => {
     });
   };
 
+  // createElement의 두 번째 요소는 첫 번째 요소의 모든 속성을 설정하는 객체
+  // 세 번째 이하의 요소는 첫 번째 요소 태그 사이에 있는 컨텐츠
   // return React.createElement(
   //   'div',
   //   {},
