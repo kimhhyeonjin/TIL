@@ -53,6 +53,18 @@
     
     - 평가 시 차이가 발생한 경우만 변경
 
+- Stateful / Stateless
+  
+  - Stateful
+    
+    - State가 있는 컴포넌트
+  
+  - Stateless
+    
+    - State가 없는 컴포넌트
+  
+  - Stateless가 많은 것이 더 좋은 것
+
 ### Create React app
 
 [github create-react-app](https://github.com/facebook/create-react-app)
