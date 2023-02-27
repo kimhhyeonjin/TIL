@@ -2255,7 +2255,7 @@ npm start
 
 ### etc
 
-- styling CSS
+- styling CSS - 동적으로 css 설정하기
   
   ```js
   // CourseInput.js
@@ -2285,7 +2285,7 @@ npm start
   export default CourseInput;
   ```
   
-  - `<div className={`form-control ${!isValid ? 'invalid' : ''}`}>`
+  - ``<div className={`form-control ${!isValid ? 'invalid' : ''}`}>``
     
     - isValid가 true이면 className="form-control"
     
