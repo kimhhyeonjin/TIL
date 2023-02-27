@@ -1045,3 +1045,39 @@
         ```js
         DateObject.toLocaleString([locales, [, options]])
         ```
+
+- 숫자 최대값, 최소값 구하기
+  
+  - 최대값
+    
+    - Math.max()
+      
+      ```js
+      console.log(Math.max(1, 3, 2));  // 3
+      console.log(Math.max(-1, -3, -2));  // -1
+      ```
+  
+  - 최소값
+    
+    - Math.min()
+      
+      ```js
+      console.log(Math.min(1, 3, 2));  // 1
+      console.log(Math.min(-1, -3, -2));  // -3
+      ```
+  
+  - 배열의 최대값, 최소값
+    
+    ```js
+    const array1 = [1, 3, 2];
+    console.log(Math.max(array1));  // NaN
+    console.log(Math.min(array1));  // NaN
+    ```
+    
+    - destructuring
+      
+      ```js
+      const array1 = [1, 3, 2];
+      console.log(Math.max(...array1));  // 3
+      console.log(Math.min(...array1));  // 1
+      ```
