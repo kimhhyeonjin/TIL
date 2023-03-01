@@ -416,6 +416,40 @@
   > print(my_dict)  # {'apple': '사과', 'banana': '바나나'}
   > ```
 
+- 딕셔너리 sort
+  
+  > key를 기준으로 오름차순 정렬
+  > 
+  > ```python
+  > sorted_dict = sorted(my_dict.items())
+  > ```
+  > 
+  > key를 기준으로 내림차순 정렬
+  > item[0]이 key를 의미
+  > 
+  > ```python
+  > sorted_dict = sorted(my_dict.items(), key = lambda item: item[0], reverse = True)
+  > ```
+  > 
+  > value를 기준으로 오름차순 정렬
+  > item[1]이 value를 의미
+  > 
+  > ```python
+  > sorted_dict = sorted(my_dict.items(), key = lambda item: item[1])
+  > ```
+  > 
+  > value를 기준으로 내림차순 정렬
+  > 
+  > ```python
+  > sorted_dict = sorted(my_dict.items(), key = lambda item: item[1], reverse = True)
+  > ```
+  > 
+  > key값 없이 value만을 정렬하고 싶은 경우 `my_dict.items()`가 아닌 `my_dict.values()`
+  > 
+  > ```python
+  > sorted_dict = sorted(my_dict.values(), reverse=True)
+  > ```
+
 ## 얕은 복사와 깊은 복사
 
 ### 할당(Assignment)
