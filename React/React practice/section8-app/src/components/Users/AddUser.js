@@ -22,7 +22,7 @@ const AddUser = (props) => {
       });
       return;
     }
-    // 입력받는 값을 항상 string
+    // 입력받는 값은 항상 string
     // +를 입력함으로써 number임을 확실하게 보장
     if (+enteredUserAge < 1) {
       setError({

@@ -1081,3 +1081,21 @@
       console.log(Math.max(...array1));  // 3
       console.log(Math.min(...array1));  // 1
       ```
+
+- 문자형을 숫자형으로 바꾸기
+  
+  - 단항 더하기 연산자 (+)
+    
+    ```js
+    +enteredAge
+    ```
+    
+    - 문자열이 숫자형으로 변환될 수 없는 경우에는 NaN 반환
+  
+  - 문자열에 곱하기 1
+    
+    ```js
+    enteredAge * 1
+    ```
+    
+    - 문자열이 숫자형으로 변환될 수 없는 경우에는 NaN 반환

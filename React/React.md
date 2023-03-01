@@ -542,6 +542,76 @@ npm start
       
       export default App;
       ```
+  
+  - 항목 여러 개를 불러오는 경우
+    
+    ```js
+    // AddUser.js
+    
+    import React, { useState } from "react";
+    import Card from "../UI/Card";
+    import Button from "../UI/Button";
+    import classes from "./AddUser.module.css";
+    
+    const AddUser = (props) => {
+      const addUserHandler = (event) => {
+        event.preventDefault();
+        ...
+        props.onAddUser(enteredName, enteredUserAge);
+        ...
+      };
+    
+      return (
+          <Card className={classes.input}>
+            <form onSubmit={addUserHandler}>
+              <label htmlFor="username">Username</label>
+              <input
+                id="username"
+                type="text"
+              />
+              <label htmlFor="age">Age (Years)</label>
+              <input
+                id="age"
+                type="number"
+              />
+              <Button type="submit">Add user</Button>
+            </form>
+          </Card>
+      );
+    };
+    
+    export default AddUser;
+    ```
+    
+    ```js
+    // App.js
+    
+    import React, { useState } from "react";
+    import AddUser from "./components/Users/AddUser";
+    import UsersList from "./components/Users/UsersList";
+    
+    function App() {
+      const [usersList, setUsersList] = useState([]);
+    
+      const addUserHandler = (uName, uAge) => {
+        setUsersList((prevUsersList) => {
+          return [
+            ...prevUsersList,
+            { name: uName, age: uAge, id: Math.random().toString() },
+          ];
+        });
+      };
+    
+      return (
+        <React.Fragment>
+          <AddUser onAddUser={addUserHandler} />
+          <UsersList users={usersList} />
+        </React.Fragment>
+      );
+    }
+    
+    export default App;
+    ```
 
 ### Context API를 이용한 중앙 state에서의 데이터 관리
 
