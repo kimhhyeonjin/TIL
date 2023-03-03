@@ -1100,6 +1100,12 @@ npm start
   - 지정한 의존성이 변경된 경우에만 실행
     
     - 컴포넌트가 다시 렌더링될 때는 실행되지 않음
+    
+    - 실행될 때 모든 컴포넌트 렌더링 주기 후에 실행됨
+    
+    - 직접적으로 컴포넌트 함수에 들어가서는 안됨
+      
+      - 버그나 무한 루프가 발생할 가능성이 높음
   
   - 첫 번째 인수는 함수
     
@@ -1179,6 +1185,8 @@ npm start
   - cleanup function
     
     - effect를 특정한 컴포넌트가 DOM에서 마운트 해제될 때마다(재사용될 때마다) 실행
+      
+      - return문 이용
     
     - 모든 새로운 side effect 함수가 실행되기 전, 컴포넌트가 제거되기 전 실행
       
@@ -1213,6 +1221,49 @@ npm start
       - cleanup 함수는 useEffect와 동시에 실행되기 때문에 promise와 같은 것을 반환하지 않음
       
       - 따라서 asyc, await와 함께 사용하고 싶다면 useEffect 안에서 새로운 함수를 만들어 사용
+  
+  - 라이프 사이클과의 연관 관계
+    
+    - `componentDidMount`
+      
+      - 최초로 렌더링되는 시점에만 단 한번 실행
+        
+        ```js
+            useEffect(() => {
+                console.log('componentDidMount')
+            }, [])
+        ```
+    
+    - `componentDidUpdate`
+      
+      - 실행되는 시점
+        
+        - props가 바뀌는 시점
+        
+        - state가 바뀌는 시점
+        
+        - 부모 컴포넌트가 재렌더링되는 시점
+        
+        - forceUpdate 함수를 통해 강제로 렌더링되는 시점
+        
+        ```js
+            useEffect(() => {
+                console.log('componentDidUpdate')
+            })
+        ```
+    
+    - `componentWillUnmount`
+      
+      - 컴포넌트가 DOM에서 제거될 때 실행
+        
+        ```js
+            useEffect(() => {
+                console.log('componentDidMount')
+                return function componentWillUnmount() {
+                    console.log('componentWillUnmount')
+                }
+            }, [])
+        ```
 
 - useReducer
   
