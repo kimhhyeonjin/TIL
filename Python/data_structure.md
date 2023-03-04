@@ -264,6 +264,9 @@
   > result = numbers.sort()  # None 반환
   > print(numbers, result)  # [1, 2, 3, 5] None
   > 
+  > # lambda를 이용한 정렬
+  > num_lists.sort(key = lambda x: len(x))
+  > 
   > numbers = [3, 2, 5, 1]
   > result = sorted(numbers)
   > print(numbers, result)  # [3, 2, 5, 1] [1, 2, 3, 5]

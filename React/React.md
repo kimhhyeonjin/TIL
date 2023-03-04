@@ -1305,6 +1305,7 @@ npm start
     import React, { useState, useEffect, useReducer } from "react";
     ...
     
+    // reducerFn: 컴포넌트 외부에서 state를 업데이트하는 함수
     const emailReducer = (state, action) => {
       if (action.type === "USER_INPUT") {
         return { value: action.val, isValid: action.val.includes("@") };
@@ -1370,6 +1371,14 @@ npm start
     
     export default Login;
     ```
+  
+  - useState와의 비교
+    
+    | useState                        | useReducer                                     |
+    |:------------------------------- |:---------------------------------------------- |
+    | 주요 state 관리 도구                  | state 관리를 도와줌                                  |
+    | state가 독립적인 경우 좋음               | 다른 state를 기반으로 하는 state를 업데이트하는 경우 좋음          |
+    | state 업데이트가 쉽고 몇 종류 되지 않는 경우 유용 | 복잡한 state가 있거나 state 하나를 변경하는 여러 action이 있는 경우 |
 
 - useContext(검색해서 확인)
 
