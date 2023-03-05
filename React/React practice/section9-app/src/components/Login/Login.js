@@ -106,8 +106,8 @@ const Login = (props) => {
     } else if (!emailIsValid) {
       emailInputRef.current.focus();
     } else {
+      passwordInputRef.current.focus();
     }
-    passwordInputRef.current.focus();
   };
 
   return (
