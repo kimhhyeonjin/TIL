@@ -1441,6 +1441,12 @@ npm start
     ```js
     const CallbackFn = useCallback(함수, 배열);
     ```
+    
+    ```js
+    const toggleParagraphHandler = useCallback(() => {
+          setShowParagraph((prevShowParagraph) => !prevShowParagraph);
+      }, []);
+    ```
 
 - useNavigate
   
