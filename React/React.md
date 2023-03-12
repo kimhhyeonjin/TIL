@@ -1384,6 +1384,39 @@ npm start
 
 - useMemo
   
+  - useMemo
+    
+    - App.js
+      
+      ```js
+      import { useMemo } from 'react';
+      
+      function App() {
+        const listItems = useMemo(() => [5, 3, 1, 10, 9], []);
+      
+        return (
+          <div>
+            <DemoList title={listTitle} items={listItems} />
+          </div>
+        );
+      }
+      export default App;
+      ```
+    
+    - DemoList.js
+      
+      ```js
+      import { useMemo } from 'react';
+      
+      const DemoList = (props) => {
+        const { items } = props;
+      
+        const sortedList = useMemo(() => {
+          return items.sort((a, b) => a - b);
+        }, [items]);
+      };
+      ```
+  
   - React.memo
     
     - 함수형 컴포넌트 최적화
