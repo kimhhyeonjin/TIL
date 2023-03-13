@@ -624,6 +624,60 @@
     </html>
     ```
 
+### 로컬 스토리지와 세션 스토리지
+
+- 로컬 스토리지
+  
+  - 웹 페이지의 세션이 끝나도 데이터가 지워지지 않음
+  
+  - 여러 탭이나 창 간에 데이터가 서로 공유됨
+  
+  - 같은 컴퓨터에서 다른 브라우저를 사용하거나 다른 컴퓨터에서 같은 브라우저를 사용하는 경우는 해당되지 않음
+  
+  - `문자형 데이터 타입만 지원`
+    
+    ```js
+    // 키에 데이터 쓰기
+    localStorage.setItem("key", value);
+    
+    // 키로 부터 데이터 읽기
+    localStorage.getItem("key");
+    
+    // 키의 데이터 삭제
+    localStorage.removeItem("key");
+    
+    // 모든 키의 데이터 삭제
+    localStorage.clear();
+    
+    // 저장된 키/값 쌍의 개수
+    localStorage.length;
+    ```
+
+- 세션 스토리지
+  
+  - 웹 페이지의 세션이 끝날 때 저장된 데이터 지워짐
+  
+  - 여러 탭이나 창을 띄워도 각 탭이나 창이 닫힐 때 데이터가 공유되지 않고 지워짐
+  
+  - `문자형 데이터 타입만 지원`
+    
+    ```js
+    // 키에 데이터 쓰기
+    sessionStorage.setItem("key", value);
+    
+    // 키로 부터 데이터 읽기
+    sessionStorage.getItem("key");
+    
+    // 키의 데이터 삭제
+    sessionStorage.removeItem("key");
+    
+    // 모든 키의 데이터 삭제
+    sessionStorage.clear();
+    
+    // 저장된 키/값 쌍의 개수
+    sessionStorage.length;
+    ```
+
 ## this
 
 - this
