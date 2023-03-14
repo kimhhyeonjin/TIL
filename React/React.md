@@ -1829,6 +1829,8 @@ npm start
 
 - Redux
   
+  - 라이브러리
+  
   - A state management system for cross-component or app-wide state
   
   - 크로스 컴포넌트 또는 앱 와이드 상태를 위한 상태 관리 시스템
@@ -1855,7 +1857,10 @@ npm start
   
   - 순수함수이어야 하며 부수 효과가 없고 동기식이어야 함
     
+    - HTTP 요청을 전송하거나 로컬 저장소에 무언가를 기록하거나 로컬 저장소에서 무언가를 가져오는 등의 행동을 해서는 안됨
+    
     - 그렇다면 비동기 코드를 어디에 넣어야 할까?
+      
       - useEffect()를 이용하거나 자체 action creator를 생성
 
 ![redux_flow](./React_assets/redux_flow.png)
@@ -1866,7 +1871,7 @@ npm start
   
   - `npm install redux`
   
-  - redux import
+  - Node.js에서의 redux import
     
     ```js
     const redux = require('redux');
@@ -1876,6 +1881,7 @@ npm start
   const redux = require("redux");
   
   // Reducer
+  // 2개의 파라미터(기존의 상태, 발송된 액션)를 입력받음
   const counterReducer = (state = { counter: 0 }, action) => {
     if (action.type === "increment") {
       return {
@@ -1896,10 +1902,13 @@ npm start
   
   // Subscriber
   const counterSubscriber = () => {
+    // 변경된 후의 최신 상태 받아오기
     const latestState = store.getState();
     console.log(latestState);
   };
   
+  // subscribe로 함수를 받고
+  // 리덕스는 데이터와 store가 변경될 때마다 재렌더링
   store.subscribe(counterSubscriber);
   
   // Action
