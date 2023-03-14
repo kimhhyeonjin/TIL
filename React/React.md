@@ -2109,7 +2109,15 @@ npm start
     
     - 이미 redux toolkit에 포함되어있음
 
-- `createSlice`, `configureStore`
+- `createSlice`
+
+- `configureStore`
+  
+  - createStore 대신 configureStore을 사용하는 이유
+    
+    - createStore에는 하나의 리듀서만 전달해야 하는데 앱의 규모가 커져 slice가 여러 개가 된다면 .reducer을 이용해 서로 다른 slice에 접근하는 리듀서가 여러 개가 되므로 문제가 생길 수 있기 때문
+    
+    - configureStore를 이용하면 여러 개의 리듀서를 하나의 리듀서로 합칠 수 있음
   
   ```js
   // store/index.js
@@ -2119,27 +2127,27 @@ npm start
   const initialState = { counter: 0, showCounter: true };
   
   const counterSlice = createSlice({
-    name: "counter",
-    initialState: initialState,
-    reducers: {
-      increment(state) {
-        state.counter++;
-      },
-      decrement(state) {
-        state.counter--;
-      },
-      increase(state, action) {
-        state.counter = state.counter + action.payload;
-      },
-      toggleCounter(state) {
-        state.showCounter = !state.showCounter;
-      },
-    },
+   name: "counter",
+   initialState: initialState,
+   reducers: {
+     increment(state) {
+       state.counter++;
+     },
+     decrement(state) {
+       state.counter--;
+     },
+     increase(state, action) {
+       state.counter = state.counter + action.payload;
+     },
+     toggleCounter(state) {
+       state.showCounter = !state.showCounter;
+     },
+   },
   });
   
   const store = configureStore({
-    // reducer: { counter: counterSlice.reducer }
-    reducer: counterSlice.reducer,
+   // reducer: { counter: counterSlice.reducer }
+   reducer: counterSlice.reducer,
   });
   
   export const counterActions = counterSlice.actions;
@@ -2168,31 +2176,31 @@ npm start
     ...
     
     const Counter = () => {
-      const dispatch = useDispatch();
-      const counter = useSelector((state) => state.counter);
-      const show = useSelector((state) => state.showCounter);
+     const dispatch = useDispatch();
+     const counter = useSelector((state) => state.counter);
+     const show = useSelector((state) => state.showCounter);
     
-      const incrementHandler = () => {
-        // dispatch({ type: "increment" });
-        dispatch(counterActions.increment());
-      };
+     const incrementHandler = () => {
+       // dispatch({ type: "increment" });
+       dispatch(counterActions.increment());
+     };
     
-      const increaseHandler = () => {
-        // dispatch({ type: "increase", amount: 5 });
-        dispatch(counterActions.increase(5));
-      };
+     const increaseHandler = () => {
+       // dispatch({ type: "increase", amount: 5 });
+       dispatch(counterActions.increase(5));
+     };
     
-      const decrementHandler = () => {
-        // dispatch({ type: "decrement" });
-        dispatch(counterActions.decrement());
-      };
+     const decrementHandler = () => {
+       // dispatch({ type: "decrement" });
+       dispatch(counterActions.decrement());
+     };
     
-      const toggleCounterHandler = () => {
-        // dispatch({ type: "toggle" });
-        dispatch(counterActions.toggleCounter());
-      };
+     const toggleCounterHandler = () => {
+       // dispatch({ type: "toggle" });
+       dispatch(counterActions.toggleCounter());
+     };
     
-      ...
+     ...
     };
     ```
 
