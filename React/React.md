@@ -1933,16 +1933,34 @@ npm start
       
       import { createStore } from "redux";
       
-      const counterReducer = (state = { counter: 0 }, action) => {
+      const initialState = { counter: 0, showCounter: true };
+      
+      const counterReducer = (state = initialState, action) => {
         if (action.type === "increment") {
           return {
             counter: state.counter + 1,
+            showCounter: state.showCounter,
+          };
+        }
+      
+        if (action.type === "increase") {
+          return {
+            counter: state.counter + action.amount,
+            showCounter: state.showCounter,
           };
         }
       
         if (action.type === "decrement") {
           return {
             counter: state.counter - 1,
+            showCounter: state.showCounter,
+          };
+        }
+      
+        if (action.type === "toggle") {
+          return {
+            counter: state.counter,
+            showCounter: !state.showCounter,
           };
         }
       
@@ -1982,6 +2000,10 @@ npm start
   - `useSelector`
     
     - 저장소가 관리하는 상태 부분을 자동적으로 선택할 수 있음
+    
+    - useSelector를 사용할 때 react-redux가 리덕스 저장소에 자동으로 subscription 설정하므로 따로 subscribe 할 필요 없음
+      
+      - 리덕스 저장소에서 데이터가 변경될 때마다 자동으로 업데이트되고 최신값을 받게 됨
       
       ```js
       import { useSelector } from "react-redux";
@@ -2014,29 +2036,41 @@ npm start
       
       ```js
       import { useSelector, useDispatch } from "react-redux";
-      ...
+      
+      import classes from "./Counter.module.css";
       
       const Counter = () => {
         const dispatch = useDispatch();
-        ...
+        const counter = useSelector((state) => state.counter.counter);
+        const show = useSelector((state) => state.counter.showCounter);
       
         const incrementHandler = () => {
           dispatch({ type: "increment" });
+        };
+      
+        const increaseHandler = () => {
+          dispatch({ type: "increase", amount: 5 });
         };
       
         const decrementHandler = () => {
           dispatch({ type: "decrement" });
         };
       
-        ...
+        const toggleCounterHandler = () => {
+          dispatch({ type: "toggle" });
+        };
       
         return (
-          ...
+          <main className={classes.counter}>
+            <h1>Redux Counter</h1>
+            {show && <div className={classes.value}>{counter}</div>}
             <div>
               <button onClick={incrementHandler}>Increment</button>
+              <button onClick={increaseHandler}>Increase by 5</button>
               <button onClick={decrementHandler}>Decrement</button>
             </div>
-          ...
+            <button onClick={toggleCounterHandler}>Toggle Counter</button>
+          </main>
         );
       };
       
@@ -2051,7 +2085,7 @@ npm start
       
       - 주의사항
         
-        - 기존의 state를 변경해서는 안 됨
+        - `기존의 state를 변경해서는 안 됨`
         
         - 예측 불가능한 동작이 발생할 수 있고 프로그램을 디버깅하는 것도 어려워질 수 있음
 
