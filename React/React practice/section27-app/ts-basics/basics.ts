@@ -36,7 +36,7 @@ let num_arr: number[];
 
 let students_att: boolean[];
 
-// object
+// objects
 let person: {
   name: string;
   age: number;
@@ -76,3 +76,49 @@ type Human = {
 let human: Human;
 
 let humans: Human[];
+
+// 함수
+
+// 함수 타입
+
+// 함수에 타입을 지정할 수도 있고 타입을 지정하지 않아도
+// Type inference를 통해 근접한 타입 추론
+function add(a: number, b: number): number {
+  return a + b;
+}
+
+// 함수에서 return하는 값이 없으면 함수의 타입은 void
+// void는 함수에 반환 값이 없다는 것을 의미
+function printOutput(value: any) {
+  console.log(value);
+}
+
+// 제네릭(generic) 타입
+
+// 기존의 배열을 변경하지 않고 새로운 배열을 얻는 방법
+function insertAtBeginning(array: any[], value: any) {
+  // 기존 배열 복사
+  const newArray = [value, ...array];
+  return newArray;
+}
+
+const demoArray = [1, 2, 3];
+// insertAtBeginning의 array를 any로 지정했기 때문에
+// demoArray에 숫자만 들어있는 것을 인식하지 못함 -> any
+const updatedArray = insertAtBeginning(demoArray, -1);
+
+// 이러한 현상을 해결하기 위해 제네릭 함수로 변환
+// 함수와 매개변수 목록 사이에 <>를 추가
+function insertAtBeginning2<T>(array: T[], value: T) {
+  // 기존 배열 복사
+  const newArray = [value, ...array];
+  return newArray;
+}
+
+// 제네릭 함수로 변환하여
+// array, value, 함수의 타입 명시 가능
+const updatedArray2 = insertAtBeginning2(demoArray, -1);
+const stringArray2 = insertAtBeginning2(['a', 'b', 'c'], 'd')
+
+// updatedArray2[0].split("");
+stringArray2[0].split("");
