@@ -1,6 +1,11 @@
-import { useRef } from "react";
+import { useRef, useContext } from "react";
 
-const NewTodo = () => {
+import { TodosContext } from "../store/todos-context";
+import classes from "./NewTodo.module.css";
+
+const NewTodo: React.FC = () => {
+  const todosCtx = useContext(TodosContext);
+
   // generic type을 이용하여 어떤 타입인지 명확히 설정해야 함
   // input 요소를 저장할 것이므로 HTMLInputElement
   // 초기값도 함께 지정해줘야 함
@@ -19,10 +24,11 @@ const NewTodo = () => {
       // throw an error
       return;
     }
+    todosCtx.addTodo(enteredText);
   };
 
   return (
-    <form onSubmit={submitHandler}>
+    <form onSubmit={submitHandler} className={classes.form}>
       <label htmlFor="text">Todo Text</label>
       <input type="text" id="text" ref={todoTextInputRef} />
       <button>Add Todo</button>
