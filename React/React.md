@@ -2493,6 +2493,253 @@ npm start
     export default ProductItem;
     ```
 
+### 리덕스로 작업할 때 비동기 코드를 넣는 방법
+
+- 자체 action creator 함수를 생성하여 리덕스 툴킷을 이용하지 않고 작성
+  
+  - 리듀서 내부(cart-slice.js)가 아니라 컴포넌트(ProductItem.js)에서 데이터 변환을 수행하기 때문에 최적의 코드라고는 할 수 없음
+    
+    - cart-slice.js
+      
+      ```js
+      import { createSlice } from "@reduxjs/toolkit";
+      
+      const cartSlice = createSlice({
+        name: "cart",
+        initialState: {
+          items: [],
+          totalQuantity: 0,
+          totalAmount: 0,
+        },
+        reducers: {
+          replaceCart(state, action) {
+            state.totalQuantity = action.payload.totalQuantity;
+            state.items = action.payload.item;
+          },
+          addItemToCart(state, action) {
+            const newItem = action.payload;
+            const existingItem = state.items.find((item) => item.id === newItem.id);
+            state.totalQuantity++;
+            if (!existingItem) {
+              state.items.push({
+                id: newItem.id,
+                price: newItem.price,
+                quantity: 1,
+                totalPrice: newItem.price,
+                name: newItem.title,
+              });
+            } else {
+              existingItem.quantity++;
+              existingItem.totalPrice = existingItem.totalPrice + newItem.price;
+            }
+          },
+          removeItemFromCart(state, action) {
+            const id = action.payload;
+            const existingItem = state.items.find((item) => item.id === id);
+            state.totalQuantity--;
+            if (existingItem.quantity === 1) {
+              state.items = state.items.filter((item) => item.id !== id);
+            } else {
+              existingItem.quantity--;
+              existingItem.totalPrice = existingItem.totalPrice - existingItem.price;
+            }
+          },
+        },
+      });
+      
+      export const cartActions = cartSlice.actions;
+      
+      export default cartSlice;
+      ```
+    
+    - ProductItem.js
+      
+      ```js
+      import { useDispatch, useSelector } from "react-redux";
+      
+      import { cartActions } from "../../store/cart-slice";
+      import Card from "../UI/Card";
+      import classes from "./ProductItem.module.css";
+      
+      const ProductItem = (props) => {
+        const cart = useSelector((state) => state.cart);
+        const dispatch = useDispatch();
+      
+        const { title, price, description, id } = props;
+      
+        const addToCartHandler = () => {
+          // 리덕스 툴킷이 아니므로 cart.totalQuantity 자체를 수정해서는 안됨
+          const newTotalQuantity = cart.totalQuantity + 1;
+      
+          // cart.items 자체를 수정할 수 없으므로 updatedItems로 복사
+          const updatedItems = cart.items.slice();
+          // 복사한 항목 중 id가 일치하는 것만을 existingItem에 저장
+          const existingItem = updatedItems.find((item) => item.id === id);
+          if (existingItem) {
+            // existingItem 또한 리덕스 스토어의 일부인 메모리 객체이므로
+            // updatedItem이라는 새 객체에 복사하여 사용
+            const updatedItem = { ...existingItem };
+            updatedItem.quantity++;
+            updatedItem.price = updatedItem.price + price;
+            const existingItemIndex = updatedItems.findIndex(
+              (item) => item.id === id
+            );
+            updatedItems[existingItemIndex] = updatedItem;
+          } else {
+            updatedItems.push({
+              id: id,
+              price: price,
+              quantity: 1,
+              totalPrice: price,
+              name: title,
+            });
+          }
+      
+          const newCart = {
+            totalQuantity: newTotalQuantity,
+            items: updatedItems,
+          };
+      
+          dispatch(cartActions.replaceCart(newCart));
+        };
+      
+        return (
+          <li className={classes.item}>
+            <Card>
+              <header>
+                <h3>{title}</h3>
+                <div className={classes.price}>${price.toFixed(2)}</div>
+              </header>
+              <p>{description}</p>
+              <div className={classes.actions}>
+                <button onClick={addToCartHandler}>Add to Cart</button>
+              </div>
+            </Card>
+          </li>
+        );
+      };
+      
+      export default ProductItem;
+      ```
+
+- useEffect를 이용하여 컴포넌트에 직접 비동기 코드의 부수 효과 넣기
+  
+  - 앱이 시작될 때 useEffect가 실행되는 문제 발생
+    
+    - 함수 외부에 변수를 추가하여 해결
+      
+      ```js
+      ...
+      
+      let isInitial = true;
+      
+      function App() {
+        ...
+      
+          // 제일 처음 렌더링 됐을 때는 sendCartData가 실행되지 않도록 설정
+          if (isInitial) {
+            isInitial = false;
+            return;
+          }
+      
+          sendCartData().catch((error) => {
+            dispatch(
+              uiActions.showNotification({
+                status: "error",
+                title: "Error!",
+                message: "Sending cart data failed!",
+              })
+            );
+          });
+        }, [cart, dispatch]);
+      
+        return (
+          <Fragment>
+            ...
+          </Fragment>
+        );
+      }
+      
+      export default App;
+      ```
+    
+    - App.js (꼭 App.js일 필요는 없음)
+      
+      ```js
+      import { useEffect } from "react";
+      import { useSelector } from "react-redux";
+      
+      import Cart from "./components/Cart/Cart";
+      import Layout from "./components/Layout/Layout";
+      import Products from "./components/Shop/Products";
+      
+      function App() {
+        const showCart = useSelector((state) => state.ui.cartIsVisible);
+        const cart = useSelector((state) => state.cart);
+      
+        // cart가 변경되면 useEffect를 통해 컴포넌트가 재실행되면서
+        // 최신 버전의 cart가 받아와짐
+        useEffect(() => {
+          fetch("https://create-http-77654-default-rtdb.firebaseio.com/cart.json", {
+            method: "PUT",
+            body: JSON.stringify(cart),
+          });
+        }, [cart]);
+      
+        return (
+          <Layout>
+            {showCart && <Cart />}
+            <Products />
+          </Layout>
+        );
+      }
+      
+      export default App;
+      ```
+    
+    - ProductItem.js
+      
+      ```js
+      import { useDispatch } from "react-redux";
+      
+      import { cartActions } from "../../store/cart-slice";
+      import Card from "../UI/Card";
+      import classes from "./ProductItem.module.css";
+      
+      const ProductItem = (props) => {
+        const dispatch = useDispatch();
+      
+        const { title, price, description, id } = props;
+      
+        const addToCartHandler = () => {
+          dispatch(
+            cartActions.addItemToCart({
+              id,
+              title,
+              price,
+            })
+          );
+        };
+      
+        return (
+          <li className={classes.item}>
+            <Card>
+              <header>
+                <h3>{title}</h3>
+                <div className={classes.price}>${price.toFixed(2)}</div>
+              </header>
+              <p>{description}</p>
+              <div className={classes.actions}>
+                <button onClick={addToCartHandler}>Add to Cart</button>
+              </div>
+            </Card>
+          </li>
+        );
+      };
+      
+      export default ProductItem;
+      ```
+
 ### etc
 
 - styling CSS - 동적으로 css 설정하기
