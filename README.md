@@ -71,3 +71,7 @@
 3. [Bootstrap 컴포넌트와 Grid system을 활용한 반응형 레이아웃 구성하기](./Web/0805.md)
 4. [HTTP](./Web/HTTP.md)
 5. [HTTP response status code](./Web/HTTP_response_status_code.md)
+
+### TypeScript 정리
+
+1. [TypeScript](./TypeScript/TypeScript.md)
