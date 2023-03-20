@@ -995,7 +995,7 @@
     - 실행이 예정된 함수에서 this 예약어를 사용하게 함
   
   - 두번째 인자
-
+    
     - 호출 예정인 함수가 받는 첫번째 인자
     
     ```js
@@ -1115,3 +1115,22 @@
     ```
     
     - 문자열이 숫자형으로 변환될 수 없는 경우에는 NaN 반환
+
+- selected에서 선택한 값 가져오기
+  
+  ```js
+  const onChangeHandler = (target) => {
+    // 선택한 option의 value 값
+    console.log(target.value);
+    // 선택한 option의 text 값
+    console.log(target.options[target.selectedIndex].text);
+  };
+  
+  return (
+    <select onChange={onChangeHandler}>
+      <option value="3개월">3개월</option>
+      <option value="6개월">6개월</option>
+      <option value="12개월">12개월</option>
+    </select>
+  );
+  ```
