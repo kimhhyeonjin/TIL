@@ -110,3 +110,38 @@
         age: number;
       }[];
       ```
+
+- Select onChange Event
+  
+  - Select onChange Event 값 가져오기
+    
+    - `event: React.ChangeEvent<HTMLSelectElement>`
+      
+      ```ts
+        // 리밸런싱 주기 선택값 가져오기
+        const rebalanceChangeHandler = (
+          event: React.ChangeEvent<HTMLSelectElement>
+        ) => {
+          // text 값
+          console.log(event.target.options[event.target.selectedIndex].text);
+          // value 값
+          console.log(event.target.value);
+        };
+      
+        return (
+          <div>
+            <label htmlFor="rebalance">리밸런싱 주기</label>
+            <div className="border rounded-xl">
+              <select
+                name="rebalance"
+                id="rebalance"
+                onChange={rebalanceChangeHandler}
+              >
+                <option value="3m">3개월</option>
+                <option value="6m">6개월</option>
+                <option value="12m">12개월</option>
+              </select>
+            </div>
+          </div>
+       );
+      ```
