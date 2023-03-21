@@ -111,6 +111,62 @@
       }[];
       ```
 
+- Type 지정 방식
+  
+  - implicit type
+    
+    - type 지정하지 않아도 type을 추론함
+      
+      ```typescript
+      let a = "hello";
+      a = "bye";
+      
+      const player = {
+        name: "H",
+      };
+      player.name = "C";
+      ```
+  
+  - explicit type
+    
+    - type을 지정
+      
+      ```typescript
+      let b: boolean = false;
+      
+      let c: number[] = [];
+      // c.push("1") : type이 number가 아니므로 에러
+      c.push(1);
+      ```
+  
+  - type objects in explicit way
+    
+    - simple types
+      
+      ```typescript
+      let aa: number = 1;
+      let bb: string = "i1";
+      let cc: boolean[] = [true];
+      ```
+    
+    - optional
+      
+      - ?를 이용하여 필수가 아님을 표시
+        
+        ```typescript
+        const player2: {
+          name: string;
+          age?: number;
+        } = {
+          name: "H",
+        };
+        
+        // player2.age가 undefined일 수 있으므로
+        // player2.age가 있는 경우에만 실행하도록 작성
+        if (player2.age && player2.age < 10) {
+        }
+        ```
+
 - Select onChange Event
   
   - Select onChange Event 값 가져오기
