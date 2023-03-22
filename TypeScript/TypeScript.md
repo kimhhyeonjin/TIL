@@ -167,6 +167,34 @@
         }
         ```
 
+- Alias
+  
+  ```typescript
+  type Player = {
+    name: string;
+    age?: number;
+  };
+  const name1: Player = {
+    name: "name1",
+  };
+  const name2: Player = {
+    name: "name2",
+    age: 12,
+  };
+  ```
+  
+  - age에 Alias를 입력할 수도 있음
+    
+    - 과하게 재사용하는 것은 권장하지 않음
+      
+      ```typescript
+      type Age = number;
+      type Player2 = {
+        name: string;
+        age?: Age;
+      };
+      ```
+
 - Select onChange Event
   
   - Select onChange Event 값 가져오기
