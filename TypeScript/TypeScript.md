@@ -195,6 +195,42 @@
       };
       ```
 
+- 함수의 return 값의 타입 지정하기
+  
+  ```typescript
+  function playerMaker(name: string) {
+    return {
+      name: name,
+    };
+  }
+  ```
+  
+  - 이 상태에서 age를 추가하려고 하면 아래와 같이 에러 발생
+    
+    ```typescript
+    H.age = 12
+    ```
+  
+  - type Player2를 받고 싶은 경우 아래와 같이 사용
+    
+    ```typescript
+    function playerMaker2(name: string): Player2 {
+      return {
+        name: name,
+      };
+    }
+    const L = playerMaker2("L");
+    L.age = 13;
+    ```
+
+- function이 아닌 const 방식으로 사용하기
+  
+  ```typescript
+  const playerMaker3 = (name: string): Player2 => ({ name });
+  const K = playerMaker3("K");
+  K.age = 21;
+  ```
+
 - Select onChange Event
   
   - Select onChange Event 값 가져오기
