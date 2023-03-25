@@ -123,13 +123,13 @@
         // unk이 unknown이므로 에러가 남
         // let bbb = unk + 1;
         // if를 통해 type을 확인 후 원하는 코드 작성
-        if (typeof unk === "number") {
+        if (typeof unk === 'number') {
           let bbb = a + 1;
         }
         
         // 에러
         // unk.toUpperCase()
-        if (typeof unk === "string") {
+        if (typeof unk === 'string') {
           let bbb = a.toUpperCase();
         }
         ```
@@ -142,7 +142,7 @@
         
         ```typescript
         function hello(): void {
-          console.log("x");
+          console.log('x');
         }
         ```
     
@@ -154,7 +154,7 @@
         
         ```typescript
         function hello2(): never {
-          throw new Error("XXX");
+          throw new Error('XXX');
         }
         ```
       
@@ -162,9 +162,9 @@
         
         ```typescript
         function hello3(name: string | number) {
-          if (typeof name === "number") {
+          if (typeof name === 'number') {
             name + 1;
-          } else if (typeof name === "string") {
+          } else if (typeof name === 'string') {
             name.toUpperCase();
           } else {
             // 이 경우 type이 never임
@@ -254,7 +254,7 @@
       age?: AAge;
     };
     const pplayerMaker = (name: string): PPlayer => ({ name });
-    const S = pplayerMaker("S");
+    const S = pplayerMaker('S');
     S.age = 22;
     ```
   
@@ -265,7 +265,7 @@
     // 에러남
     // numbers.push(1)
     
-    const names: readonly string[] = ["1", "2"];
+    const names: readonly string[] = ['1', '2'];
     // push하는 경우 에러남
     // names.push("3")
     ```
@@ -335,6 +335,23 @@
   const K = playerMaker3('K');
   K.age = 21;
   ```
+
+- tuple
+  
+  - array를 생성할 수 있는데 최소한의 길이를 가져야 하고 특정 위치에 특정 타입이 있어야 함
+    
+    ```typescript
+    const pplayer: [string, number, boolean] = ['V', 1, true];
+    pplayer[0] = 'W';
+    ```
+    
+    - tuple과 readonly를 함께 사용할 수도 있음
+      
+      ```typescript
+      const pplayer2: readonly [string, number, boolean] = ['V', 1, true];
+      // 에러 남
+      // pplayer2[0] = 'W'
+      ```
 
 - Select onChange Event
   
