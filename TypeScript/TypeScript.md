@@ -353,6 +353,24 @@
       // pplayer2[0] = 'W'
       ```
 
+- Call Signatures
+  
+  - 함수 위에 마우스를 올렸을 때 보게 되는 것
+  
+  - 인자의 타입과 함수의 반환 타입을 알려줌
+    
+    ```typescript
+    function add(a: number, b: number): number {
+      return a + b;
+    }
+    ```
+  
+  - arrow function / 화살표 함수
+    
+    ```typescript
+    const add1 = (a: number, b: number) => a + b;
+    ```
+
 - Select onChange Event
   
   - Select onChange Event 값 가져오기
