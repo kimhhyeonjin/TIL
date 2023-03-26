@@ -370,6 +370,17 @@
     ```typescript
     const add1 = (a: number, b: number) => a + b;
     ```
+  
+  - 원하는 타입을 만들고 함수가 어떻게 작동하는지 서술할 수 있음
+    
+    ```typescript
+    type Add = (a: number, b: number) => number;
+    // type Add와 같음
+    type Add1 = {
+      (a: number, b: number): number;
+    };
+    const add2: Add = (a, b) => a + b;
+    ```
 
 - Select onChange Event
   
