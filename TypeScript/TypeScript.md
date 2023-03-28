@@ -382,6 +382,39 @@
     const add2: Add = (a, b) => a + b;
     ```
 
+- Overloading
+  
+  - 함수가 여러 개의 Call Signatures를 갖고 있는 경우 발생
+    
+    ```typescript
+    type Add2 = {
+      (a: number, b: number): number;
+      (a: number, b: string): number;
+    };
+    const add3: Add2 = (a, b) => {
+      if (typeof b === "string") return a;
+      return a + b;
+    };
+    
+    type Config = {
+      path: string;
+      state: object;
+    };
+    
+    type Push = {
+      (path: string): void;
+      (config: Config): void;
+    };
+    
+    const push: Push = (config) => {
+      if (typeof config === "string") {
+        console.log(config);
+      } else {
+        console.log(config.path, config.state);
+      }
+    };
+    ```
+
 - Select onChange Event
   
   - Select onChange Event 값 가져오기
