@@ -392,7 +392,7 @@
       (a: number, b: string): number;
     };
     const add3: Add2 = (a, b) => {
-      if (typeof b === "string") return a;
+      if (typeof b === 'string') return a;
       return a + b;
     };
     
@@ -407,12 +407,29 @@
     };
     
     const push: Push = (config) => {
-      if (typeof config === "string") {
+      if (typeof config === 'string') {
         console.log(config);
       } else {
         console.log(config.path, config.state);
       }
     };
+    ```
+  
+  - 다른 여러 개의 인자를 갖고있을 때 발생하는 효과
+    
+    ```ts
+    type Add3 = {
+      (a: number, b: number): number;
+      (a: number, b: number, c: number): number;
+    };
+    
+    const add4: Add3 = (a, b, c?: number) => {
+      if (c) return a + b + c;
+      return a + b;
+    };
+    
+    add4(1, 2);
+    add4(1, 2, 3);
     ```
 
 - Select onChange Event
