@@ -1191,3 +1191,43 @@
           ```
           
           - `a=b,c`의 형태
+  
+  - 실제 구현 코드
+    
+    - qs 사용 이전 axios 요청 시 url
+      
+      - 기본url`?industries[]=1&industries[]=2&indicators[]=1&indicators[]=4&그 외의 params`
+    
+    - 원하는 url 형태
+      
+      - 기본url`?industries=1&industries=2&indicators=1&indicators=4&그 외의 params`
+      
+      - qs의 options 중 repeat 이용
+        
+        ```typescript
+          const industriesURL = qs.stringify(
+            { industries: selectedIndustries },
+            { arrayFormat: 'repeat' }
+          );
+          const indicatorsURL = qs.stringify(
+            { indicators: selectedIndicators },
+            { arrayFormat: 'repeat' }
+          );
+          const doBackTestHandler = () => {
+            axios.get(`기본url 주소?${industriesURL}&${indicatorsURL}`,
+              {
+                headers: {
+                  authentication: token,
+                },
+                params: {
+                  startYear: startYear,
+                  startMonth: startMonth,
+                  ...
+                },
+              })
+              .then((response) => {
+                console.log(response.data);
+              })
+              .catch((error) => console.log(error));
+          };
+        ```
