@@ -1134,3 +1134,60 @@
     </select>
   );
   ```
+
+- axios 요청 보낼 때 param에 배열 넣어 보내기
+  
+  - qs 라이브러리
+    
+    - A querystring parsing and stringifying library with some added security
+      
+      - querystring
+        
+        - url 주소에 미리 협의된 데이터를 파라미터를 통해 넘기는 
+    
+    - 사용
+      
+      - `qs.stringify(object, [options])`
+      
+      - 예시
+        
+        ```typescript
+        qs.stringify(
+            { industries: selectedIndustries },
+            { arrayFormat: 'repeat' }
+          );
+        ```
+      
+      - `[options]`
+        
+        - indices
+          
+          ```typescript
+          { arrayFormat: 'indices'}
+          ```
+          
+          - `a[0]=b&a[1]=c`의 형태
+        
+        - brackets
+          
+          ```typescript
+          { arrayFormat: 'brackets'}
+          ```
+          
+          - `a[]=b&a[]=c`의 형태
+        
+        - repeat
+          
+          ```typescript
+          { arrayFormat: 'repeat'}
+          ```
+          
+          - `a=b&a=c`의 형태
+        
+        - comma
+          
+          ```typescript
+          { arrayFormat: 'comma'}
+          ```
+          
+          - `a=b,c`의 형태
