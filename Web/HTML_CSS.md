@@ -101,6 +101,18 @@
   - 다양한 타입을 가지는 입력 데이터 유형과 위젯이 제공됨
   
   - label과 함께 사용하는 경우 input의 id 속성을, label의 for 속성을 활용하여 상호 연관시킴
+    
+    ```html
+    <input type='month' onKeyDown={(event) => event.preventDefault()} />
+    ```
+    
+    - type='month'
+      
+      - 월까지만 표시되는 날짜 형식
+    
+    - onKeyDown={(event) => event.preventDefault()}
+      
+      - 키보드를 통한 수정이 불가능하도록 설정
 
 ## CSS
 
