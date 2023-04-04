@@ -105,14 +105,24 @@
     ```html
     <input type='month' onKeyDown={(event) => event.preventDefault()} />
     ```
+  
+  - type='month'
     
-    - type='month'
-      
-      - 월까지만 표시되는 날짜 형식
+    - 월까지만 표시되는 날짜 형식
+  
+  - onKeyDown={(event) => event.preventDefault()}
     
-    - onKeyDown={(event) => event.preventDefault()}
+    - 키보드를 통한 수정이 불가능하도록 설정
+  
+  - input 박스 클릭 시 생기는 테두리 보이지 않게 설정
+    
+    - outline:none
       
-      - 키보드를 통한 수정이 불가능하도록 설정
+      - focus인 경우 outline: none 설정하기
+        
+        ```html
+        input:focus {outline: none;}
+        ```
 
 ## CSS
 
