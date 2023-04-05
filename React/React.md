@@ -1497,6 +1497,10 @@ npm start
     - replace 옵션을 통해 history에 이력을 남길지 여부 설정 가능
       
       - replace: true인 경우 이력을 남기지 않음
+    
+    - state 옵션을 통해 state를 넘길 수 있음
+      
+      - useLocation()을 통해 전달받은 state를 취득할 수 있음
 
 ### Custom Hook
 
