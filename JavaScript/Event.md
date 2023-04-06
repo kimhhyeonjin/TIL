@@ -51,3 +51,13 @@
         };
       }, []);
     ```
+
+- onClick 함수에 파라미터 전달하기
+  
+  - `onClick={(event) => {onClickHandler(parameter, event)}}`
+    
+    ```javascript
+    const onClickHandler = (parameter, event) => {
+        console.log(parameter)
+    }
+    ```
