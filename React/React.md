@@ -1186,6 +1186,8 @@ npm start
     
     - effect를 특정한 컴포넌트가 DOM에서 마운트 해제될 때마다(재사용될 때마다) 실행
       
+      - Life Cycle에서 componentWillUnmount에 해당
+      
       - return문 이용
     
     - 모든 새로운 side effect 함수가 실행되기 전, 컴포넌트가 제거되기 전 실행
