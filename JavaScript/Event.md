@@ -51,6 +51,29 @@
         };
       }, []);
     ```
+  
+  - 실제 사용 예시 2
+    
+    ```typescript
+      // 새로고침 시 정보 초기화
+      const beforeUnLoad = () => {
+        // reset();
+      };
+      // 대표전략이나 나의 전략조회에서 바로 넘어오는 경우
+      useEffect(() => {
+        if (location.state !== null) {
+          const redirectIndicators: number[] = location.state.indicators;
+          // console.log(redirectIndicators);
+          backtestFactor.loadSelectedIndicator(redirectIndicators);
+          setShowFactor(true);
+        }
+        window.addEventListener('beforeunload', beforeUnLoad);
+        return () => {
+          window.removeEventListener('beforeunload', beforeUnLoad);
+          reset();
+        };
+      }, []);
+    ```
 
 - onClick 함수에 파라미터 전달하기
   
