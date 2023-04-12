@@ -8,10 +8,10 @@
 4. [큐](./Algorithm/queue.md)
 5. [트리](./Algorithm/tree.md)
 6. [컴퓨팅사고](./Algorithm/computational_thinking.md)
-7. [APS_응용_1](./Algorithm/APS_응용_1.md)
-8. [APS_응용_2](./Algorithm/APS_응용_2.md)
-9. [APS_응용_3](./Algorithm/APS_응용_3.md)
-10. [APS_응용_4](./Algorithm/APS_응용_4.md)
+7. [APS\_응용\_1](./Algorithm/APS_응용_1.md)
+8. [APS\_응용\_2](./Algorithm/APS_응용_2.md)
+9. [APS\_응용\_3](./Algorithm/APS_응용_3.md)
+10. [APS\_응용\_4](./Algorithm/APS_응용_4.md)
 
 ### Basic 기본적인 내용 정리
 
@@ -19,7 +19,7 @@
 
 ### DB
 
-1. [SQL_기본](./DB/SQL_ORM.md)
+1. [SQL\_기본](./DB/SQL_ORM.md)
 2. [SQL 심화](./DB/QuerySet_API.md)
 3. [Django에서의 관계(N:1 / N:N)](./DB/Database_Relationship.md)
 4. [Event Scheduler](./DB/Event_Scheduler.md)
@@ -44,17 +44,25 @@
 
 ### JavaScript 정리
 
-1. [JavaScript_기초](./JavaScript/JavaScript_기초.md)
+1. [JavaScript\_기초](./JavaScript/JavaScript_기초.md)
 2. [DOM_Event_this](./JavaScript/DOM_Event_this.md)
-3. [동기와_비동기](./JavaScript/동기와_비동기.md)
+3. [동기와\_비동기](./JavaScript/동기와_비동기.md)
 4. [Event](./JavaScript/Event.md)
+
+### Next.js 정리
+
+1. [Next.js](./NextJs/NextJs.md)
 
 ### Python 정리
 
 1. [Python 기초](./Python/basic.md)
-2. [조건문_반복문_함수](./Python/control_statement_function.md)
+2. [조건문*반복문*함수](./Python/control_statement_function.md)
 3. [데이터 구조 및 활용](./Python/data_structure.md)
 4. [객체지향프로그래밍](./Python/OOP.md)
+
+### TypeScript 정리
+
+1. [TypeScript](./TypeScript/TypeScript.md)
 
 ### Vue 정리
 
@@ -71,7 +79,3 @@
 3. [Bootstrap 컴포넌트와 Grid system을 활용한 반응형 레이아웃 구성하기](./Web/0805.md)
 4. [HTTP](./Web/HTTP.md)
 5. [HTTP response status code](./Web/HTTP_response_status_code.md)
-
-### TypeScript 정리
-
-1. [TypeScript](./TypeScript/TypeScript.md)
