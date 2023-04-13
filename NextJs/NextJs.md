@@ -27,3 +27,13 @@
 - 검색엔진 최적화 (SEO)
   
   - 검색엔진이 이해하기 쉽도록 홈페이지의 구조와 페이지를 개발해 검색 결과 상위에 노출될 수 있도록 하는 작업
+
+### Next.js 프로젝트 시작하기
+
+- node.js가 설치되어 있지 않은 경우 먼저 설치
+
+- bash에 `npx create-next-app` 입력
+  
+  ```bash
+  npx create-next-app
+  ```
