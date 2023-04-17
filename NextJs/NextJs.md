@@ -47,3 +47,51 @@
   ```bash
   npx create-next-app
   ```
+
+- 페이지 추가하기
+  
+  - index 파일은 / 뒤에 아무것도 없는 경우 불러옴
+  
+  - 그 외의 다른 파일 이름은 경로 이름으로 사용
+    
+    - 예를 들어 news.js라는 파일이 있다면
+    
+    - 도메인 뒤에 `/news`라는 요청에 반응
+  
+  - index.js
+    
+    ```js
+    const HomePage = () => {
+        return <h1>The Home Page</h1>
+    };
+    
+    export default HomePage;
+    ```
+    
+    - Next.js 프로젝트는 최신 React 설정을 지원해서 `import React from 'react'` 생략 가능
+  
+  - 실행
+    
+    ```bash
+    npm run dev
+    ```
+    
+    - terminal에 출력되는 주소로 url 실행
+  
+  - 우클릭 → 페이지 소스 보기
+    
+    - 비어있는 뼈대만 있는 것이 아니라 실제 페이지 내용이 존재
+    
+    - 기본 React 앱과 다른 중요한 차이점
+      
+      - 서버에서 페이지를 사전 렌더링
+  
+  - index.js가 아닌 따로 이름 붙인 파일을 대체하는 방법
+    
+    - pages 폴더 안에 원하는 주소를 이름으로 하는 하위 폴더를 만들고 그 안에 index.js 파일 생성
+    
+    - 예를 들어 pages 폴더 안에 news 폴더를 만들고 그 안에 index.js 파일을 생성하는 경우
+      
+      - `domain.com/news`의 형태가 됨
+    
+    - 세그먼트를 하나 이상 만드는 경우(중첩 경로를 만드는 경우) 유용
