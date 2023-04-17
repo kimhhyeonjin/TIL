@@ -95,3 +95,51 @@
       - `domain.com/news`의 형태가 됨
     
     - 세그먼트를 하나 이상 만드는 경우(중첩 경로를 만드는 경우) 유용
+
+- 동적 페이지 만들기
+  
+  - 경로에 있는 값이 동적인 경우
+    
+    - 파일명을 `[].js`와 같이 입력
+      
+      - Next.js가 이것을 동적 페이지로 인식해서 경로에 여러 값을 불러옴
+      
+      - [] 안에 식별자를 추가
+        
+        - `[newsId].js`
+
+- 동적 매개변수 값 추출하기
+  
+  - `import { useRouter } from 'next/router';` 이용
+    
+    - 기본 React 훅인데 React에 내장된 것은 아니고 Next에서 만들어서 흔히 쓰이는 훅
+    
+    - 특정 라우팅 기능을 사용할 수 있음
+      
+      - `useRouter();`를 이용하여 호출
+        
+        - 라우터 객체에 접근하고 그 라우터 객체에서 특정 데이터나 호출할 수 있는 특정 메소드를 얻을 수 있음
+        
+        - URL에 인코딩된 값, 동적 경로 세그먼트의 구체적인 값에 접근 가능
+          
+          - 접근 방법
+            
+            - 라우터 객체에서 query 속성 사용
+            
+            - 식별자를 속성 이름으로 넣으면 됨
+              
+              ```js
+              import { useRouter } from "next/router";
+              
+              const DetailPage = () => {
+                useRouter();
+              
+                const router = useRouter();
+                const newsId = router.query.newsId;
+                console.log(newsId);
+              
+                return <h1>The Detail Page</h1>;
+              };
+              
+              export default DetailPage;
+              ```
