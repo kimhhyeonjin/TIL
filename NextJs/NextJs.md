@@ -143,3 +143,59 @@
               
               export default DetailPage;
               ```
+
+- 페이지 간 연결하기
+  
+  - a 태그 이용
+    
+    ```js
+    <a href="/news/nextjs-is-a-great-framework">
+      NextJS Is A Great Framework
+    </a>
+    ```
+    
+    - 항상 브라우저가 새 요청을 보내고 새 HTML 페이지를 받음
+    
+    - SPA가 아니라는 뜻
+    
+    - 이전에 저장한 상태가 사라짐
+  
+  - `import Link from 'next/link';` 이용
+    
+    - Next에서 제공하는 링크 담당 하위 패키지
+      
+      - JSX 코드에서 링크를 만들 때 사용
+      
+      - 사용
+        
+        - a 태그 대신 Link 사용
+        
+        - a 태그를 렌더링하고 a 태그에의 클릭을 감지해서 클릭하면 브라우저가 기본 동작으로 새 HTML 페이지 받는 요청을 보내지 못하도록 함
+        
+        - 대신 불러올 컴포넌트를 읽어들이고 url을 변경하여 페이지가 바뀐 것처럼 보이게 함
+    
+    ```js
+    import Link from 'next/link';
+    
+    <Link href="/news/nextjs-is-a-great-framework">
+      NextJS Is A Great Framework
+    </Link>
+    ```
+    
+    - SPA
+    
+    - 사용자가 이미 페이지에 들어온 상태에서 탐색하는 경우 SPA를 유지하는 것이 좋음
+      
+      - 페이지 전체에 걸쳐 상태를 보존하면서도 더 빠르게 반응
+    
+    - 화면에 보이는 콘텐츠는 React에서 재렌더링한 것
+    
+    - 장점
+      
+      - 상호작용하고 반응하는 SPA으로 페이지 상태를 관리하고 저장할 수 있음
+      
+      - 동시에 사용자가 url을 입력하고 엔터 키를 눌러 페이지에 바로 들어오면 이미 완성된 HTML 반환
+        
+        - 검색 엔진으로 직접 들어와도 완성된 HTML 페이지를 볼 수 있음
+        
+        - 이미 웹사이트에 접속한 상태에서 링크를 클릭하는 경우 SPA에 그대로 머물게 됨
