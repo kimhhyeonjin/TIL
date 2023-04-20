@@ -258,3 +258,43 @@
     
     export default MyApp;
     ```
+
+- 프로그래밍 방식으로 탐색하기
+  
+  - `router.push();`
+    
+    - 새 페이지를 페이지 더미에 연결
+    
+    - Link 컴포넌트를 사용하는 것과 같음
+    
+    - 단지 프로그래밍 방식으로 탐색하는 것
+      
+      ```js
+      import { useRouter } from "next/router";
+      
+      ...
+      
+      function MeetupItem(props) {
+        const router = useRouter();
+      
+        const showDetailsHandler = () => {
+          router.push("/" + props.id);
+        };
+      
+        return (
+          ...
+                <button onClick={showDetailsHandler}>Show Details</button>
+          ...
+        );
+      }
+      
+      export default MeetupItem;
+      ```
+
+- useRouter
+  
+  - `import { useRouter } from "next/router";`
+  
+  - 동적 매개변수
+  
+  - 프로그래밍 방식으로 탐색하기
