@@ -211,3 +211,50 @@
         - 검색 엔진으로 직접 들어와도 완성된 HTML 페이지를 볼 수 있음
         
         - 이미 웹사이트에 접속한 상태에서 링크를 클릭하는 경우 SPA에 그대로 머물게 됨
+
+- _app.js
+  
+  - pages 폴더에서 바로 쓸 수 있는 특수파일
+  
+  - NextJS가 렌더링하는 최상위 컴포넌트처럼 작동
+  
+  - 프로퍼티를 받고 구조 분해 할당을 통해 Component와 pageProps를 받아옴
+    
+    ```js
+    import '../styles/globals.css'
+    
+    function MyApp({ Component, pageProps }) {
+      return <Component {...pageProps} />
+    }
+    
+    export default MyApp
+    ```
+    
+    - NextJS가 자동으로 이 프로퍼티를 MyApp 컴포넌트로 보냄
+    
+    - `Component`
+      
+      - 렌더링 될 실제 페이지 콘텐츠를 저장하고 있는 프로퍼티
+      
+      - 페이지를 전환할 때마다 바뀜
+    
+    - `pageProps`
+      
+      - 페이지가 받는 특수 프로퍼티
+  
+  - 네브바를 추가하는 경우
+    
+    ```js
+    import Layout from "../components/layout/Layout";
+    import "../styles/globals.css";
+    
+    function MyApp({ Component, pageProps }) {
+      return (
+        <Layout>
+          <Component {...pageProps} />;
+        </Layout>
+      );
+    }
+    
+    export default MyApp;
+    ```
