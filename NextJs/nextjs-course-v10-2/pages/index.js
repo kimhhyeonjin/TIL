@@ -20,16 +20,29 @@ const DUMMY_MEETUPS = [
   },
 ];
 
-const HomePage = () => {
-  const [loadedMeetups, setLoadedMeetups] = useState([]);
+const HomePage = (props) => {
+  // getStaticProps를 쓰면 상태를 관리할 필요가 없어짐
+  // const [loadedMeetups, setLoadedMeetups] = useState([]);
 
+  // getStaticProps를 쓰면 useEffect가 필요하지 않음
   // 컴포넌트 함수가 실행되고 난 후에 useEffect 실행
-  useEffect(() => {
-    // send a http request and fetch data
-    setLoadedMeetups(DUMMY_MEETUPS);
-  }, []);
+  // useEffect(() => {
+  //   // send a http request and fetch data
+  //   setLoadedMeetups(DUMMY_MEETUPS);
+  // }, []);
 
-  return <MeetupList meetups={loadedMeetups} />;
+  // getStaticProps 사용 이전
+  // return <MeetupList meetups={loadedMeetups} />;
+  // getStaticProps 사용 이후
+  return <MeetupList meetups={props.meetups} />;
 };
+
+export async function getStaticProps() {
+  return {
+    props: {
+      meetups: DUMMY_MEETUPS,
+    },
+  };
+}
 
 export default HomePage;

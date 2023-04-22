@@ -91,6 +91,11 @@
     - 기본 React 앱과 다른 중요한 차이점
       
       - 서버에서 페이지를 사전 렌더링
+        - 단점
+          
+          - 사전 렌더링한 페이지는 컴포넌트가 첫 번째 렌더링 사이클을 마친 이후의 상태를 갖고 있으므로 중요한 데이터가 손실된 상태
+          
+          - 따라서 사전 렌더링 과정을 미세 조정해야 함
   
   - index.js가 아닌 따로 이름 붙인 파일을 대체하는 방법
     
@@ -298,3 +303,80 @@
   - 동적 매개변수
   
   - 프로그래밍 방식으로 탐색하기
+
+### 개념
+
+- SSG와 SSR
+  
+  - SSG (Static Generation)
+    
+    - 일반적으로 사용하는 접근법
+    
+    - 컴포넌트가 사전 렌더링되는 시점은 애플리케이션을 빌드하거나  Next 프로젝트를 빌드하는 시점
+      
+      ```js
+      const HomePage = (props) => {
+        // getStaticProps를 쓰면 상태를 관리할 필요가 없어짐
+        // const [loadedMeetups, setLoadedMeetups] = useState([]);
+      
+        // getStaticProps를 쓰면 useEffect가 필요하지 않음
+        // 컴포넌트 함수가 실행되고 난 후에 useEffect 실행
+        // useEffect(() => {
+        //   // send a http request and fetch data
+        //   setLoadedMeetups(DUMMY_MEETUPS);
+        // }, []);
+      
+        // getStaticProps 사용 이전
+        // return <MeetupList meetups={loadedMeetups} />;
+        // getStaticProps 사용 이후
+        return <MeetupList meetups={props.meetups} />;
+      };
+      
+      export async function getStaticProps() {
+        return {
+          props: {
+            meetups: DUMMY_MEETUPS,
+          },
+        };
+      }
+      
+      export default HomePage;
+      ```
+      
+      - pages 폴더 안에 있는 컴포넌트 파일에서만 작동
+      
+      - 컴포넌트 함수를 호출하기 전에 `getStaticProps`를 호출
+      
+      - NextJs가 `getStaticProps`를 찾으면 사전 렌더링 프로세스 중에 이 함수를 실행
+        
+        - 컴포넌트 함수를 바로 호출하지 않고 반환된 JSX의 형태를 HTML 내용으로 사용
+      
+      - 작업을 완료했으면 객체를 반환
+        
+        - 이 곳에서 props 프로퍼티 설정 진행
+          
+          - 이름은 반드시 props
+    
+    - `getStaticProps`
+      
+      - 페이지에서 사용할 props를 준비
+      
+      - 비동기적으로 설정할 수 있어 유용
+        
+        ```js
+        export async function getStaticProps() {};
+        ```
+        
+        - NextJs는 이 promise가 해결될 때까지 기다린 후 컴포넌트 함수에서 사용할 props를 반환
+      
+      - 일반적으로 서버에서만 돌아가는 어떤 코드든지 전부 실행할 수 있음
+        
+        - 파일 시스템에 연결할 수 있음
+        
+        - 데이터베이스에 안전하게 연결할 수 있음
+        
+        - 서버에서도, 클라이언트 측에서도 실행되지 않음
+        
+        - API나 데이터베이스에서 데이터를 가져오거나 파일 시스템의 일부 파일에서 데이터를 읽어올 수 있음
+  
+  - SSR (Server-side Rendering)
