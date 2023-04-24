@@ -352,7 +352,6 @@
         };
       }
       
-      
       export default HomePage;
       ```
       
@@ -370,7 +369,7 @@
           
           - 이름은 반드시 props
         
-        - revalidate 프러퍼티 설정
+        - revalidate 프로퍼티 설정
           
           - 데이터가 자주 변하는 경우
           
@@ -407,3 +406,42 @@
         - API나 데이터베이스에서 데이터를 가져오거나 파일 시스템의 일부 파일에서 데이터를 읽어올 수 있음
   
   - SSR (Server-side Rendering)
+    
+    - `getServerSideProps`
+      
+      - `요청이 들어올 때마다` 페이지를 다시 만들어야 하는 경우
+      
+      - 들어오는 요청에 작업이 필요한 경우나 매 초마다 요청이 들어오는 경우
+      
+      - 페이지를 동적으로 pregenerate 해야 함
+        
+        ```js
+        export async function getServerSideProps(context) {
+          const req = context.req;
+          const res = context.res;
+        
+          return {
+            props: {
+              meetups: DUMMY_MEETUPS,
+            },
+          };
+        }
+        ```
+        
+        - 단점
+          
+          - 요청이 들어올 때까지 기다려야 함
+        
+        - getStaticProps와의 차이점
+          
+          - 빌드 과정에서는 실행되지 않음
+          
+          - revalidate 사용할 수 없음
+            
+            - 애초에 말이 안 됨
+          
+          - 인증의 경우 getStaticProps가 더 나음
+            
+            - 캐싱 가능
+            
+            - 페이지를 여러 번 pregenerate 할 필요 없음
