@@ -404,6 +404,77 @@
         - 서버에서도, 클라이언트 측에서도 실행되지 않음
         
         - API나 데이터베이스에서 데이터를 가져오거나 파일 시스템의 일부 파일에서 데이터를 읽어올 수 있음
+      
+      - useRouter 훅을 사용할 수 없음
+        
+        - 대신 `context.params`를 통해 매개변수를 받아올 수 있음
+        
+        - params가 pregenerate 되지 않은 상태에서 해당 페이지로 이동하는 경우 404 에러
+          
+          ```js
+          export async function getStaticProps(context) {
+            // fetch data for a single meetup
+          
+            // context.params;
+            const meetupId = context.params.meetupId;
+            console.log(meetupId);
+          
+            return {
+              props: {
+                meetupData: {
+                  image:
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Funguni_Island%2C_Pangani%2C_Tanga.jpg/1280px-Funguni_Island%2C_Pangani%2C_Tanga.jpg",
+                  id: meetupId,
+                  title: "A First Meetup",
+                  address: "Some Street 5, Some City",
+                  description: "This is a first meetup",
+                },
+              },
+            };
+          }
+          ```
+    
+    - `getStaticPaths`
+      
+      - 동적 세그먼트 값이 있는 객체를 반환
+        
+        ```js
+        export async function getStaticPaths() {
+          return {
+            fallback: false,
+            paths: [
+              {
+                params: {
+                  // pregenerate되는 값
+                  meetupId: "m1",
+                },
+              },
+              {
+                params: {
+                  // pregenerate되는 값
+                  meetupId: "m2",
+                },
+              },
+            ],
+          };
+        }
+        ```
+      
+      - fallback 키
+        
+        - path 배열이 모든 지원되는 매개변수를 저장할지 일부만 저장할지 지정
+        
+        - false
+          
+          - 모든 지원되는 매개변수 저장
+        
+        - true
+          
+          - 일부만 저장
+      
+      - path 키를 배열로 받아옴
+        
+        - 배열에는 객체가 여러 개 있는데 동적 페이지 버전 당 하나의 객체를 가져야 함
   
   - SSR (Server-side Rendering)
     
