@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
+import Head from "next/head";
 import { MongoClient } from "mongodb";
 import MeetupList from "../components/meetups/MeetupList";
+import { Fragment } from "react";
 
 const HomePage = (props) => {
   // getStaticProps를 쓰면 상태를 관리할 필요가 없어짐
@@ -16,7 +18,20 @@ const HomePage = (props) => {
   // getStaticProps 사용 이전
   // return <MeetupList meetups={loadedMeetups} />;
   // getStaticProps 사용 이후
-  return <MeetupList meetups={props.meetups} />;
+  return (
+    <Fragment>
+      <Head>
+        {/* 탭 이름 */}
+        <title>React Meetups</title>
+        {/* 검색엔진에서 선택되어 나타나는 설명 */}
+        <meta
+          name="description"
+          content="Browse a huge list of highly active React meetups!"
+        />
+      </Head>
+      <MeetupList meetups={props.meetups} />;
+    </Fragment>
+  );
 };
 
 // export async function getServerSideProps(context) {

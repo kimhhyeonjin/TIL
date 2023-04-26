@@ -315,6 +315,46 @@
   
   - 프로그래밍 방식으로 탐색하기
 
+### 배포(deploy)
+
+- head 메타 데이터 추가하기
+  
+  - `import Head from "next/head";`
+    
+    ```js
+    import Head from "next/head";
+    import { MongoClient } from "mongodb";
+    import MeetupList from "../components/meetups/MeetupList";
+    import { Fragment } from "react";
+    
+    const HomePage = (props) => {
+      return (
+        <Fragment>
+          <Head>
+            {/* 탭 이름 */}
+            <title>React Meetups</title>
+            {/* 검색엔진에서 선택되어 나타나는 설명 */}
+            <meta
+              name="description"
+              content="Browse a huge list of highly active React meetups!"
+            />
+          </Head>
+          <MeetupList meetups={props.meetups} />;
+        </Fragment>
+      );
+    };
+    
+    export default HomePage;
+    ```
+    
+    - <title> 속성
+      
+      - 탭 이름
+    
+    - <meta> 속성
+      
+      - 검색엔진에서 선택되어 나타나는 설명
+
 ### 개념
 
 - SSG와 SSR
@@ -468,9 +508,27 @@
           
           - 모든 지원되는 매개변수 저장
         
-        - true
+        - true / "blocking"
           
           - 일부만 저장
+          
+          - 지정한 경로 목록이 완전하지 않을 수 있고 더 유효한 페이지가 있을 수 있음
+          
+          - NextJs가 바로 페이지를 찾을 수 없는 경우 바로 404페이지를 보이지 않고 요청 시 페이지를 생성한 후 캐시에 저장하여 pregenerate
+          
+          - true와 blocking의 차이
+            
+            -  true
+              
+              - 빈 페이지 즉시 반환
+              
+              - 페이지에 데이터가 아직 없는 경우에 대한 처리 필요
+            
+            - blocking
+              
+              - 페이지가 미리 생성될 때까지 사용자는 아무것도 볼 수 없음
+              
+              - 완성된 페이지 제공
       
       - path 키를 배열로 받아옴
         
