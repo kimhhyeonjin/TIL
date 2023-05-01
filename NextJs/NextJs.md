@@ -838,9 +838,7 @@
     
     const GenreWrapper = styled.div``;
     
-    const GenreName = styled.input``;
-    
-    
+    const GenreName = styled.input``;    
     ```
     
     - GenreName 클릭 시 id가 1일 때 `/novels/genres?genre=1&sort=like`로 이동
