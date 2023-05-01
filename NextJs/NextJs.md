@@ -518,7 +518,7 @@
           
           - true와 blocking의 차이
             
-            -  true
+            - true
               
               - 빈 페이지 즉시 반환
               
@@ -803,3 +803,99 @@
       
       export default MeetupDetails;
       ```
+
+- Router로 쿼리(query) 보내기
+  
+  - useRouter() 이용
+    
+    ```tsx
+    import { useRouter } from "next/router";
+    import styled from "styled-components";
+    
+    interface Props {
+      id: number;
+      name: string;
+    }
+    
+    function GenreList({ id, name }: Props) {
+      const router = useRouter();
+    
+      const genreSelectHandler = () => {
+        router.push({
+          pathname: "/novels/genres",
+          query: { genre: id, sort: "like" },
+        });
+      };
+    
+      return (
+        <GenreWrapper>
+          <GenreName type="button" value={name} onClick={genreSelectHandler} />
+        </GenreWrapper>
+      );
+    }
+    
+    export default GenreList;
+    
+    const GenreWrapper = styled.div``;
+    
+    const GenreName = styled.input``;
+    
+    
+    ```
+    
+    - GenreName 클릭 시 id가 1일 때 `/novels/genres?genre=1&sort=like`로 이동
+    
+    ```tsx
+    function GenreList({ id, name }: Props) {
+      const router = useRouter();
+    
+      const genreSelectHandler = () => {
+        router.push({
+          pathname: "/novels/genres",
+          query: { genre: id, sort: "like" },
+        }, `/novels/genres`);
+      };
+    
+      return (
+        <GenreWrapper>
+          <GenreName type="button" value={name} onClick={genreSelectHandler} />
+        </GenreWrapper>
+      );
+    }
+    
+    export default GenreList;
+    ```
+    
+    - router.push에 백틱을 이용해 `/novels/genres`와 같이 pathname을 입력하면 마스킹 됨
+      
+      - `/novels/genres`로 페이지 이동
+      
+      - 쿼리값 받아오기
+        
+        ```tsx
+        import NovelNav from "@/src/components/main/NovelNav";
+        import { useRouter } from "next/router";
+        import styled from "styled-components";
+        
+        function GenreNovel() {
+          const { query } = useRouter();
+        
+          return (
+            <Wrapper>
+              <NovelNav />
+              {query.genre}
+              {query.sort}
+            </Wrapper>
+          );
+        }
+        
+        export default GenreNovel;
+        
+        const Wrapper = styled.div``;
+        ```
+        
+        - useRouter를 import 한 후
+        
+        - `const { query } = useRouter();`
+        
+        - `{ query.키 값 }` 형태로 받아옴
