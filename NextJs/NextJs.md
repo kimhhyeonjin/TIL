@@ -574,6 +574,135 @@
             - 캐싱 가능
             
             - 페이지를 여러 번 pregenerate 할 필요 없음
+      
+      - getServerSideProps를 통해 query parameter 여러 개 받아오기
+        
+        ```typescript
+        interface Novel {
+          genre: number | string;
+          sort: string;
+          name: string;
+          pageNum: number | string;
+        }
+        
+        function GenreNovel(props: Novel) {
+          console.log(props);
+          const { query } = useRouter();
+          const router = useRouter();
+        
+          // 정렬 기준 선택 시 반영
+          const sortHandler = (params: string) => {
+            router.push(
+              {
+                pathname: `/novels/genres`,
+                query: {
+                  genre: query.genre,
+                  sort: params,
+                  name: query.name,
+                  pageNum: 1,
+                },
+              }
+              // `/novels/genres`
+            );
+          };
+        
+          return (
+            <Wrapper>
+              {typeof props.pageNum == "number" ? (
+                <NovelNav nav="genres" pageNum={props.pageNum} />
+              ) : (
+                ""
+              )}
+              <NovelTop>
+                {query.name}
+                {query.genre}
+                {query.sort}
+                {query.pageNum}
+                <hr />
+                {props.name}
+                {props.genre}
+                {props.sort}
+                {props.pageNum}
+                <SortWrapper>
+                  <SortContent
+                    onClick={() => {
+                      sortHandler("like");
+                    }}
+                  >
+                    인기순
+                  </SortContent>
+                  |
+                  <SortContent
+                    onClick={() => {
+                      sortHandler("hit");
+                    }}
+                  >
+                    조회순
+                  </SortContent>
+                  |
+                  <SortContent
+                    onClick={() => {
+                      sortHandler("date");
+                    }}
+                  >
+                    업데이트순
+                  </SortContent>
+                </SortWrapper>
+              </NovelTop>
+              <NovelPagination
+                nav="genres"
+                name={props.name}
+                genre={props.genre}
+                sort={props.sort}
+                pageNum={props.pageNum}
+              />
+            </Wrapper>
+          );
+        }
+        
+        export async function getServerSideProps(context: {
+          query: {
+            genre: number | undefined | string;
+            sort: string | undefined;
+            name: string | undefined;
+            pageNum: number | undefined | string;
+          };
+        }) {
+          // genre
+          let genre = 1;
+          if (context.query.genre == undefined || context.query.genre == "") {
+            genre = 1;
+          } else {
+            genre = Number(context.query.genre);
+          }
+          // sort
+          let sort = "like";
+          if (context.query.sort == undefined || context.query.sort == "") {
+            sort = "like";
+          } else {
+            sort = context.query.sort;
+          }
+          // name
+          let name = "전체";
+          if (context.query.name == undefined || context.query.name == "") {
+            name = "전체";
+          } else {
+            name = context.query.name;
+          }
+          // pageNum
+          let pageNum = 1;
+          if (context.query.pageNum == undefined || context.query.pageNum == "") {
+            pageNum = 1;
+          } else {
+            pageNum = Number(context.query.pageNum);
+          }
+          return { props: { genre: genre, sort: sort, name: name, pageNum: pageNum } };
+        }
+        
+        export default GenreNovel;
+        ```
+        
+        - useRouter를 통해 받아오는 것은 페이지 빌드가 끝난 후 받아오는 값
 
 - API route
   
