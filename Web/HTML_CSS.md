@@ -524,3 +524,23 @@
   - background-position
     
     - background 이미지의 위치
+
+- 스크롤바
+  
+  - globalStyle에서 스크롤바 css 설정한 경우 특정 컴포넌트에서 스크롤바 보이지 않게 하기
+    
+    ```css
+      overflow: hidden;
+      white-space: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    
+      /* IE, Edge 및 Firefox에서 스크롤바 숨김 */
+      -ms-overflow-style: none; /* IE, Edge */
+      scrollbar-width: none; /* Firefox */
+    
+      /* Chrome, Safari 및 Opera에서 스크롤바 숨김 */
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    ```
