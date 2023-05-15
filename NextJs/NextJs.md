@@ -703,6 +703,34 @@
         ```
         
         - useRouter를 통해 받아오는 것은 페이지 빌드가 끝난 후 받아오는 값
+      
+      - getServerSideProps를 통해 쿠키값 가져오기
+        
+        ```typescript
+        import { NextPageContext } from "next";
+        
+        // 쿠키 확인
+        export async function getServerSideProps({ req }: NextPageContext) {
+          const cookies =
+            req && req.headers && req.headers.cookie ? req.headers.cookie : "";
+          const cookie = decodeURIComponent(cookies);
+          // 쿠키를 ; 기준으로 나누어 그 중 userDto가 존재하는지 확인
+          const parts = cookie.split("; ");
+          let userDTOcookie = "";
+          for (let i = 0; i < parts.length; i++) {
+            if (parts[i].startsWith("userDto=")) {
+              userDTOcookie = parts[i].substring("userDto=".length);
+              break;
+            }
+          }
+        
+          return {
+            props: {
+              userDTO: userDTOcookie,
+            },
+          };
+        }
+        ```
 
 - API route
   
