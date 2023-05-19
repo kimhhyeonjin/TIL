@@ -2,6 +2,52 @@
 
 ## 시작
 
+- Nextjs
+  
+  - `getStaticPaths`
+    
+    - 동적 세그먼트 값이 있는 객체를 반환
+    
+    - 쉽게 말해 동적라우팅 + getStaticProps를 사용할 때 필요
+      
+      - 동적라우팅에 들어갈 수 있는 값을 지정해주는 것
+      
+      - 값이 존재하지 않는 항목에 대해서는 알아서 404 Not Found 처리를 하기 때문
+        
+        - pages > series > [id] > index.tsx
+          
+          ```typescript
+          export async function getStaticPaths() {
+            const res = await axios.get("http://.../covers");
+            const series = await res.data;
+          
+            const paths = series.content.map((serie: Content) => ({
+              // params로 [id]에 들어갈 수 있는 값 하나하나 지정
+              params: { id: serie.id.toString() },
+            }));
+            return {
+              paths,
+              fallback: "blocking",
+            };
+          }
+          
+          export async function getStaticProps(context: GetStaticPropsContext) {
+            const seriesId = context.params?.id ?? "";
+          
+            const res = await axios.get(
+              `http://.../covers/${seriesId}`
+            );
+            const seriesData = res.data;
+          
+            return {
+              props: {
+                seriesData,
+              },
+              revalidate: 1,
+            };
+          }
+          ```
+
 - Jotai
   
   - atomWithStorage
