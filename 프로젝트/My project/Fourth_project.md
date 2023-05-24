@@ -189,3 +189,74 @@
         - useEffect를 통해 로그인 상태를 가져올 수 있지만 로그인을 하더라도 상태가 반영되지 않아 상태관리를 하지 못함
       
       - page 폴더 아래에 있는 컴포넌트에서 getServerSideProps를 실행해야 함
+
+- 리팩토링
+  
+  - `새로운 기능을 만들지 않고` 코드를 개선하는 체계적인 프로세스
+    
+    - 기능에 변화가 있어서는 안됨
+  
+  - type을 지정할 때 자주 사용하는 type의 경우 따로 폴더를 빼서 type 지정 후 사용할 컴포넌트에서 import 해서 사용
+    
+    - 기존
+      
+      - 사용할 컴포넌트에서 `interface Novel {}`과 같은 형식으로 type 지정 후 사용
+      
+      - 변경
+        
+        - src 폴더 하단 pages와 같은 위치에 types 폴더를 생성하고 그 아래에 사용할 폴더명 그 아래에 `index.d.ts` 형식으로 파일 생성
+          
+          - src > types > novel > index.d.ts
+            
+            ```ts
+            declare module "novel" {
+              export interface Novel {
+                content: {
+                  id: number;
+                  title: string;
+                  status: string;
+                  thumbnail: string;
+                  genre: string;
+                  writer: {
+                    id: number;
+                    nickname: string;
+                  };
+                  isUploaded: boolean;
+                  isNew: boolean;
+                }[];
+                pageable: {
+                  sort: {
+                    sorted: boolean;
+                    unsorted: boolean;
+                    empty: boolean;
+                  };
+                  pageSize: number;
+                  pageNumber: number;
+                  offset: number;
+                  paged: boolean;
+                  unpaged: boolean;
+                };
+                totalPages: number;
+                totalElements: number;
+                last: boolean;
+                number: number;
+                sort: {
+                  sorted: boolean;
+                  unsorted: boolean;
+                  empty: boolean;
+                };
+                size: number;
+                numberOfElements: number;
+                first: boolean;
+                empty: boolean;
+              }
+            }
+            ```
+        
+        - type을 사용할 컴포넌트에서 import해서 사용
+          
+          ```typescript
+          import { novel } from "novel";
+          ```
+        
+        - 자주 사용하는 경우 반복해서 작성할 필요가 없어 편리
