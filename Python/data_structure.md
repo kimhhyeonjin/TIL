@@ -550,3 +550,9 @@
   > b[2][0] = 0
   > print(a, b)  # [1, 2, ['a', 'b']] [1, 2, [0, 'b']]
   > ```
+
+- 얕은 복사가 되지 않는 3차원 배열 생성하기
+  
+  > ```python
+  > visited = [[[0 for _ in range(C)] for _ in range(R)] for _ in range(L)]
+  > ```
