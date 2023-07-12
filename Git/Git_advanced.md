@@ -104,6 +104,16 @@
 
 - Github를 이용해 협업할 때, 커밋 내역의 차이로 인한 충돌 방지 가능
 
+- merge한 사항을 revert하기
+  
+  - `git log`를 통해 revert하고 싶은 부모의 커밋 id 찾기
+  
+  - `-m 1`또는 `-m 2`를 뒤에 붙여주기
+    
+    - `git revert -m 1{커밋 ID}`
+    
+    - `git revert -m 2 {커밋 ID}`
+
 ## Git branch & merge
 
 ### Git branch
