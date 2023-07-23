@@ -283,3 +283,24 @@
   - 이후 사용자는 pull 받기
   
   - 새로운 기능 추가를 위해 새로운 브랜치를 생성하며 위 과정을 반복
+
+- fork한 저장소 동기화
+  
+  - 외부 원본 저장소의 최신 내용을 가져옴
+    
+    ```git
+    $ git fetch upstream
+    ```
+  
+  - merge할 브랜치로 변경한 다음, 원본 저장소의 변경사항을 로컬 브랜치에 merge
+    
+    ```git
+    $ git checkout main
+    $ git merge upstream/main
+    ```
+  
+  - fork한 저장소에 merge한 내용 반영
+    
+    ```git
+    $ git push origin main
+    ```
