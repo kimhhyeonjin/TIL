@@ -33,6 +33,8 @@
     - app > layout.js
       
       - page.js를 감싸는 파일
+      
+      - 페이지 변경과 상관없이 계속 보여줄 UI를 작성하면 편리
     
     - app > globals.css
       

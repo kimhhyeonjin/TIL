@@ -4,6 +4,7 @@ export default function Home() {
 
   return (
     <div>
+      
       <h4 className="title">신선배송</h4>
       <p className="title-sub">by dev {name}</p>
       <div style={{ textAlign: "center" }}>
