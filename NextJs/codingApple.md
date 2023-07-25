@@ -139,3 +139,41 @@
           );
         }
         ```
+  
+  - 이미지 넣기
+    
+    - img 태그 이용
+      
+      ```js
+      {products.map((product, idx) => {
+        return (
+          <div className="food" key={idx}>
+            <img src={`/food${idx}.png`} className="food-img" />
+            <h4>{product}</h4>
+          </div>
+        );
+      })}
+      ```
+    
+    - Image 태그 이용
+      
+      - 최적화된 이미지로 넣을 수 있음 (lazy loading + 사이즈 최적화 + layout shift 방지)
+        
+        ```js
+        import Image from "next/image";
+        import food0 from "/public/food0.png";
+        
+        
+        export default function Test() {
+        
+          return (
+            <div>
+              <Image src={food0} className="food-img" />
+            </div>
+          );
+        }
+        ```
+      
+      - 외부 이미지는 width, height 속성이 필요
+        
+        - 또한 `next.config.js` 파일에 도메인 및 경로 등록 해야 함
