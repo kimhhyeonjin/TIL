@@ -163,7 +163,6 @@
         import Image from "next/image";
         import food0 from "/public/food0.png";
         
-        
         export default function Test() {
         
           return (
@@ -177,3 +176,43 @@
       - 외부 이미지는 width, height 속성이 필요
         
         - 또한 `next.config.js` 파일에 도메인 및 경로 등록 해야 함
+  
+  - 컴포넌트
+    
+    - server component
+      
+      - 장점
+        
+        - 로딩 속도가 빠름
+        
+        - 검색 엔진 노출에 유리함
+      
+      - 단점
+        
+        - html에 자바스크립트 기능 넣기 불가능
+        
+        - useState, useEffect 등 역시 사용 불가능
+    
+    - client component
+      
+      - 파일 맨 위에 `'use client'`를 넣고 만든 경우
+      
+      - 장점
+        
+        - html에 자바스크립트 기능 넣을 수 있음
+        
+        - useState, useEffect 사용 가능
+      
+      - 단점
+        
+        - 로딩 속도가 느림
+          
+          - 자바스크립트 파일이 많이 필요
+          
+          - hydration 필요
+            
+            - hydration
+              
+              - html 유저에게 보낸 후에 자바스크립트로 html을 다시 읽고 분석하는 일
+    
+    - 큰 페이지는 server component, 자바스크립트 기능이 필요한 곳에 client component 사용하는 것이 좋음
