@@ -24,6 +24,12 @@
   
   - src directory 사용 X
   
+  - app directory 사용 O
+    
+    - next 13에서 app directory를 이용하는 경우 client에서 렌더링 하도록 하려면
+      
+      `'use client'` 키워드 사용해야 함
+  
   - 구조
     
     - app > page.js
@@ -222,6 +228,27 @@
 - 생성
   
   - src directory 사용 O
+  
+  - app directory 사용 O
+    
+    - next 13에서 app directory를 이용하는 경우 client에서 렌더링 하도록 하려면
+      
+      `'use client'` 키워드 사용해야 함
+      
+      - useRouter를 사용할 때에도
+        
+        ```ts
+        import { useRouter } from "next/router";
+        ```
+        
+         가 아닌
+        
+        ```ts
+        import { useRouter } from "next/navigation";
+        ```
+        
+         사용해야 함
+  
   - ts 사용
 
 - database
@@ -427,6 +454,122 @@
             <h4>{result?.title}</h4>
             <p>{result?.content}</p>
           </div>
+        );
+      }
+      ```
+
+- `next/navigation`
+  
+  - useRouter()
+    
+    ```ts
+    "use client";
+    
+    // 클라이언트 컴포넌트에서만 사용
+    import { useRouter } from "next/navigaion";
+    
+    export default function Test() {
+      const router = useRouter();
+      return (
+        <button
+          onClick={() => {
+            router.push("/");
+          }}
+        >
+          버튼
+        </button>
+      );
+    }
+    ```
+    
+    - router.push('주소')
+      
+      - 주소로 이동
+    
+    - router.back()
+      
+      - 뒤로 가기
+    
+    - router.forward()
+      
+      - 앞으로 가기
+    
+    - router.refresh()
+      
+      - 바뀐 내용 새로고침
+    
+    - router.prefetch('주소')
+      
+      - 페이지 미리 로드
+      
+      - 참고로 <Link>에도 prefetch 기능 내장되어 있음
+        
+        - 설정하고 싶지 않으면
+          
+          ```ts
+          <Link prefetch={false} href={`/detail/${result._id.toString()}`}>
+            <h4>{result.title}</h4>
+          </Link>
+          ```
+          
+          와 같이 `prefetch={false}` 사용
+  
+  - usePathname()
+    
+    - 현재 URL 가져오기
+      
+      ```ts
+      "use client";
+      
+      // 클라이언트 컴포넌트에서만 사용
+      import { usePathname } from "next/navigation";
+      
+      export default function Test() {
+        // 현재 URL 출력
+        const currentURL = usePathname();
+        console.log(currentURL);
+        return (
+          <button>버튼</button>
+        );
+      }
+      ```
+  
+  - useSearchParams()
+    
+    - search parameter 가져오기
+      
+      ```ts
+      "use client";
+      
+      // 클라이언트 컴포넌트에서만 사용
+      import { useSearchParams } from "next/navigation";
+      
+      export default function Test() {
+        // search parameter 출력
+        const searchParams = useSearchParams();
+        console.log(searchParams);
+        return (
+          <button>버튼</button>
+        );
+      }
+      ```
+  
+  - useParams()
+    
+    - 유저가 dynamic route 자리에 입력한 값 가져오기
+      
+      ```ts
+      "use client";
+      
+      // 클라이언트 컴포넌트에서만 사용
+      import { useParams } from "next/navigation";
+      
+      export default function Test() {
+        // 유저가 dynamic route 자리에 입력한 값 출력
+        const dynamicParams = useParams();
+        console.log(dynamicParams);
+        return (
+          <button>버튼</button>
         );
       }
       ```

@@ -16,7 +16,7 @@ export default async function Detail(props: Props) {
     .findOne({ _id: new ObjectId(props.params.id) });
 
   // 유저가 dynamic route 자리에 입력한 값을 출력
-  console.log(props);
+  // console.log(props);
 
   return (
     <div>

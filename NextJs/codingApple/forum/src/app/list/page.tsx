@@ -1,4 +1,6 @@
 import { connectDB } from "@/util/database";
+import Link from "next/link";
+import DetailLink from "./DetailLink";
 
 export default async function List() {
   const client = await connectDB;
@@ -10,7 +12,10 @@ export default async function List() {
       {results.map((result, idx) => {
         return (
           <div className="list-item" key={idx}>
-            <h4>{result.title}</h4>
+            <Link prefetch={false} href={`/detail/${result._id.toString()}`}>
+              <h4>{result.title}</h4>
+            </Link>
+            <DetailLink />
             <p>1월 1일</p>
           </div>
         );
