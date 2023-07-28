@@ -222,6 +222,7 @@
 - 생성
   
   - src directory 사용 O
+  - ts 사용
 
 - database
   
@@ -357,8 +358,78 @@
           "global.d.ts"
         ],
         ```
+      
+      - DB 입출력이 필요한 곳에서 connectDB 함수를 가져다 사용
+        
+        ```ts
+        import { connectDB } from "@/util/database";
+        
+        export default async function Home() {
+          const client = await connectDB;
+          const db = client.db("forum");
+          const result = await db.collection("post").find().toArray();
+          console.log(result)
+        
+          return (
+            <main>
+              {result[0].title}
+            </main>
+          )
+        }
+        ```
   
   - db 입출력 코드는 server component 안에서만 사용하기
+  
+  - `findOne()`
+    
+    - 게시물 하나만 mongodb에서 가져오고 싶은 경우
+      
+      ```ts
+      import { ObjectId } from "mongodb";
+      
+      db.collection("post").findOne({ _id: new ObjectId(props.params.id) });
+      ```
+      
+      - ObjectId로 찾고 싶으면 new ObjectId() 사용
+
+- dynamic route
+  
+  - root/src/app/detail/**[id]**/page.js
+    
+    - [id] 자리에는 아무 값이나 와도 됨
+    
+    - [id] 값을 가져오는 방법: props
+      
+      ```ts
+      import { connectDB } from "@/util/database";
+      import { ObjectId } from "mongodb";
+      
+      interface Props {
+        params: {
+          id: string;
+        };
+        searchParams: {};
+      }
+      
+      export default async function Detail(props: Props) {
+        const client = await connectDB;
+        const db = client.db("forum");
+        const result = await db
+          .collection("post")
+          .findOne({ _id: new ObjectId(props.params.id) });
+      
+        // 유저가 dynamic route 자리에 입력한 값을 출력
+        console.log(props);
+      
+        return (
+          <div>
+            <h4>상세페이지</h4>
+            <h4>{result?.title}</h4>
+            <p>{result?.content}</p>
+          </div>
+        );
+      }
+      ```
 
 ### 라이브러리
 
