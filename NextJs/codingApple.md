@@ -574,6 +574,35 @@
       }
       ```
 
+- 서버 기능 개발하기
+  
+  - app 폴더 안에 api 폴더를 만들어서 그 안에 서버 기능 만들기
+    
+    - 아직은 기능을 완전히 사용하기 힘듦
+  
+  - src 폴도 안에 pages라는 폴더를 만들고 그 안에 api 폴더 생성 후 그 안에 서버 기능 만들기
+    
+    - 요청과 응답이 필요한 경우 해당 타입 import
+      
+      ```ts
+      import type { NextApiRequest, NextApiResponse } from "next";
+      ```
+    
+    - 예시
+      
+      - 현재 날짜, 현재 시간을 보내주는 서버 기능
+        
+        ```ts
+        // src/pages/api/date.tsx
+        
+        import type { NextApiRequest, NextApiResponse } from "next";
+        
+        export default function handler(req: NextApiRequest, res: NextApiResponse) {
+          const time = new Date();
+          res.status(200).json(time);
+        }
+        ```
+
 ### 라이브러리
 
 - `dotenv`
