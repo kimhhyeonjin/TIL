@@ -462,6 +462,20 @@
       
       await db.collection("post").insertOne(req.body)
       ```
+  
+  - `updateOne()`
+    
+    - object 하나를 mongodb에 수정하고 싶은 경우
+      
+      ```ts
+      // .updateOne({수정할 게시물 정보}, {$set : {수정할 내용}})
+      
+      const edits = { title: req.body.title, content: req.body.content };
+      
+      const result = await db
+              .collection("post")
+              .updateOne({ _id: new ObjectId(req.body._id) }, { $set: edits });
+      ```
 
 - dynamic route
   
