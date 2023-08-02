@@ -661,6 +661,68 @@
         }
         ```
 
+- AJAX
+  
+  - GET, POST 요청 보내는 방법
+    
+    - form 태그
+      
+      - GET과 POST만 가능함
+      
+      - 새로고침 되기 때문에 event.preventDefault() 등을 사용해야 함
+    
+    - fetch() 이용
+      
+      - 버튼 클릭 시 GET 요청 보내기
+        
+        ```ts
+        <span
+          // GET 요청
+          onClick={() => {
+            fetch("/api", {
+              //생략 가능
+              method: "GET"
+            })
+              .then(() => {})
+              .catch((error) => {
+                console.log(error);
+              });
+          }}
+        >
+          🗑️
+        </span>
+        ```
+      
+      - 버튼 클릭 시 POST 요청 보내기
+        
+        ```ts
+        <span
+          // POST 요청
+          onClick={() => {
+            fetch("/api", {
+              method: "POST",
+              body: "데이터",
+              // array나 object를 보내는 경우
+              // JSON.stringify([1, 2, 3])과 같이 입력해야 함
+            })
+              .then(() => {})
+              .catch((error) => {
+                console.log(error);
+              });
+          }}
+        >
+          🗑️
+        </span>
+        ```
+        
+        - JSON.stringify()
+          
+          - JavaScript 객체를 JSON 문자열로 변환
+        
+        - JSON.parse()
+          
+          - JSON 문자열을 JavaScript 객체로 변환
+
 ### 라이브러리
 
 - `dotenv`
