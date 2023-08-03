@@ -34,10 +34,21 @@ export default function ListItem(props: Props) {
                   })
                   .then(() => {
                     // 성공 시 실행할 코드
-                    event.target.parentElement.style.opacity = 0;
-                    setTimeout(() => {
-                      event.target.parentElement.style.display = "none";
-                    }, 1000);
+
+                    // 원래는 root/node_modules/@types/react/global.d.ts 파일에서
+                    // parentElement 검색해서 Node extends EventTarget 찾았는데
+                    // 에러나서 chatGPT 도움을 받아 extends 대신 & 사용
+                    // const target = event.target as Node extends EventTarget;
+                    const target = event.target as Node & EventTarget;
+                    // 이렇게 parentElement를 정의하지 않고 if 조건문 안에 바로 target.parentElement를 사용하면
+                    // setTimeout 안의 target.parentElement에서 에러남
+                    const parentElement = target.parentElement;
+                    if (parentElement) {
+                      parentElement.style.opacity = "0";
+                      setTimeout(() => {
+                        parentElement.style.display = "none";
+                      }, 1000);
+                    }
                   })
                   .catch((error) => {
                     // 인터넷 문제로 실패 시 실행할 코드
