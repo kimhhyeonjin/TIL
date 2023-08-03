@@ -476,6 +476,20 @@
               .collection("post")
               .updateOne({ _id: new ObjectId(req.body._id) }, { $set: edits });
       ```
+  
+  - `deleteOne()`
+    
+    - object 하나를 mongodb에서 삭제하고 싶은 경우
+      
+      ```ts
+      // .deleteOne({삭제할 게시물 정보}, {$set : {수정할 내용}})
+      
+      const edits = { title: req.body.title, content: req.body.content };
+      
+      const result = await db
+              .collection("post")
+              .deleteOne({ _id: new ObjectId(req.body._id) }, { $set: edits });
+      ```
 
 - dynamic route
   
@@ -699,14 +713,24 @@
         <span
           // POST 요청
           onClick={() => {
-            fetch("/api", {
-              method: "POST",
-              body: "데이터",
-              // array나 object를 보내는 경우
-              // JSON.stringify([1, 2, 3])과 같이 입력해야 함
+            fetch("/api/post/delete", {
+              method: "DELETE",
+              body: result._id.toString(),
             })
-              .then(() => {})
+              .then((response) => {
+                if (response.status == 200) {
+                  return response.json();
+                } else {
+                  // 서버가 에러코드 전송 시 실행할 코드
+                }
+                // console.log(response);
+              })
+              .then((response) => {
+                // 성공 시 실행할 코드
+                console.log(response);
+              })
               .catch((error) => {
+                // 인터넷 문제로 실패 시 실행할 코드
                 console.log(error);
               });
           }}
