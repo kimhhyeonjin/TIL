@@ -388,7 +388,7 @@
       
       - DB 입출력이 필요한 곳에서 connectDB 함수를 가져다 사용
         
-        ```ts
+        ```tsx
         import { connectDB } from "@/util/database";
         
         export default async function Home() {
@@ -411,7 +411,7 @@
     
     - ts로 구현
       
-      ```ts
+      ```tsx
       import type { NextApiRequest, NextApiResponse } from "next";
       import { connectDB } from "@/util/database";
       
@@ -445,7 +445,7 @@
     
     - 게시물 하나만 mongodb에서 가져오고 싶은 경우
       
-      ```ts
+      ```tsx
       import { ObjectId } from "mongodb";
       
       db.collection("post").findOne({ _id: new ObjectId(props.params.id) });
@@ -457,7 +457,7 @@
     
     - object 하나를 mongodb로 저장하고 싶은 경우
       
-      ```ts
+      ```tsx
       // 유저가 보낸 데이터 : req.body
       
       await db.collection("post").insertOne(req.body)
@@ -467,7 +467,7 @@
     
     - object 하나를 mongodb에 수정하고 싶은 경우
       
-      ```ts
+      ```tsx
       // .updateOne({수정할 게시물 정보}, {$set : {수정할 내용}})
       
       const edits = { title: req.body.title, content: req.body.content };
@@ -481,7 +481,7 @@
     
     - object 하나를 mongodb에서 삭제하고 싶은 경우
       
-      ```ts
+      ```tsx
       // .deleteOne({삭제할 게시물 정보}, {$set : {수정할 내용}})
       
       const edits = { title: req.body.title, content: req.body.content };
@@ -499,7 +499,7 @@
     
     - [id] 값을 가져오는 방법: props
       
-      ```ts
+      ```tsx
       import { connectDB } from "@/util/database";
       import { ObjectId } from "mongodb";
       
@@ -534,7 +534,7 @@
   
   - useRouter()
     
-    ```ts
+    ```tsx
     "use client";
     
     // 클라이언트 컴포넌트에서만 사용
@@ -578,7 +578,7 @@
         
         - 설정하고 싶지 않으면
           
-          ```ts
+          ```tsx
           <Link prefetch={false} href={`/detail/${result._id.toString()}`}>
             <h4>{result.title}</h4>
           </Link>
@@ -590,7 +590,7 @@
     
     - 현재 URL 가져오기
       
-      ```ts
+      ```tsx
       "use client";
       
       // 클라이언트 컴포넌트에서만 사용
@@ -610,7 +610,7 @@
     
     - search parameter 가져오기
       
-      ```ts
+      ```tsx
       "use client";
       
       // 클라이언트 컴포넌트에서만 사용
@@ -630,7 +630,7 @@
     
     - 유저가 dynamic route 자리에 입력한 값 가져오기
       
-      ```ts
+      ```tsx
       "use client";
       
       // 클라이언트 컴포넌트에서만 사용
@@ -656,7 +656,7 @@
     
     - 요청과 응답이 필요한 경우 해당 타입 import
       
-      ```ts
+      ```tsx
       import type { NextApiRequest, NextApiResponse } from "next";
       ```
     
@@ -664,7 +664,7 @@
       
       - 현재 날짜, 현재 시간을 보내주는 서버 기능
         
-        ```ts
+        ```tsx
         // src/pages/api/date.tsx
         
         import type { NextApiRequest, NextApiResponse } from "next";
@@ -675,77 +675,161 @@
         }
         ```
 
-- AJAX
+- 서버로 데이터 보내기
   
-  - GET, POST 요청 보내는 방법
+  - form 태그
     
-    - form 태그
-      
-      - GET과 POST만 가능함
-      
-      - 새로고침 되기 때문에 event.preventDefault() 등을 사용해야 함
+    - GET과 POST만 가능함
     
-    - fetch() 이용
+    - 새로고침 되기 때문에 event.preventDefault() 등을 사용해야 함
+  
+  - fetch() 이용
+    
+    - 버튼 클릭 시 GET 요청 보내기
       
-      - 버튼 클릭 시 GET 요청 보내기
-        
-        ```ts
-        <span
-          // GET 요청
-          onClick={() => {
-            fetch("/api", {
-              //생략 가능
-              method: "GET"
-            })
-              .then(() => {})
-              .catch((error) => {
-                console.log(error);
-              });
-          }}
-        >
-          🗑️
-        </span>
-        ```
+      ```tsx
+      <span
+        // GET 요청
+        onClick={() => {
+          fetch("/api", {
+            //생략 가능
+            method: "GET"
+          })
+            .then(() => {})
+            .catch((error) => {
+              console.log(error);
+            });
+        }}
+      >
+        🗑️
+      </span>
+      ```
+    
+    - 버튼 클릭 시 POST 요청 보내기
       
-      - 버튼 클릭 시 POST 요청 보내기
-        
-        ```ts
-        <span
-          // POST 요청
-          onClick={() => {
-            fetch("/api/post/delete", {
-              method: "DELETE",
-              body: result._id.toString(),
+      ```tsx
+      <span
+        // POST 요청
+        onClick={() => {
+          fetch("/api/post/delete", {
+            method: "DELETE",
+            body: result._id.toString(),
+          })
+            .then((response) => {
+              if (response.status == 200) {
+                return response.json();
+              } else {
+                // 서버가 에러코드 전송 시 실행할 코드
+              }
+              // console.log(response);
             })
-              .then((response) => {
-                if (response.status == 200) {
-                  return response.json();
-                } else {
-                  // 서버가 에러코드 전송 시 실행할 코드
-                }
-                // console.log(response);
-              })
-              .then((response) => {
-                // 성공 시 실행할 코드
-                console.log(response);
-              })
-              .catch((error) => {
-                // 인터넷 문제로 실패 시 실행할 코드
-                console.log(error);
-              });
-          }}
-        >
-          🗑️
-        </span>
-        ```
+            .then((response) => {
+              // 성공 시 실행할 코드
+              console.log(response);
+            })
+            .catch((error) => {
+              // 인터넷 문제로 실패 시 실행할 코드
+              console.log(error);
+            });
+        }}
+      >
+        🗑️
+      </span>
+      ```
+      
+      - JSON.stringify()
         
-        - JSON.stringify()
-          
-          - JavaScript 객체를 JSON 문자열로 변환
+        - JavaScript 객체를 JSON 문자열로 변환
+      
+      - JSON.parse()
         
-        - JSON.parse()
-          
-          - JSON 문자열을 JavaScript 객체로 변환
+        - JSON 문자열을 JavaScript 객체로 변환
+  
+  - query string (또는 search parameter)
+    
+    - 클라이언트 컴포넌트
+      
+      ```tsx
+      "use client";
+      
+      <span
+        onClick={() => {
+          // root/src/pages/api/test.tsx파일 생성 후
+          // 아래처럼 요청을 보내면 해당 파일에서
+          // req.query를 통해 확인이 가능
+      
+          // URL 뒤에 ?데이터이름=값
+          fetch("/api/test?name=kim&age=100");
+        }}
+      >
+        🗑️
+      </span>
+      ```
+    
+    - root/src/pages/api/test.tsx
+      
+      ```tsx
+      import type { NextApiRequest, NextApiResponse } from "next";
+      
+      export default function handler(req: NextApiRequest, res: NextApiResponse) {
+        console.log(req.query);
+        return res.status(200).json("쿼리");
+      }
+      ```
+      
+      - `req.query`를 통해 확인 가능
+      
+      - console.log 확인
+        
+        - { name: 'kim', age: '100' }
+    
+    - 장점
+      
+      - 간단함
+      
+      - GET 요청도 데이터 전송 가능
+    
+    - 단점
+      
+      - 데이터가 많으면 깔끔하지 않음
+      
+      - URL에 데이터가 노출됨
+  
+  - URL parameter
+    
+    - 클라이언트 컴포넌트
+      
+      ```tsx
+      "use client";
+      
+      <span
+        onClick={() => {
+          // root/src/pages/api/test/[anyword].tsx파일 생성 후
+          // 아래처럼 요청을 보내면 해당 파일에서
+          // req.query를 통해 확인이 가능
+          fetch("/api/test/happy");
+        }}
+      >
+        🗑️
+      </span>
+      ```
+    
+    - root/src/pages/api/test/[anyword].tsx
+      
+      ```tsx
+      import type { NextApiRequest, NextApiResponse } from "next";
+      
+      export default function handler(req: NextApiRequest, res: NextApiResponse) {
+        console.log(req.query);
+        return res.status(200).json("쿼리");
+      }
+      ```
+      
+      - `req.query`를 통해 확인 가능
+      
+      - console.log 확인
+        
+        - { anyword: 'happy' }
 
 ### 라이브러리
 

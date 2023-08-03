@@ -47,6 +47,24 @@ export default function ListItem(props: Props) {
             >
               🗑️
             </span>
+            {/* <span
+              onClick={() => {
+                // URL 뒤에 ?데이터이름=값
+                fetch("/api/test?name=kim&age=100");
+              }}
+            >
+              🗑️
+            </span> */}
+            {/* <span
+              onClick={() => {
+                // root/src/pages/api/test/[anyword].tsx파일 생성 후
+                // 아래처럼 요청을 보내면 해당 파일에서
+                // req.query를 통해 확인이 가능
+                fetch("/api/test/happy");
+              }}
+            >
+              🗑️
+            </span> */}
             <p>1월 1일</p>
           </div>
         );
