@@ -29,3 +29,31 @@
   - 결과의 변경 없이 코드의 구조를 재조정하는 것
   
   - 가독성을 높이고 유지보수를 편하게 함
+
+#### 코드
+
+- redux-persist
+  
+  - redux의 store는 새로고침할 경우 state가 날라감
+    
+    - localStorage 또는 session에 원하는 state를 저장하여 새로고침해도 state가 날라가지 않도록 하기 위한 라이브러리
+  
+  - 설치
+    
+    ```bash
+    npm install redux-persist
+    ```
+  
+  - 사용
+    
+    - localStorage 저장
+      
+      ```js
+      import storage from "redux-persist/lib/storage";
+      ```
+    
+    - session Storage 저장
+      
+      ```js
+      import storageSession from "redux-persist/lib/storage/session""
+      ```
