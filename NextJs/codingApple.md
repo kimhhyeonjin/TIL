@@ -831,6 +831,87 @@
         
         - { anyword: 'happy' }
 
+### 배포
+
+- `npm run build`
+  
+  - development mode로 앱 실행
+  
+  - 코드를 html, javascript, css 파일로 바꿔줌
+  
+  - build가 끝나면 아래와 같은 문구 확인 가능
+    
+    ```
+    λ (Server) server-side renders at runtime (uses getInitialProps or getServerSideProps)
+    ○ (Static) automatically rendered as static HTML (uses no initial props)
+    ```
+    
+    - ○ : static rendering
+      
+      - 디폴트 렌더링
+      
+      - npm run build할 때 만든 html 페이지 그대로 유저에게 보냄
+      
+      - static rendering이 되어야 하는데 dynamic rendering으로 표시된 페이지가 있는 경우가 있음
+        
+        - static rendering으로 수정
+          
+          - 해당 페이지에서 `dynamic` 변수를 만듦
+            
+            ```tsx
+            export const dynamic = "force-static";
+            ```
+    
+    - λ : dynamic rendering
+      
+      - 유저가 페이지에 접속할 때마다 html 페이지를 새로 만들어 보내줌
+      
+      - dynamic rendering이 되어야 하는데 static rendering으로 표시된 페이지가 있는 경우가 있음
+        
+        - dynamic rendering으로 수정
+          
+          - 해당 페이지에서 `dynamic` 변수를 만듦
+            
+            ```tsx
+            export const dynamic = "force-dynamic";
+            ```
+      
+      - 단점
+        
+        - 서버/DB 부담 증가
+          
+          - 캐싱 기능 사용하면 도움됨
+            
+            - 페이지 캐싱
+              
+              - 페이지 완성본을 잠깐 저장해두고 재사용
+                
+                ```tsx
+                // 페이지 단위 캐싱
+                export const revalidate = 60;
+                ```
+                
+                - 60초마다 캐싱
+            
+            - GET 요청 결과 캐싱
+              
+              - GET 요청 결과를 잠깐 저장해두고 재사용
+                
+                ```tsx
+                // 디폴트
+                await fetch("/URL", { cache: "force-cache" });
+                // 매번 서버로 요청해 실시간 데이터 받아옴
+                await fetch("/URL", { cache: "no-store" });
+                // 60초마다 캐싱된 데이터 갱신
+                await fetch("/URL", { next: { revalidate: 60 } });
+                ```
+              
+              - 다만 캐싱된 데이터는 하드용량을 차지함
+
+- `npm run start`
+  
+  - production mode로 앱 실행
+
 ### 라이브러리
 
 - `dotenv`
