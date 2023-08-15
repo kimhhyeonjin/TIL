@@ -1013,30 +1013,105 @@
     
     - root/src/pages/api/auth 폴더 생성 후 [...nextauth].ts 파일 생성
       
-      ```ts
-      import NextAuth from "next-auth";
-      import GithubProvider from "next-auth/providers/github";
+      - 토큰(JWT) 방식
+        
+        ```ts
+        import NextAuth from "next-auth";
+        import GithubProvider from "next-auth/providers/github";
+        
+        const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID!;
+        const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET!;
+        
+        export const authOptions = {
+          // 구현하고 싶은 로그인 방식 입력
+          providers: [
+            GithubProvider({
+              // clientId: "Github에서 발급받은ID",
+              clientId: GITHUB_CLIENT_ID,
+              // clientSecret: "Github에서 발급받은Secret",
+              clientSecret: GITHUB_CLIENT_SECRET,
+            }),
+          ],
+          // secret: "jwt생성시쓰는암호",
+          secret: "jwt생성시쓰는암호",
+        };
+        export default NextAuth(authOptions);
+        ```
+        
+        - clientId와 clientSecret에 undefined 에러가 뜨는 경우 `!`를 변수 뒤에 붙여주어 해당 변수가 undefined 또는 null이 될 수 없음을 강제로 알려줌
       
-      const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID!;
-      const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET!;
-      
-      export const authOptions = {
-        // 구현하고 싶은 로그인 방식 입력
-        providers: [
-          GithubProvider({
-            // clientId: "Github에서 발급받은ID",
-            clientId: GITHUB_CLIENT_ID,
-            // clientSecret: "Github에서 발급받은Secret",
-            clientSecret: GITHUB_CLIENT_SECRET,
-          }),
-        ],
-        // secret: "jwt생성시쓰는암호",
-        secret: "jwt생성시쓰는암호",
-      };
-      export default NextAuth(authOptions);
-      ```
-      
-      - clientId와 clientSecret에 undefined 에러가 뜨는 경우 `!`를 변수 뒤에 붙여주어 해당 변수가 undefined 또는 null이 될 수 없음을 강제로 알려줌
+      - session 방식
+        
+        - DB adapter 사용
+          
+          - 방식
+            
+            - 첫 로그인 시 자동회원가입 (DB 보관)
+            
+            - 로그인 시 DB에 세션정보 보관
+            
+            - 현재 로그인된 유저정보가 필요하면 DB에서 조회
+          
+          - `@next-auth/mongodb-adapter` 설치
+            
+            ```bash
+            npm install @next-auth/mongodb-adapter
+            ```
+          
+          - 세팅
+            
+            ```ts
+            import { connectDB } from "@/util/database";
+            import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+            import NextAuth from "next-auth";
+            import GithubProvider from "next-auth/providers/github";
+            
+            const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID!;
+            const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET!;
+            const LOGIN_SECRET = process.env.LOGIN_SECRET;
+            
+            export const authOptions = {
+              // 구현하고 싶은 로그인 방식 입력
+              providers: [
+                GithubProvider({
+                  // clientId: "Github에서 발급받은ID",
+                  clientId: GITHUB_CLIENT_ID,
+                  // clientSecret: "Github에서 발급받은Secret",
+                  clientSecret: GITHUB_CLIENT_SECRET,
+                }),
+              ],
+              // secret: "jwt생성시쓰는암호", 개발자가 작성
+              secret: LOGIN_SECRET,
+              adapter: MongoDBAdapter(connectDB)
+            };
+            export default NextAuth(authOptions);
+            ```
+            
+            - adapter 부분만 추가
+          
+          - 로그인 시
+            
+            ![](./codingApple_assets/Login_collection.png)
+            
+            - 컬렉션 생성
+            
+            - accounts
+              
+              - 가입된 유저의 계정정보
+              
+              - 하나의 유저는 여러 계정을 가질 수 있음
+                
+                - 같은 이메일을 이용한 여러 계정으로 가입하는 경우 이메일은 users에 하나만 저장되지만 accounts에는 여러 개 저장
+            
+            - sessions
+              
+              - 현재 로그인된 유저 세션정보 저장용
+            
+            - users
+              
+              - 현재 가입된 유저정보
+              
+              - 이메일이 같으면 같은 유저
   
   - 사용
     

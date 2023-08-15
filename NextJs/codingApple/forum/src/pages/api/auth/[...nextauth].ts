@@ -1,3 +1,5 @@
+// import { connectDB } from "@/util/database";
+// import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 
@@ -17,5 +19,6 @@ export const authOptions = {
   ],
   // secret: "jwt생성시쓰는암호", 개발자가 작성
   secret: LOGIN_SECRET,
+  // adapter: MongoDBAdapter(connectDB)
 };
 export default NextAuth(authOptions);
