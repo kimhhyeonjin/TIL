@@ -855,6 +855,8 @@
     
     - GET 요청이나 POST 요청을 보낼 때 DB를 조회할 필요가 없어 DB 부담이 적음
 
+- Next-auth 라이브러리를 이용하면 간편하게 구현 가능
+
 ### 배포
 
 - `npm run build`
@@ -998,3 +1000,62 @@
       ```ts
       const url = process.env.MONGODB_URL;
       ```
+
+- `Next-auth`
+  
+  - 설치
+    
+    ```bash
+    npm install next-auth@4.21.1
+    ```
+  
+  - 세팅
+    
+    - root/src/pages/api/auth 폴더 생성 후 [...nextauth].ts 파일 생성
+      
+      ```ts
+      import NextAuth from "next-auth";
+      import GithubProvider from "next-auth/providers/github";
+      
+      const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID!;
+      const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET!;
+      
+      export const authOptions = {
+        // 구현하고 싶은 로그인 방식 입력
+        providers: [
+          GithubProvider({
+            // clientId: "Github에서 발급받은ID",
+            clientId: GITHUB_CLIENT_ID,
+            // clientSecret: "Github에서 발급받은Secret",
+            clientSecret: GITHUB_CLIENT_SECRET,
+          }),
+        ],
+        // secret: "jwt생성시쓰는암호",
+        secret: "jwt생성시쓰는암호",
+      };
+      export default NextAuth(authOptions);
+      ```
+      
+      - clientId와 clientSecret에 undefined 에러가 뜨는 경우 `!`를 변수 뒤에 붙여주어 해당 변수가 undefined 또는 null이 될 수 없음을 강제로 알려줌
+  
+  - 사용
+    
+    - 사용하려는 클라이언트 컴포넌트에 signIn 함수 사용 
+      
+      - signIn 함수 실행 시 로그인페이지 자동이동
+    
+    - getServerSession
+      
+      - 로그인 된 유저정보 출력
+        
+        ```tsx
+        import { getServerSession } from "next-auth/next";
+        import { authOptions } from "@/pages/api/auth/[...nextauth]";
+        
+        export default async function RootLayout() {
+          await getServerSession(authOptions);
+          return (
+            ...
+          );
+        }
+        ```
