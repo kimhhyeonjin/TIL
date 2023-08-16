@@ -1134,3 +1134,85 @@
           );
         }
         ```
+      
+      - 본인이 작성한 글만 삭제할 수 있도록 하기
+        
+        - 기존 삭제 버튼 응용
+          
+          - 글의 작성자와 로그인 한 사람이 같은지 확인 후 같으면 삭제 버튼 보이기
+          
+          - 글을 작성할 때 작성자 정보를 db에 같이 저장해줘야 함
+            
+            - getServerSession 이용
+              
+              - root/src/pages/api/post/new.tsx
+                
+                ```tsx
+                import type { NextApiRequest, NextApiResponse } from "next";
+                import { connectDB } from "@/util/database";
+                import { getServerSession } from "next-auth";
+                import { authOptions } from "../auth/[...nextauth]";
+                
+                export default async function handler(
+                  req: NextApiRequest,
+                  res: NextApiResponse
+                ) {
+                  const session = await getServerSession(req, res, authOptions);
+                  if (session) {
+                    // req.body에 author 항목 추가
+                    req.body.author = session.user?.email;
+                  }
+                  if (req.method == "POST") {
+                    try {
+                      const client = await connectDB;
+                      const db = client.db("forum");
+                      const result = await db.collection("post").insertOne(req.body);
+                      return res.redirect(302, "/list");
+                    } catch (error) {
+                      console.log(error);
+                    }
+                  }
+                }
+                ```
+          
+          - 글을 삭제할 때 글의 작성자와 로그인 한 사람이 같은지 확인 후 같으면 삭제
+            
+            - root/src/pages/api/post/delete.tsx
+              
+              ```tsx
+              import type { NextApiRequest, NextApiResponse } from "next";
+              import { connectDB } from "@/util/database";
+              import { ObjectId } from "mongodb";
+              import { getServerSession } from "next-auth";
+              import { authOptions } from "../auth/[...nextauth]";
+              
+              export default async function handler(
+                req: NextApiRequest,
+                res: NextApiResponse
+              ) {
+                if (req.method == "DELETE") {
+                  const session = await getServerSession(req, res, authOptions);
+                  try {
+                    const client = await connectDB;
+                    const db = client.db("forum");
+                    const writer_info = await db
+                      .collection("post")
+                      .findOne({ _id: new ObjectId(req.body) });
+              
+                    if (writer_info?.author === session?.user?.email) {
+                      // .deleteOne({수정할 게시물 정보})
+                      const result = await db
+                        .collection("post")
+                        .deleteOne({ _id: new ObjectId(req.body) });
+                      if (result.deletedCount == 1) {
+                        return res.status(200).json("삭제 완료");
+                      } else if (result.deletedCount == 1) {
+                        return res.status(500).json("삭제 안 됨");
+                      }
+                    }
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }
+              }
+              ```
