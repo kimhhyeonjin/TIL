@@ -148,6 +148,8 @@
 
 - git diff : 두 commit 간 차이를 볼 수 있는 명령어 ex) git diff cb85f3 3f1dda
 
+- git remote prune origin : local에서 remote에 없는 브랜치 제거
+
 ### Vim 2가지 모드 : command, edit
 
 - command모드에서 edit모드로 변경하려면 insert버튼을 누른다
