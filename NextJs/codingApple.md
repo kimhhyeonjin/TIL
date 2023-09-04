@@ -856,6 +856,8 @@
     - GET 요청이나 POST 요청을 보낼 때 DB를 조회할 필요가 없어 DB 부담이 적음
 
 - Next-auth 라이브러리를 이용하면 간편하게 구현 가능
+  
+  - 하단 Next-auth 라이브러리 참고
 
 ### 배포
 
@@ -1216,3 +1218,101 @@
                 }
               }
               ```
+  
+  - 소셜 로그인이 아닌 아이디, 비밀번호 형식으로 로그인 하기
+    
+    - `CredentialsProvider()`
+      
+      - session 방식을 사용할 수 없고 JWT 방식만 사용 가능
+      
+      - 회원가입 페이지 먼저 만들어야 함
+        
+        ```tsx
+        export default function Register() {
+          return (
+            <div>
+              <form method="POST" action="/api/auth/signup">
+                <input name="name" type="text" placeholder="이름" />
+                <input name="email" type="text" placeholder="이메일" />
+                <input name="password" type="password" placeholder="비번" />
+                <button type="submit">회원가입</button>
+              </form>
+            </div>
+          );
+        }
+        ```
+      
+      - POST 요청을 보내고 db에 저장할 때 비밀번호는 암호화해야 함
+        
+        - `bcrypt` 라이브러리 사용
+        
+        - root/src/pages/api/auth/signup.tsx
+          
+          ```tsx
+          import { connectDB } from "@/util/database";
+          import type { NextApiRequest, NextApiResponse } from "next";
+          import bcrypt from "bcrypt";
+          
+          export default async function handler(
+            req: NextApiRequest,
+            res: NextApiResponse
+          ) {
+            if (req.method == "POST") {
+              // 비밀번호 암호화
+              const hash = await bcrypt.hash(req.body.password, 10);
+              req.body.password = hash;
+              const client = await connectDB;
+              const db = client.db("forum");
+              const result = await db.collection("user_cred").insertOne(req.body);
+              res.status(200).json('가입완료')
+            }
+          }
+          ```
+          
+          - user_cred 콜렉션에 저장
+            
+            ![](./codingApple_assets/bcrypt.png)
+
+- `bcrypt`
+  
+  - 설치
+    
+    ```bash
+    npm install bcrypt
+    ```
+    
+    - typescript를 사용하는 경우
+      
+      ```bash
+      npm install --save bcrypt @types/bcrypt
+      ```
+      
+      - `npm install @types/bcrypt`는 실행하면 `Module not found: Can't resolve 'bcrypt'` 에러남
+  
+  - 사용
+    
+    ```tsx
+    import bcrypt from "bcrypt";
+    
+    export default async function handler() {
+      if (req.method == "POST") {
+        // 비밀번호 암호화
+        const hash = await bcrypt.hash(req.body.password, 10);
+        req.body.password = hash;
+      }
+    }
+    ```
+    
+    - `bcrypt.hash(req.body.password, 10)`
+      
+      - 10은 saltRound 횟수
+        
+        - salt
+          
+          - 실제 비밀번호에 랜덤한 값을 추가하는 것
+        
+        - saltRound
+          
+          - salt 횟수
+          
+          - 값이 클 수록 암호화가 잘 되지만 그만큼 속도가 느려짐
