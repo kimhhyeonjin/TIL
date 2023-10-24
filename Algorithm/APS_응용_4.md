@@ -398,3 +398,35 @@
   dijkstra2()
   print(D)
   ```
+  
+  - heapq 라이브러리 이용하기
+    
+    ```python
+    from heapq import heappush, heappop
+    
+    def dijkstra(start):
+        h = []                                  # 최소힙
+        d[start] = 0
+        heappush(h, (0, start))                 # 시작점 추가
+        while h:
+            dist_u, u = heappop(h)              # 최소 비용 간선 선택
+            if d[u] < dist_u:                   # 테이블에 저장된 최소값 보다 크면 continue
+                continue
+            for v, w in graph[u]:               # 다음 노드로 가는 비용 계산해서
+                dist_v = dist_u + w
+                if dist_v < d[v]:
+                    d[v] = dist_v               # 최소값 테이블에 업데이트 후
+                    heappush(h, (dist_v, v))    # 힙에 추가
+    
+    N, E = map(int, input().split())
+    graph = [[] for _ in range(N+1)]
+    for _ in range(E):
+        u, v, w = map(int, input().split())
+        graph[u].append((v, w))                 # 인접 리스트
+    
+    INF = 1e9
+    d = [INF]*(N+1)                             # 최대값으로 초기화
+    
+    dijkstra(0)
+    print(d)
+    ```
