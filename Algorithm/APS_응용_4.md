@@ -195,19 +195,13 @@
 
 - Prim 알고리즘
   
-  - 하나의 정점에서 연결된 간선 중 하나씩 선택하면서 MST를 만들어 가는 방식
+  - 하나의 **정점**에서 연결된 간선 중 하나씩 선택하면서 MST를 만들어 가는 방식
     
     1) 임의의 정점을 선택
     
     2) 선택한 정점과 인접하는 정점 중 최소 비용의 간선이 존재하는 정점 선택
     
     3) 모든 정점이 선택될 때까지 위의 과정을 반복
-  
-  - 서로소인 2개의 집합(2 disjoint-sets) 정보를 유지
-    
-    - 트리 정점들(tree vertices): MST를 만들기 위해 선택된 정점들
-    
-    - 비트리 정점들(nontree vertices): 선택되지 않은 정점들
   
   - Kruskal과 비교했을 때의 단점
     
@@ -252,10 +246,46 @@
         MST[u] = 1
     return s
   ```
+  
+  - heapq 라이브러리 이용하기
+    
+    ```python
+    import sys
+    from heapq import heappop, heappush
+    
+    def prim(start):
+        h = []
+        MST[start] = 1
+        total = 0
+        for v, w in adjList[start]:
+            heappush(h, (w, v))
+    
+        cnt = 0
+        while cnt < V-1:
+            w, v = heappop(h)
+            if MST[v]:
+                continue
+            total += w
+            MST[v] = 1
+            cnt += 1
+            for nv, nw in adjList[v]:
+                if MST[nv] == 0:
+                    heappush(h, (nw, nv))
+        return total
+    
+    V, E = map(int, input().split())
+    adjList = [[] for _ in range(V+1)]
+    for _ in range(E):
+        A, B, C = map(int, sys.stdin.readline().strip().split())
+        adjList[A].append((B, C))
+        adjList[B].append((A, C))
+    MST = [0] * (V+1)
+    print(prim(1))
+    ```
 
 - Kruskal 알고리즘
   
-  - 간선을 하나씩 선택해서 MST를 찾는 알고리즘
+  - **간선**을 하나씩 선택해서 MST를 찾는 알고리즘
     
     1) 최초, 모든 간선을 가중치에 따라 오름차순으로 정렬
     
@@ -264,6 +294,12 @@
        - 사이클이 존재하면 다음으로 가중치가 낮은 간선 선택
     
     3) n-1개의 간선이 선택될 때까지 2.를 반복
+  
+  - 서로소인 2개의 집합(2 disjoint-sets) 정보를 유지
+    
+    - 트리 정점들(tree vertices): MST를 만들기 위해 선택된 정점들
+    
+    - 비트리 정점들(nontree vertices): 선택되지 않은 정점들
   
   ```python
   def find_set(x):
