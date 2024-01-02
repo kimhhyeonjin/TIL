@@ -1,5 +1,34 @@
 # SQL
 
+## SQL 문법 순서와 실행 순서
+
+- SQL 문법 순서
+  
+  ```sql
+  SELECT 컬럼명
+  FROM 테이블명
+  WHERE 테이블 조건
+  GROUP BY 컬럼명
+  HAVING 그룹 조건
+  ORDER BY 컬럼명
+  ```
+
+- SQL 실행 순서
+  
+  ```sql
+  FROM -- 각 테이블 확인
+  ON -- 조인 조건 확인
+  JOIN -- 테이블 조인 (병합)
+  WHERE -- 데이터 추출 조건 확인
+  GROUP BY -- 특정 칼럼으로 데이터 그룹화
+  CUBE | ROLLUP
+  HAVING -- 그룹화 이후 데이터 추출 조건 확인
+  SELECT -- 데이터 추출
+  DISTINCT -- 중복 제거
+  ORDER BY -- 데이터 정렬
+  TOP
+  ```
+
 ### 문자열 자르기
 
 - SUBSTRING / LEFT / RIGHT
@@ -24,7 +53,7 @@
 
 ### 날짜 및 시간 함수
 
-- FORMAT_DATE
+- DATE_FORMAT
   
   - 날짜를 지정한 형식으로
     
