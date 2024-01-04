@@ -125,6 +125,76 @@
       
       - `hh:mm:ss AM, PM`
 
+### 결과값 개수 제한
+
+- MySql
+  
+  - LIMIT
+    
+    - 쿼리가 ORDER BY 절까지 모두 실행 후 해당 결과에서 원하는 행의 데이터를 가져옴
+  
+  - `LIMIT 개수`
+    
+    ```sql
+    SELECT 컬럼명
+    FROM 테이블명
+    LIMIT 개수
+    ```
+    
+    - 0번부터 개수개 만큼의 결과 반환
+    
+    - 예시
+      
+      ```sql
+      SELECT NAME
+      FROM ANIMAL_INS
+      ORDER BY DATETIME
+      LIMIT 1
+      ```
+  
+  - `LIMIT offset, 개수`
+    
+    ```sql
+    SELECT 컬럼명
+    FROM 테이블명
+    LIMIT offset, 개수
+    ```
+    
+    - offset번부터 개수개 만큼의 결과 반환
+      
+      - 0번부터 셈
+    
+    - 예시
+      
+      ```sql
+      SELECT NAME
+      FROM ANIMAL_INS
+      ORDER BY DATETIME
+      LIMIT 2, 3
+      ```
+      
+      - 3번째 행부터 3개 반환
+
+- Oracle
+  
+  - ROWNUM
+    
+    - 쿼리가 완전히 수행되지 않은 원 데이터의 정렬순서대로 번호를 매김
+    
+    - SELECT절로 한번 감싼후에 ROWNUM으로 조건을 주면 LIMIT와 동일한 결과가 출력
+    
+    - 예시
+      
+      ```sql
+      SELECT NAME 
+      FROM (
+          SELECT NAME
+          FROM ANIMAL_INS
+          ORDER BY DATETIME
+      )
+      WHERE ROWNUM = 1
+      ```
+
 ### JOIN
 
 - SELF JOIN
