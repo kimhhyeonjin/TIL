@@ -29,24 +29,62 @@
   TOP
   ```
 
+### Select절
+
+- CASE WHEN
+  
+  - 프로그래밍 언어에서의 IF문과 유사
+    
+    ```sql
+    CASE 컬럼
+    WHEN 조건1 THEN 값1
+    WHEN 조건2 THEN 값2
+    ELSE 값3
+    END
+    ```
+    
+    - 예시
+      
+      ```sql
+      SELECT ADDRESS, CASE WHEN FREEZER_YN IS NULL THEN 'N' ELSE FREEZER_YN END AS FREEZER_YN
+      ```
+
 ### Where절
 
 - IN 연산자
   
   - Where 절 내에서 특정값 여러 개를 선택하는 연산자
     
+    ```sql
+    SELECT * FROM 테이블명
+    WHERE 컬럼명 IN (값1, 값2, ...);
+    ```
+    
     - 예시
-      
-      ```sql
-      SELECT * FROM 테이블명
-      WHERE 컬럼명 IN (값1, 값2, ...);
-      ```
       
       ```sql
       SELECT ANIMAL_ID, NAME, SEX_UPON_INTAKE
       FROM ANIMAL_INS
       WHERE NAME IN ('Lucy', 'Ella', 'Pickle', 'Rogan', 'Sabrina', 'Mitty')
       ORDER BY ANIMAL_ID
+      ```
+
+- LIKE 연산자
+  
+  - 문자열 부분일치 검색
+    
+    - `_`
+      
+      - 한 글자 문자
+    
+    - `%`
+      
+      - 모든 문자
+    
+    - 예시
+      
+      ```sql
+      WHERE ADDRESS LIKE '경기도%'
       ```
 
 ### 문자열 자르기
