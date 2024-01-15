@@ -272,3 +272,13 @@
     WHERE A.SALES_DATE != B.SALES_DATE
     ORDER BY USER_ID ASC, PRODUCT_ID DESC
     ```
+
+- OUTER JOIN
+  
+  ![File:Joins del SQL.svg](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Joins_del_SQL.svg/691px-Joins_del_SQL.svg.png?20210224114301)
+  
+  - LEFT OUTER JOIN
+  
+  - RIGHT OUTER JOIN
+  
+  - FULL OUTER JOIN
